@@ -100,6 +100,7 @@ CREATE TABLE Clinic.Timeslots
     DoctorId      INT NOT NULL,
     AppointmentId INT NULL,
 
+	CONSTRAINT Timeslot_PK PRIMARY KEY,
     CONSTRAINT Doctor_FK FOREIGN KEY (DoctorId) REFERENCES Clinic.Doctors (Id),
     CONSTRAINT TimeslotAppointment_FK FOREIGN KEY (AppointmentId) REFERENCES Clinic.Appointments (Id)
 );
