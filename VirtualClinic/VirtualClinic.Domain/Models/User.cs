@@ -4,12 +4,10 @@ using System.Text;
 
 namespace VirtualClinic.Domain.Models
 {
-    public class Appointment
+    public abstract class User
     {
         public int Id { get; set; }
-        public Doctor Doctor { get; set; }
-        public Patient Patient { get; set; }
-        public string Notes { get; set; }
-
+        public string Name { get; set; }
+        public List<Timeslot> Timeslots { get; set; }
     }
 }
