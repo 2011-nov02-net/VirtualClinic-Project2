@@ -21,7 +21,7 @@ namespace VirtualClinic.Api.Controllers
         /// </param>
         /// <returns>Information on the patient, or error 403 not authorized.</returns>
         [HttpGet]
-        public IEnumerable<string> Get(string search = null)
+        public IEnumerable<string> Get([FromQuery] string search = null)
         {
             //check if logged in as dr, if not, then return not authorized
 
@@ -45,7 +45,7 @@ namespace VirtualClinic.Api.Controllers
         /// <param name="id">The id of the patient who's information is to be retrieved</param>
         /// <returns>Information on the patient, 404 not found, or 403 not authorized</returns>
         [HttpGet("{id}")]
-        public string Get(int id)
+        public string Get([FromRoute] int id)
         {
             // check if the patient with that id exists
 
@@ -58,7 +58,7 @@ namespace VirtualClinic.Api.Controllers
 
 
         [HttpGet("{Patientid}/Reports")]
-        public string GetReports(int Patientid)
+        public string GetReports([FromRoute] int Patientid)
         {
             // check if the patient with that id exists
 
@@ -71,7 +71,7 @@ namespace VirtualClinic.Api.Controllers
 
 
         [HttpGet("{PatientID}/Reports/id")]
-        public string GetReport(int PatientID, int id)
+        public string GetReport([FromRoute] int PatientID, [FromRoute] int id)
         {
             // check if the patient with that id exists
 
@@ -95,13 +95,13 @@ namespace VirtualClinic.Api.Controllers
 
         // PUT api/<PatientsController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Put([FromRoute] int id, [FromBody] string value)
         {
         }
 
         // DELETE api/<PatientsController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void Delete([FromRoute] int id)
         {
         }
     }

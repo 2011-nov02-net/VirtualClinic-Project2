@@ -33,7 +33,7 @@ namespace VirtualClinic.Api.Controllers
         /// </param>
         /// <returns>A list of all doctors.</returns>
         [HttpGet]
-        public IEnumerable<string> Get(string search = null)
+        public IEnumerable<string> Get([FromQuery] string search = null)
         {
             //if search isn't null, filter list of all doctors by name
             if(search is not null)
@@ -51,7 +51,7 @@ namespace VirtualClinic.Api.Controllers
         /// <param name="id">The doctor's ID</param>
         /// <returns>Information about the Doctor, or 403 unauthorized, or 404 not found</returns>
         [HttpGet("{id}")]
-        public string Get(int id)
+        public string Get( [FromRoute] int id)
         {
             //try to find the dr by id, if not then 404 not found
 
