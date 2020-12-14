@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using VirtualClinic.DataModel;
 using VirtualClinic.Domain.Interfaces;
 using VirtualClinic.Domain.Models;
-using VirtualClinic.DataModel;
 
 namespace VirtualClinic.Domain.Repositories
 {
@@ -19,152 +19,152 @@ namespace VirtualClinic.Domain.Repositories
             _logger = logger ?? throw new ArgumentNullException();
         }
 
-        public void AddDoctor(Doctor doctor)
+        public void AddDoctor(Models.Doctor doctor)
         {
             throw new NotImplementedException();
         }
 
-        public Task AddDoctorAsync(Doctor doctor)
+        public Task AddDoctorAsync(Models.Doctor doctor)
         {
             throw new NotImplementedException();
         }
 
-        public void AddPatient(Patient patient)
+        public void AddPatient(Models.Patient patient)
         {
             throw new NotImplementedException();
         }
 
-        public Task AddPatientAsync(Patient patient)
+        public Task AddPatientAsync(Models.Patient patient)
         {
             throw new NotImplementedException();
         }
 
-        public void AddPatientReport(PatientReport report)
+        public void AddPatientReport(Models.PatientReport report)
         {
             throw new NotImplementedException();
         }
 
-        public Task AddPatientReportAsync(PatientReport report)
+        public Task AddPatientReportAsync(Models.PatientReport report)
         {
             throw new NotImplementedException();
         }
 
-        public void AddPrescription(Prescription prescription)
+        public void AddPrescription(Models.Prescription prescription)
         {
             throw new NotImplementedException();
         }
 
-        public Task AddPrescriptionAsync(Prescription prescription)
+        public Task AddPrescriptionAsync(Models.Prescription prescription)
         {
             throw new NotImplementedException();
         }
 
-        public void AddTimeslot(Timeslot timeslot)
+        public void AddTimeslot(Models.Timeslot timeslot)
         {
             throw new NotImplementedException();
         }
 
-        public Task AddTimeslotAsync(Timeslot timeslot)
+        public Task AddTimeslotAsync(Models.Timeslot timeslot)
         {
             throw new NotImplementedException();
         }
 
-        public Doctor GetDoctorByID(int id)
+        public Models.Doctor GetDoctorByID(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Doctor> GetDoctorByIDAsync(int id)
+        public Task<Models.Doctor> GetDoctorByIDAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Patient> GetDoctorPatients(int id)
+        public IEnumerable<Models.Patient> GetDoctorPatients(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Patient>> GetDoctorPatientsAsync(int id)
+        public Task<IEnumerable<Models.Patient>> GetDoctorPatientsAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Doctor> GetDoctors()
+        public IEnumerable<Models.Doctor> GetDoctors()
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Doctor>> GetDoctorsAsync()
+        public Task<IEnumerable<Models.Doctor>> GetDoctorsAsync()
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Timeslot> GetDoctorTimeslots(int id)
+        public IEnumerable<Models.Timeslot> GetDoctorTimeslots(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Timeslot>> GetDoctorTimeslotsAsync(int id)
+        public Task<IEnumerable<Models.Timeslot>> GetDoctorTimeslotsAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Patient GetPatientByID(int id)
+        public Models.Patient GetPatientByID(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Patient> GetPatientByIDAsync(int id)
+        public Task<Models.Patient> GetPatientByIDAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Prescription> GetPatientPrescriptions(int id)
+        public IEnumerable<Models.Prescription> GetPatientPrescriptions(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Prescription>> GetPatientPrescriptionsAsync(int id)
+        public Task<IEnumerable<Models.Prescription>> GetPatientPrescriptionsAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public PatientReport GetPatientReportByID(int id)
+        public Models.PatientReport GetPatientReportByID(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<PatientReport> GetPatientReportByIDAsync(int id)
+        public Task<Models.PatientReport> GetPatientReportByIDAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<PatientReport> GetPatientReports(int id)
+        public IEnumerable<Models.PatientReport> GetPatientReports(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Prescription>> GetPatientReportsAsync(int id)
+        public Task<IEnumerable<Models.Prescription>> GetPatientReportsAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Patient> GetPatients()
+        public IEnumerable<Models.Patient> GetPatients()
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Patient>> GetPatientsAsync()
+        public Task<IEnumerable<Models.Patient>> GetPatientsAsync()
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Timeslot> GetPatientTimeslots(int id)
+        public IEnumerable<Models.Timeslot> GetPatientTimeslots(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Timeslot>> GetPatientTimeslotsAsync(int id)
+        public Task<IEnumerable<Models.Timeslot>> GetPatientTimeslotsAsync(int id)
         {
             throw new NotImplementedException();
         }
