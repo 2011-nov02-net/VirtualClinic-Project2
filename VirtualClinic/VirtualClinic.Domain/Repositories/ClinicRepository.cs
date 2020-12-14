@@ -1,14 +1,24 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using VirtualClinic.Domain.Interfaces;
 using VirtualClinic.Domain.Models;
+using VirtualClinic.DataModel;
 
 namespace VirtualClinic.Domain.Repositories
 {
     class ClinicRepository : IClinicRepository
     {
+        private readonly ClinicDbContext _context;
+        private readonly ILogger<ClinicRepository> _logger;
+        public ClinicRepository(ClinicDbContext context, ILogger<ClinicRepository> logger)
+        {
+            _context = context ?? throw new ArgumentNullException();
+            _logger = logger ?? throw new ArgumentNullException();
+        }
+
         public void AddDoctor(Doctor doctor)
         {
             throw new NotImplementedException();
