@@ -5,7 +5,11 @@ using System.Text;
 
 namespace VirtualClinic.Domain.Models
 {
-    public class TimeSlot
+    class Timeslot
     {
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
+        public Appointment Appointment { get; set; }
+
     }
 }
