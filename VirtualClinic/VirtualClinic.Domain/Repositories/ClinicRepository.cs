@@ -137,9 +137,22 @@ namespace VirtualClinic.Domain.Repositories
 
         }
 
-        public IEnumerable<Models.Timeslot> GetDoctorTimeslots(int id)
+        /// <summary>
+        /// Get all timeslots related to a doctor.
+        /// </summary>
+        /// <param name="doctorId">The id of the doctor who's timeslots are to be retrieved.</param>
+        /// <remarks>
+        /// Note: references to the dr, and patient are left out inside these.
+        /// </remarks>
+        /// <returns>List of timeslots with any apointments filled in.</returns>
+        public IEnumerable<Models.Timeslot> GetDoctorTimeslots(int doctorId)
         {
-            throw new NotImplementedException();
+            List<DataModel.Timeslot> timeslots = _context.Timeslots
+                    .Include(ts => ts.Appointment)
+                    .Where(ts => ts.DoctorId == doctorId)
+                    .ToList();
+
+            return ConvertTimeslots(timeslots);
         }
 
         public Task<IEnumerable<Models.Timeslot>> GetDoctorTimeslotsAsync(int id)
@@ -250,24 +263,47 @@ namespace VirtualClinic.Domain.Repositories
                     .Where(ts => ts.Appointment.PatientId == PatientId)
                     .ToList();
 
-            List<Models.Timeslot> modelTimeslots = new List<Models.Timeslot>();
-
-            foreach(var DBTimeSlot in timeslots)
-            {
-                Models.Timeslot modelts = DB_DomainMapper.MapTimeslot(DBTimeSlot);
-
-                //does not fill in dr or patient
-                modelts.Appointment = DB_DomainMapper.MapApointment(DBTimeSlot.Appointment);
-
-                modelTimeslots.Add(modelts);
-            }
-
-            return modelTimeslots;        
+            return ConvertTimeslots(timeslots, true);        
         }
 
         public Task<IEnumerable<Models.Timeslot>> GetPatientTimeslotsAsync(int id)
         {
             throw new NotImplementedException();
         }
+
+
+
+
+
+        #region PrivateHelpers
+        /// <summary>
+        /// Takes a list of db timeslots and converts them to apointments
+        /// </summary>
+        /// <param name="timeslots">List of DB timeslots</param>
+        /// <returns>List of model timeslots</returns>
+        private static List<Models.Timeslot> ConvertTimeslots(List<DataModel.Timeslot> timeslots, bool AllowNullApointmentsFlag = false)
+        {
+            List<Models.Timeslot> modelTimeslots = new List<Models.Timeslot>();
+
+            foreach (var DBTimeSlot in timeslots)
+            {
+                Models.Timeslot modelts = DB_DomainMapper.MapTimeslot(DBTimeSlot);
+
+                //does not fill in dr or patient
+                if(DBTimeSlot.Appointment is not null)
+                {
+                    modelts.Appointment = DB_DomainMapper.MapApointment(DBTimeSlot.Appointment);
+                } else if (AllowNullApointmentsFlag)
+                {
+                    throw new NullReferenceException("A timeslot has a null apointment reference");
+                }
+                
+                modelTimeslots.Add(modelts);
+            }
+
+            return modelTimeslots;
+        }
+
+        #endregion
     }
 }
