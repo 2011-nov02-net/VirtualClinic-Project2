@@ -77,9 +77,20 @@ namespace VirtualClinic.Domain.Mapper
             return timeslot;
         }
 
-        internal static Models.Appointment MapApointment(DataModel.Appointment appointment)
+        /// <summary>
+        /// Map a DB apointment to an equivilent model apointment. Will not fill in doctor, or patient reference.
+        /// </summary>
+        /// <param name="Dbappointment">A DB version of the apointment to be converted.</param>
+        /// <returns>A model version of the given apointment.</returns>
+        internal static Models.Appointment MapApointment(DataModel.Appointment Dbappointment)
         {
-            throw new NotImplementedException();
+            Models.Appointment modelAppointment = new Models.Appointment();
+
+            modelAppointment.Id = Dbappointment.Id;
+
+            modelAppointment.Notes = Dbappointment.Notes;
+
+            return modelAppointment;
         }
     }
 }
