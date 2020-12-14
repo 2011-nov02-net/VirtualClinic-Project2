@@ -222,6 +222,7 @@ namespace VirtualClinic.Domain.Repositories
             {
                 Models.Timeslot modelts = DB_DomainMapper.MapTimeslot(DBTimeSlot);
 
+                //does not fill in dr or patient
                 modelts.Appointment = DB_DomainMapper.MapApointment(DBTimeSlot.Appointment);
 
                 modelTimeslots.Add(modelts);
