@@ -9,7 +9,7 @@ namespace VirtualClinic.Domain.Models
         public int Id { get; set; }
         public int HeartRate { get; set; }
         public string BloodPressure { get; set; }
-        public double Temperature { get; set; }
+        public double? Temperature { get; set; }
         public int PainLevel { get; set; }
     }
 }

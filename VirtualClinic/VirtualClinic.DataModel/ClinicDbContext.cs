@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace VirtualClinic.DataModel
 {
-    public partial class CliniqueDbContext : DbContext 
+    public partial class ClinicDbContext : DbContext 
     {
-        public CliniqueDbContext()
+        public ClinicDbContext()
         {
         }
 
-        public CliniqueDbContext(DbContextOptions<CliniqueDbContext> options)
+        public ClinicDbContext(DbContextOptions<ClinicDbContext> options)
             : base(options)
         {
         }
