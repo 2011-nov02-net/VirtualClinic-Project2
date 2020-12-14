@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using VirtualClinic.DataModel;
 using VirtualClinic.Domain.Interfaces;
 using VirtualClinic.Domain.Models;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using VirtualClinic.Domain.Mapper;
 
 namespace VirtualClinic.Domain.Repositories
 {
@@ -18,6 +21,7 @@ namespace VirtualClinic.Domain.Repositories
             _context = context ?? throw new ArgumentNullException();
             _logger = logger ?? throw new ArgumentNullException();
         }
+
 
         public void AddDoctor(Models.Doctor doctor)
         {
@@ -151,6 +155,38 @@ namespace VirtualClinic.Domain.Repositories
 
         public IEnumerable<Models.Patient> GetPatients()
         {
+            var DBPatients = _context.Patients
+                    .Include(thing => thing.PatientReports)
+                    .ToList();
+
+            List<Models.Patient> ModelPatients = new List<Models.Patient>();
+
+            foreach(var dbpatient in DBPatients)
+            {
+                Models.Patient next = new Models.Patient(dbpatient.Id, dbpatient.Name,dbpatient.Dob);
+
+                next.InsuranceProvider = dbpatient.Insurance;
+
+                //todo: fill in perscriptions
+                next.Prescriptions = new List<Models.Prescription>();
+
+                //could get dr
+                next.PrimaryDoctor = this.GetDoctorByID(dbpatient.DoctorId);
+
+                next.PatientReports = new List<Models.PatientReport>();
+                foreach(var dbPatientReport in dbpatient.PatientReports)
+                {
+                    var report = DB_DomainMapper.MapReport(dbPatientReport);
+                    report.Patient = next;
+                    //TODO: note vitals still not filled in.
+
+                    next.PatientReports.Add(report);
+                }
+                
+
+                ModelPatients.Add(next);
+            }
+
             throw new NotImplementedException();
         }
 
