@@ -45,6 +45,7 @@ CREATE TABLE Clinic.Vitals
     Id          INT NOT NULL,
     Systolic    INT NOT NULL CHECK ( Systolic > 80 AND Systolic < 250 ),
     Diastolic   INT NOT NULL CHECK  ( Diastolic > 40 AND Diastolic < 150),
+    HeartRate   INT NOT NULL CHECK  ( HeartRate > 60 AND HeartRate < 220),
     Temperature DECIMAL  CHECK ( Temperature > 95.0 AND Temperature < 105.0),
     Pain        INT CHECK   ( Pain > 0 And  Pain <= 10),
 

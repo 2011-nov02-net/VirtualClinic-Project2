@@ -16,15 +16,15 @@ INSERT INTO Clinic.Patients (Id, Name, DoctorId, DOB, SSN, Insurance) VALUES
       (5,'Michael Scott',1,'2009-09-21','681-24-2024', 'Cigna'),
       (6,'Dean Winchester',2,'1979-03-19','042-60-4547', 'Kaiser Permanente');
 
-INSERT INTO Clinic.Vitals ( Id, Systolic, Diastolic, Temperature, Pain) VALUES 
-       (1,120, 80, 97.2, 2),
-       (2,143, 91, 96.3, 1),
-       (3,123, 84, 97.2, 1),
-       (4,111, 75, 99.0, 2),
-       (5,170, 95, 96.8, 3),
-       (6,123, 65, 98.1, 4),
-       (7,134, 64, 96.7, 8),
-       (8,138, 90, 97.5, 10);
+INSERT INTO Clinic.Vitals ( Id, Systolic, Diastolic, HeartRate,Temperature, Pain) VALUES 
+       (1,120, 80, 95,97.2, 2),
+       (2,143, 91, 93,96.3, 1),
+       (3,123, 84, 88,97.2, 1),
+       (4,111, 75, 115,99.0, 2),
+       (5,170, 95, 75,96.8, 3),
+       (6,123, 65, 83,98.1, 4),
+       (7,134, 64, 149,96.7, 8),
+       (8,138, 90, 112,97.5, 10);
 INSERT INTO Clinic.PatientReports ( Id,PatientId, Information, ReportTime, VitalsId) VALUES
        (1,1, 'Lorem Ipsum1', GetDate(), 1),
        (2,2, 'Lorem Ipsum2', GetDate(), 2),
