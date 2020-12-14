@@ -211,9 +211,29 @@ namespace VirtualClinic.Domain.Repositories
             throw new NotImplementedException();
         }
 
-        public Models.PatientReport GetPatientReportByID(int id)
+        /// <summary>
+        /// Given a report id, gets the report with the given id.
+        /// </summary>
+        /// <remarks>
+        /// will not fill in the references to patient.
+        /// </remarks>
+        /// <param name="ReportID">The id value of the report in the DB</param>
+        /// <returns>The patient report with the given ID</returns>
+        public Models.PatientReport GetPatientReportByID(int ReportID)
         {
-            throw new NotImplementedException();
+            DataModel.PatientReport report = _context.PatientReports.Find(ReportID);
+
+            if(report is null)
+            {
+                //then no report with that id exists in the DB
+                throw new ArgumentException("ID Not Found in DB.");
+            }
+
+
+            var modelreport = DB_DomainMapper.MapReport(report);
+            //technically could be null, but shouldn't be because this ID comes from DB information.
+            modelreport.Vitals = DB_DomainMapper.MapVitals(_context.Vitals.Find(report.VitalsId));
+            return modelreport;
         }
 
         public Task<Models.PatientReport> GetPatientReportByIDAsync(int id)
