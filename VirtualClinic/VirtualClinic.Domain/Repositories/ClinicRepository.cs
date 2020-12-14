@@ -115,9 +115,26 @@ namespace VirtualClinic.Domain.Repositories
 
         }
 
-        public Task<IEnumerable<Models.Doctor>> GetDoctorsAsync()
+        public async Task<IEnumerable<Models.Doctor>> GetDoctorsAsync()
         {
-            throw new NotImplementedException();
+            var DBDoctors = await _context.Doctors
+              .Include(o => o.Patients)
+              .ToListAsync();
+
+            List<Models.Doctor> ModelDoctors = new List<Models.Doctor>();
+
+            foreach (var dbdoctor in DBDoctors)
+            {
+                Models.Doctor next = new Models.Doctor(dbdoctor.Id, dbdoctor.Name, dbdoctor.Title)
+                {
+                    Patients = (List<Models.Patient>)GetDoctorPatients(dbdoctor.Id)
+                };
+
+                ModelDoctors.Add(next);
+            }
+
+            return ModelDoctors;
+
         }
 
         /// <summary>
@@ -181,9 +198,9 @@ namespace VirtualClinic.Domain.Repositories
                 throw new ArgumentException("ID Not Found in DB.");
             }
 
-            _context.Vitals.Find(report.VitalsId);
 
             var modelreport = DB_DomainMapper.MapReport(report);
+            //technically could be null, but shouldn't be because this ID comes from DB information.
             modelreport.Vitals = DB_DomainMapper.MapVitals(_context.Vitals.Find(report.VitalsId));
             return modelreport;
         }
