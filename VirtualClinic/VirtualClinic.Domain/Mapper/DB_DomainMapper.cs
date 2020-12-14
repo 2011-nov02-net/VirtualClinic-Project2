@@ -76,5 +76,10 @@ namespace VirtualClinic.Domain.Mapper
 
             return timeslot;
         }
+
+        internal static Models.Appointment MapApointment(DataModel.Appointment appointment)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

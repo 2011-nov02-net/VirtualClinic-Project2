@@ -200,9 +200,34 @@ namespace VirtualClinic.Domain.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Models.Timeslot> GetPatientTimeslots(int id)
+        /// <summary>
+        /// Get timeslot and apointment information for ones related to a specific patient.
+        /// </summary>
+        /// <remarks>
+        /// NOTE: because this matches to a patient id which is stored on apointments,
+        /// every item returned should have an apointment attached to the timeslot.
+        /// </remarks>
+        /// <param name="PatientId">The id of the desired patient in the DB.</param>
+        /// <returns>List of timeslots with any apointment informtion filled in.</returns>
+        public IEnumerable<Models.Timeslot> GetPatientTimeslots(int PatientId)
         {
-            throw new NotImplementedException();
+            List<DataModel.Timeslot> timeslots = _context.Timeslots
+                    .Include(ts => ts.Appointment)
+                    .Where(ts => ts.Appointment.PatientId == PatientId)
+                    .ToList();
+
+            List<Models.Timeslot> modelTimeslots = new List<Models.Timeslot>();
+
+            foreach(var DBTimeSlot in timeslots)
+            {
+                Models.Timeslot modelts = DB_DomainMapper.MapTimeslot(DBTimeSlot);
+
+                modelts.Appointment = DB_DomainMapper.MapApointment(DBTimeSlot.Appointment);
+
+                modelTimeslots.Add(modelts);
+            }
+
+            return modelTimeslots;        
         }
 
         public Task<IEnumerable<Models.Timeslot>> GetPatientTimeslotsAsync(int id)
