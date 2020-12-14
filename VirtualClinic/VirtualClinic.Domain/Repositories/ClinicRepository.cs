@@ -104,7 +104,7 @@ namespace VirtualClinic.Domain.Repositories
 
             var doctor = new Models.Doctor(DBDoctor.Id, DBDoctor.Name, DBDoctor.Title)
             {
-                Patients = (List<Models.Patient>)GetDoctorPatients(DBDoctor.Id)
+                Patients = (List<Models.Patient>)await GetDoctorPatientsAsync(DBDoctor.Id)
             };
 
             return doctor;
@@ -132,9 +132,26 @@ namespace VirtualClinic.Domain.Repositories
             return patients;
         }
 
-        public Task<IEnumerable<Models.Patient>> GetDoctorPatientsAsync(int id)
+        /// <summary>
+        /// Get patients of a specific doctor async
+        /// </summary>
+        /// <param name="id">The id of the doctor whose patients are being requested</param>
+        /// <returns>A list of patients of a doctor</returns>
+
+        public async Task<IEnumerable<Models.Patient>> GetDoctorPatientsAsync(int id)
         {
-            throw new NotImplementedException();
+            var DBPatients = await _context.Patients.Where(o => o.DoctorId == id).ToListAsync();
+
+            List<Models.Patient> patients = new List<Models.Patient>();
+
+            foreach (var patient in DBPatients)
+            {
+                Models.Patient next = new Models.Patient(patient.Id, patient.Name, patient.Dob);
+
+                patients.Add(next);
+            }
+
+            return patients;
         }
 
         /// <summary>

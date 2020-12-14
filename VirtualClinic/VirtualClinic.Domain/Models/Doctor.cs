@@ -15,5 +15,10 @@ namespace VirtualClinic.Domain.Models
 
         public List<Patient> Patients { get; set; }
         public string Title { get; set; }
+
+        public static implicit operator Doctor(Doctor v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
