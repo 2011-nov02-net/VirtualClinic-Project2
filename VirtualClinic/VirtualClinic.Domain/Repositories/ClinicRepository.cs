@@ -93,12 +93,12 @@ namespace VirtualClinic.Domain.Repositories
             throw new NotImplementedException();
         }
 
+
         /// <summary>
         /// Get a doctor with a specific Id
         /// </summary>
         /// <param name="id">The id of the doctor to be returned</param>
         /// <returns>A doctor with a list of its patient</returns>
-
         public Models.Doctor GetDoctorByID(int id)
         {
 
@@ -112,12 +112,12 @@ namespace VirtualClinic.Domain.Repositories
             return doctor;
         }
 
+
         /// <summary>
         /// Get a doctor with a specific Id Async
         /// </summary>
         /// <param name="id">The id of the doctor to be returned</param>
         /// <returns><A doctor with a list of its patient/returns>
-
         public async Task<Models.Doctor> GetDoctorByIDAsync(int id)
         {
             var DBDoctor = await _context.Doctors.Where(o => o.Id == id).FirstAsync();
@@ -129,6 +129,7 @@ namespace VirtualClinic.Domain.Repositories
 
             return doctor;
         }
+
 
         /// <summary>
         /// Get patients of a specific doctor
@@ -152,12 +153,12 @@ namespace VirtualClinic.Domain.Repositories
             return patients;
         }
 
+
         /// <summary>
         /// Get patients of a specific doctor async
         /// </summary>
         /// <param name="id">The id of the doctor whose patients are being requested</param>
         /// <returns>A list of patients of a doctor</returns>
-
         public async Task<IEnumerable<Models.Patient>> GetDoctorPatientsAsync(int id)
         {
             var DBPatients = await _context.Patients.Where(o => o.DoctorId == id).ToListAsync();
@@ -174,11 +175,11 @@ namespace VirtualClinic.Domain.Repositories
             return patients;
         }
 
+
         /// <summary>
         /// Get All doctors
         /// </summary>
         /// <returns>A list of all Doctors</returns>
-
         public IEnumerable<Models.Doctor> GetDoctors()
         {
             var DBDoctors = _context.Doctors
