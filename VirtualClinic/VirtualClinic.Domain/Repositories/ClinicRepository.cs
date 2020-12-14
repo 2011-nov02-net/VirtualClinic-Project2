@@ -110,9 +110,26 @@ namespace VirtualClinic.Domain.Repositories
             return doctor;
         }
 
+        /// <summary>
+        /// Get patients of a specific doctor
+        /// </summary>
+        /// <param name="id">The id of the doctor whose patients are being requested</param>
+        /// <returns>A list of patients of a doctor</returns>
+
         public IEnumerable<Models.Patient> GetDoctorPatients(int id)
         {
-            throw new NotImplementedException();
+            var DBPatients = _context.Patients.Where(o => o.DoctorId == id).ToList();
+
+            List<Models.Patient> patients = new List<Models.Patient>();
+
+            foreach( var patient in DBPatients)
+            {
+                Models.Patient next = new Models.Patient(patient.Id, patient.Name, patient.Dob);
+
+                patients.Add(next);
+            }
+
+            return patients;
         }
 
         public Task<IEnumerable<Models.Patient>> GetDoctorPatientsAsync(int id)
