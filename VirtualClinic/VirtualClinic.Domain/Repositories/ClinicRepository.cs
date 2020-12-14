@@ -63,9 +63,29 @@ namespace VirtualClinic.Domain.Repositories
             throw new NotImplementedException();
         }
 
+        
+        /// <summary>
+        /// Creates a DB timeslot based on a Model Timeslot, and sends it to the DB.
+        /// </summary>
+        /// <exception cref="ArgumentException">
+        /// Throws an argument exception if the id
+        /// of the given timeslot is already in use on the DB
+        /// </exception>
+        /// <param name="timeslot">A Model Timeslot </param>
         public void AddTimeslot(Models.Timeslot timeslot)
         {
+            DataModel.Timeslot DBTimeslot = new DataModel.Timeslot();
+
+            //DBTimeslot.Id = timeslot.Id;
+            //todo: check if Id is valid in DB, and if not, throw some argument exception.
+
+            DBTimeslot.AppointmentId = timeslot.Appointment?.Id;
+            //DBTimeslot.DoctorId = timeslot.dr.id;         
+
             throw new NotImplementedException();
+
+            _context.Timeslots.Attach(DBTimeslot);
+            _context.SaveChanges();
         }
 
         public Task AddTimeslotAsync(Models.Timeslot timeslot)
