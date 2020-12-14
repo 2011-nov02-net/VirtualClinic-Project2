@@ -13,4 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\VirtualClinic.DataModel\VirtualClinic.DataModel.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Repository\" />
+  </ItemGroup>
 </Project>
