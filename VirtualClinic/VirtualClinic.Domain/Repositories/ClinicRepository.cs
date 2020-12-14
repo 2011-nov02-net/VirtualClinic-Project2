@@ -115,9 +115,26 @@ namespace VirtualClinic.Domain.Repositories
 
         }
 
-        public Task<IEnumerable<Models.Doctor>> GetDoctorsAsync()
+        public async Task<IEnumerable<Models.Doctor>> GetDoctorsAsync()
         {
-            throw new NotImplementedException();
+            var DBDoctors = await _context.Doctors
+              .Include(o => o.Patients)
+              .ToListAsync();
+
+            List<Models.Doctor> ModelDoctors = new List<Models.Doctor>();
+
+            foreach (var dbdoctor in DBDoctors)
+            {
+                Models.Doctor next = new Models.Doctor(dbdoctor.Id, dbdoctor.Name, dbdoctor.Title)
+                {
+                    Patients = (List<Models.Patient>)GetDoctorPatients(dbdoctor.Id)
+                };
+
+                ModelDoctors.Add(next);
+            }
+
+            return ModelDoctors;
+
         }
 
         /// <summary>
