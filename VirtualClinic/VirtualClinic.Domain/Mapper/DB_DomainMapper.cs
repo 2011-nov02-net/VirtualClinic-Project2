@@ -22,10 +22,8 @@ namespace VirtualClinic.Domain.Mapper
                 throw new ArgumentNullException("MapReport Report is null.");
             }
 
-            Models.PatientReport modelreport = new Models.PatientReport();
+            Models.PatientReport modelreport = new Models.PatientReport(report.Id, report.Information);
 
-            modelreport.Id = report.Id;
-            modelreport.Info = report.Information;
             modelreport.Time = report.ReportTime;
 
             //todo: get patient and vitals
@@ -36,11 +34,11 @@ namespace VirtualClinic.Domain.Mapper
         /// <summary>
         /// Maps a DB vitals to a Domain Vitals exluding blood pressure and pain level.
         /// </summary>
-        /// <param name="vital"></param>
-        /// <returns></returns>
+        /// <param name="vital">A DB vitals.</param>
+        /// <returns>A Domain Vitals.</returns>
         public static Models.Vitals MapVitals(DataModel.Vital vital)
         {
-            Models.Vitals modelvitals = new Models.Vitals();
+            Models.Vitals modelvitals = new Models.Vitals(vital.Id);
             modelvitals.Id = vital.Id;
 
             if(vital.Temperature is not null)
@@ -82,15 +80,9 @@ namespace VirtualClinic.Domain.Mapper
         /// </summary>
         /// <param name="Dbappointment">A DB version of the apointment to be converted.</param>
         /// <returns>A model version of the given apointment.</returns>
-        internal static Models.Appointment MapApointment(DataModel.Appointment Dbappointment)
+        internal static Models.Appointment MapApointment(DataModel.Appointment Dbappointment, Models.Doctor doctor = null)
         {
-            Models.Appointment modelAppointment = new Models.Appointment();
-
-            modelAppointment.Id = Dbappointment.Id;
-
-            modelAppointment.Notes = Dbappointment.Notes;
-
-            return modelAppointment;
+            return new Models.Appointment(Dbappointment.Id, Dbappointment.Notes, doctor);
         }
     }
 }

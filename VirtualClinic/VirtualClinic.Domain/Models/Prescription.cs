@@ -11,5 +11,23 @@ namespace VirtualClinic.Domain.Models
         public Doctor Doctor { get; set; }
         public string Info { get; set; }
         public string DrugName { get; set; }
+
+
+        /// <summary>
+        /// Creates a new Prescription. 
+        /// </summary>
+        /// <param name="id">A unique id for the Prescription</param>
+        /// <param name="info">Misc info about the Prescription.</param>
+        /// <param name="drugName">The name of the drug.</param>
+        /// <param name="patient">(Optional)The patient who the Prescription is for.</param>
+        /// <param name="doctor">(Optional) The doctor issuing the Prescription.</param>
+        public Prescription(int id, string info, string drugName, Patient patient = null, Doctor doctor = null)
+        {
+            Id = id;
+            Info = info;
+            DrugName = drugName;
+            Patient = patient;
+            Doctor = doctor;
+        }
     }
 }
