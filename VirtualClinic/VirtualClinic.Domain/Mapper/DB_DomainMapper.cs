@@ -33,7 +33,11 @@ namespace VirtualClinic.Domain.Mapper
             return modelreport;
         }
 
-
+        /// <summary>
+        /// Maps a DB vitals to a Domain Vitals exluding blood pressure and pain level.
+        /// </summary>
+        /// <param name="vital"></param>
+        /// <returns></returns>
         public static Models.Vitals MapVitals(DataModel.Vital vital)
         {
             Models.Vitals modelvitals = new Models.Vitals();
@@ -55,6 +59,22 @@ namespace VirtualClinic.Domain.Mapper
             modelvitals.BloodPressure = null;
 
             return modelvitals;
+        }
+
+        /// <summary>
+        /// Converts a timeslot, excluding apointment information to a Domain Model version of it.
+        /// </summary>
+        /// <param name="DbTimeSlot">A DB timeslot to be converted</param>
+        /// <returns>The domain model version of a DB timeslot</returns>
+        internal static Models.Timeslot MapTimeslot(DataModel.Timeslot DbTimeSlot)
+        {
+
+            Models.Timeslot timeslot = new Models.Timeslot();
+            //TODO: get timeslot from db when added to db
+
+            //TODO: get id from timeslot
+
+            return timeslot;
         }
     }
 }
