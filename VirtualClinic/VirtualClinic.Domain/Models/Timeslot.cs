@@ -9,6 +9,5 @@ namespace VirtualClinic.Domain.Models
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public Appointment Appointment { get; set; }
-
     }
 }
