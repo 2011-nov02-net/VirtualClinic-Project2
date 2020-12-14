@@ -73,14 +73,41 @@ namespace VirtualClinic.Domain.Repositories
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Get a doctor with a specific Id
+        /// </summary>
+        /// <param name="id">The id of the doctor to be returned</param>
+        /// <returns>A doctor with a list of its patient</returns>
+
         public Models.Doctor GetDoctorByID(int id)
         {
-            throw new NotImplementedException();
+
+            var DBDoctor = _context.Doctors.Where(o => o.Id == id).First();
+
+            var doctor = new Models.Doctor(DBDoctor.Id, DBDoctor.Name, DBDoctor.Title)
+            {
+                Patients = (List<Models.Patient>)GetDoctorPatients(DBDoctor.Id)
+            };
+
+            return doctor;
         }
 
-        public Task<Models.Doctor> GetDoctorByIDAsync(int id)
+        /// <summary>
+        /// Get a doctor with a specific Id Async
+        /// </summary>
+        /// <param name="id">The id of the doctor to be returned</param>
+        /// <returns><A doctor with a list of its patient/returns>
+
+        public async Task<Models.Doctor> GetDoctorByIDAsync(int id)
         {
-            throw new NotImplementedException();
+            var DBDoctor = await _context.Doctors.Where(o => o.Id == id).FirstAsync();
+
+            var doctor = new Models.Doctor(DBDoctor.Id, DBDoctor.Name, DBDoctor.Title)
+            {
+                Patients = (List<Models.Patient>)GetDoctorPatients(DBDoctor.Id)
+            };
+
+            return doctor;
         }
 
         public IEnumerable<Models.Patient> GetDoctorPatients(int id)
@@ -93,6 +120,11 @@ namespace VirtualClinic.Domain.Repositories
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Get All doctors
+        /// </summary>
+        /// <returns>A list of all Doctors</returns>
+
         public IEnumerable<Models.Doctor> GetDoctors()
         {
             var DBDoctors = _context.Doctors
@@ -103,17 +135,19 @@ namespace VirtualClinic.Domain.Repositories
 
             foreach (var dbdoctor in DBDoctors)
             {
-                Models.Doctor next = new Models.Doctor(dbdoctor.Id, dbdoctor.Name, dbdoctor.Title)
-                {
-                    Patients = (List<Models.Patient>)GetDoctorPatients(dbdoctor.Id)
-                };
-
+                Models.Doctor next = new Models.Doctor(dbdoctor.Id, dbdoctor.Name, dbdoctor.Title);
+          
                 ModelDoctors.Add(next);
             }
 
             return ModelDoctors;
 
         }
+
+        /// <summary>
+        /// Get all doctors async
+        /// </summary>
+        /// <returns>A list of all Doctors</returns>
 
         public async Task<IEnumerable<Models.Doctor>> GetDoctorsAsync()
         {
@@ -125,11 +159,8 @@ namespace VirtualClinic.Domain.Repositories
 
             foreach (var dbdoctor in DBDoctors)
             {
-                Models.Doctor next = new Models.Doctor(dbdoctor.Id, dbdoctor.Name, dbdoctor.Title)
-                {
-                    Patients = (List<Models.Patient>)GetDoctorPatients(dbdoctor.Id)
-                };
-
+                Models.Doctor next = new Models.Doctor(dbdoctor.Id, dbdoctor.Name, dbdoctor.Title);
+                
                 ModelDoctors.Add(next);
             }
 
