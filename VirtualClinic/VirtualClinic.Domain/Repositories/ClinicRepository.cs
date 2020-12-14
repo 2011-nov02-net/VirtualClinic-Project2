@@ -167,11 +167,16 @@ namespace VirtualClinic.Domain.Repositories
 
                 next.InsuranceProvider = dbpatient.Insurance;
 
+                next.SSN = dbpatient.Ssn;
+            
+                //could get dr
+                next.PrimaryDoctor = GetDoctorByID(dbpatient.DoctorId);
+
+                //todo, fill in timeslots
+                next.Timeslots = new List<Models.Timeslot>();
+
                 //todo: fill in perscriptions
                 next.Prescriptions = new List<Models.Prescription>();
-
-                //could get dr
-                next.PrimaryDoctor = this.GetDoctorByID(dbpatient.DoctorId);
 
                 next.PatientReports = new List<Models.PatientReport>();
                 foreach(var dbPatientReport in dbpatient.PatientReports)
@@ -187,7 +192,7 @@ namespace VirtualClinic.Domain.Repositories
                 ModelPatients.Add(next);
             }
 
-            throw new NotImplementedException();
+            return ModelPatients;
         }
 
         public Task<IEnumerable<Models.Patient>> GetPatientsAsync()
