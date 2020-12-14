@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using VirtualClinic.DataModel;
 using VirtualClinic.Domain.Interfaces;
 using VirtualClinic.Domain.Models;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using VirtualClinic.Domain.Mapper;
 
 namespace VirtualClinic.Domain.Repositories
 {
@@ -18,6 +21,7 @@ namespace VirtualClinic.Domain.Repositories
             _context = context ?? throw new ArgumentNullException();
             _logger = logger ?? throw new ArgumentNullException();
         }
+
 
         public void AddDoctor(Models.Doctor doctor)
         {
@@ -151,7 +155,44 @@ namespace VirtualClinic.Domain.Repositories
 
         public IEnumerable<Models.Patient> GetPatients()
         {
-            throw new NotImplementedException();
+            var DBPatients = _context.Patients
+                    .Include(thing => thing.PatientReports)
+                    .ToList();
+
+            List<Models.Patient> ModelPatients = new List<Models.Patient>();
+
+            foreach(var dbpatient in DBPatients)
+            {
+                Models.Patient next = new Models.Patient(dbpatient.Id, dbpatient.Name,dbpatient.Dob);
+
+                next.InsuranceProvider = dbpatient.Insurance;
+
+                next.SSN = dbpatient.Ssn;
+            
+                //could get dr
+                next.PrimaryDoctor = GetDoctorByID(dbpatient.DoctorId);
+
+                //todo, fill in timeslots
+                next.Timeslots = new List<Models.Timeslot>();
+
+                //todo: fill in perscriptions
+                next.Prescriptions = new List<Models.Prescription>();
+
+                next.PatientReports = new List<Models.PatientReport>();
+                foreach(var dbPatientReport in dbpatient.PatientReports)
+                {
+                    var report = DB_DomainMapper.MapReport(dbPatientReport);
+                    report.Patient = next;
+                    //TODO: note vitals still not filled in.
+
+                    next.PatientReports.Add(report);
+                }
+                
+
+                ModelPatients.Add(next);
+            }
+
+            return ModelPatients;
         }
 
         public Task<IEnumerable<Models.Patient>> GetPatientsAsync()
@@ -159,9 +200,35 @@ namespace VirtualClinic.Domain.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Models.Timeslot> GetPatientTimeslots(int id)
+        /// <summary>
+        /// Get timeslot and apointment information for ones related to a specific patient.
+        /// </summary>
+        /// <remarks>
+        /// NOTE: because this matches to a patient id which is stored on apointments,
+        /// every item returned should have an apointment attached to the timeslot.
+        /// </remarks>
+        /// <param name="PatientId">The id of the desired patient in the DB.</param>
+        /// <returns>List of timeslots with any apointment informtion filled in.</returns>
+        public IEnumerable<Models.Timeslot> GetPatientTimeslots(int PatientId)
         {
-            throw new NotImplementedException();
+            List<DataModel.Timeslot> timeslots = _context.Timeslots
+                    .Include(ts => ts.Appointment)
+                    .Where(ts => ts.Appointment.PatientId == PatientId)
+                    .ToList();
+
+            List<Models.Timeslot> modelTimeslots = new List<Models.Timeslot>();
+
+            foreach(var DBTimeSlot in timeslots)
+            {
+                Models.Timeslot modelts = DB_DomainMapper.MapTimeslot(DBTimeSlot);
+
+                //does not fill in dr or patient
+                modelts.Appointment = DB_DomainMapper.MapApointment(DBTimeSlot.Appointment);
+
+                modelTimeslots.Add(modelts);
+            }
+
+            return modelTimeslots;        
         }
 
         public Task<IEnumerable<Models.Timeslot>> GetPatientTimeslotsAsync(int id)

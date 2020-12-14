@@ -5,6 +5,14 @@ namespace VirtualClinic.Domain.Models
 {
     public class Patient : User
     {
+
+        public Patient(int id, string name, DateTime dob)
+        {
+            base.Id = id;
+            base.Name = name;
+            this.DateOfBirth = dob;
+        }
+
         public Doctor PrimaryDoctor { get; set; }
         public List<PatientReport> PatientReports { get; set; }
         public List<Prescription> Prescriptions { get; set; }
