@@ -13,6 +13,9 @@ namespace VirtualClinic.Domain.Mapper
         /// <summary>
         /// Convert a report from a db object to a domain model object.
         /// </summary>
+        /// <remarks>
+        /// Will not get patient or vitals.
+        /// </remarks>
         /// <param name="report">The report from the db</param>
         /// <returns></returns>
         public static Models.PatientReport MapReport(DataModel.PatientReport report)
@@ -27,8 +30,6 @@ namespace VirtualClinic.Domain.Mapper
             modelreport.Id = report.Id;
             modelreport.Info = report.Information;
             modelreport.Time = report.ReportTime;
-
-            //todo: get patient and vitals
 
             return modelreport;
         }

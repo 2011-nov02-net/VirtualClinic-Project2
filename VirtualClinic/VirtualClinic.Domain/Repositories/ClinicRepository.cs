@@ -230,9 +230,20 @@ namespace VirtualClinic.Domain.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Models.PatientReport> GetPatientReports(int id)
+        public IEnumerable<Models.PatientReport> GetPatientReports(int PatientId)
         {
-            throw new NotImplementedException();
+            List<DataModel.PatientReport> reports = _context.PatientReports
+                .Where(report => report.PatientId == PatientId)
+                .ToList();
+
+            List<Models.PatientReport> modelreports = new List<Models.PatientReport>();
+
+            foreach(var r in reports)
+            {
+                modelreports.Add(DB_DomainMapper.MapReport(r));
+            }
+
+            return modelreports;
         }
 
         public Task<IEnumerable<Models.Prescription>> GetPatientReportsAsync(int id)
