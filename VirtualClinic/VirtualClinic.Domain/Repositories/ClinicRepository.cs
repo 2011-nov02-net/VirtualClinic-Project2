@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using VirtualClinic.DataModel;
-using VirtualClinic.Domain.Interfaces;
-using VirtualClinic.Domain.Models;
+using VirtualClinic.Domain.Interfaces;using VirtualClinic.Domain.Models;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using VirtualClinic.Domain.Mapper;
@@ -141,10 +140,10 @@ namespace VirtualClinic.Domain.Repositories
         /// </summary>
         /// <param name="id">The id of the doctor to be returned</param>
         /// <returns>A doctor with a list of its patient</returns>
-        public Models.Doctor GetDoctorByID(int id)
+        public Models.Doctor GetDoctorByID(int doctorId)
         {
 
-            var DBDoctor = _context.Doctors.Where(o => o.Id == id).First();
+            var DBDoctor = _context.Doctors.Where(o => o.Id == doctorId).First();
 
             var doctor = new Models.Doctor(DBDoctor.Id, DBDoctor.Name, DBDoctor.Title)
             {
@@ -154,9 +153,9 @@ namespace VirtualClinic.Domain.Repositories
             return doctor;
         }
 
-        public async Task<Models.Doctor> GetDoctorByIDAsync(int id)
+        public async Task<Models.Doctor> GetDoctorByIDAsync(int doctorId)
         {
-            var DBDoctor = await _context.Doctors.Where(o => o.Id == id).FirstAsync();
+            var DBDoctor = await _context.Doctors.Where(o => o.Id == doctorId).FirstAsync();
 
             var doctor = new Models.Doctor(DBDoctor.Id, DBDoctor.Name, DBDoctor.Title)
             {
@@ -173,9 +172,9 @@ namespace VirtualClinic.Domain.Repositories
         /// <param name="id">The id of the doctor whose patients are being requested</param>
         /// <returns>A list of patients of a doctor</returns>
 
-        public IEnumerable<Models.Patient> GetDoctorPatients(int id)
+        public IEnumerable<Models.Patient> GetDoctorPatients(int doctorId)
         {
-            var DBPatients = _context.Patients.Where(o => o.DoctorId == id).ToList();
+            var DBPatients = _context.Patients.Where(o => o.DoctorId == doctorId).ToList();
 
             List<Models.Patient> patients = new List<Models.Patient>();
 
@@ -190,9 +189,9 @@ namespace VirtualClinic.Domain.Repositories
         }
 
 
-        public async Task<IEnumerable<Models.Patient>> GetDoctorPatientsAsync(int id)
+        public async Task<IEnumerable<Models.Patient>> GetDoctorPatientsAsync(int doctorId)
         {
-            var DBPatients = await _context.Patients.Where(o => o.DoctorId == id).ToListAsync();
+            var DBPatients = await _context.Patients.Where(o => o.DoctorId == doctorId).ToListAsync();
 
             List<Models.Patient> patients = new List<Models.Patient>();
 
@@ -267,9 +266,14 @@ namespace VirtualClinic.Domain.Repositories
             return ConvertTimeslots(timeslots);
         }
 
-        public Task<IEnumerable<Models.Timeslot>> GetDoctorTimeslotsAsync(int id)
+        public async Task<IEnumerable<Models.Timeslot>> GetDoctorTimeslotsAsync(int doctorId)
         {
-            throw new NotImplementedException();
+            List<DataModel.Timeslot> timeslots = await _context.Timeslots
+                    .Include(ts => ts.Appointment)
+                    .Where(ts => ts.DoctorId == doctorId)
+                    .ToListAsync();
+
+            return ConvertTimeslots(timeslots);
         }
 
         public Models.Patient GetPatientByID(int id)
