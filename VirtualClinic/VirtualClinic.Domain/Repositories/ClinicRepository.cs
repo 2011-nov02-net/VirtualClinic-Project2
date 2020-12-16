@@ -22,7 +22,10 @@ namespace VirtualClinic.Domain.Repositories
             _logger = logger ?? throw new ArgumentNullException();
         }
 
-
+        /// <summary>
+        /// Adds a doctor to the database
+        /// </summary>
+        /// <param name="doctor">The doctor to be added to the database</param>
         public void AddDoctor(Models.Doctor doctor)
         {
            var newDoctor = new DataModel.Doctor
@@ -47,14 +50,39 @@ namespace VirtualClinic.Domain.Repositories
            await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Add a patient to the database 
+        /// </summary>
+        /// <param name="patient">A patient to be added to the database</param>
         public void AddPatient(Models.Patient patient)
         {
-            throw new NotImplementedException();
+            var newPatient = new DataModel.Patient
+            {
+                Id = patient.Id,
+                Name = patient.Name,
+                Dob = patient.DateOfBirth,
+                DoctorId = patient.PrimaryDoctor.Id,
+                Ssn = patient.SSN,
+                Insurance = patient.InsuranceProvider
+            };
+            _context.Patients.Add(newPatient);
+            _context.SaveChanges();
+
         }
 
-        public Task AddPatientAsync(Models.Patient patient)
+        public async Task AddPatientAsync(Models.Patient patient)
         {
-            throw new NotImplementedException();
+            var newPatient = new DataModel.Patient
+            {
+                Id = patient.Id,
+                Name = patient.Name,
+                Dob = patient.DateOfBirth,
+                DoctorId = patient.PrimaryDoctor.Id,
+                Ssn = patient.SSN,
+                Insurance = patient.InsuranceProvider
+            };
+           await _context.Patients.AddAsync(newPatient);
+           await _context.SaveChangesAsync();
         }
 
         public void AddPatientReport(Models.PatientReport report)
@@ -126,12 +154,6 @@ namespace VirtualClinic.Domain.Repositories
             return doctor;
         }
 
-
-        /// <summary>
-        /// Get a doctor with a specific Id Async
-        /// </summary>
-        /// <param name="id">The id of the doctor to be returned</param>
-        /// <returns><A doctor with a list of its patient/returns>
         public async Task<Models.Doctor> GetDoctorByIDAsync(int id)
         {
             var DBDoctor = await _context.Doctors.Where(o => o.Id == id).FirstAsync();
@@ -168,11 +190,6 @@ namespace VirtualClinic.Domain.Repositories
         }
 
 
-        /// <summary>
-        /// Get patients of a specific doctor async
-        /// </summary>
-        /// <param name="id">The id of the doctor whose patients are being requested</param>
-        /// <returns>A list of patients of a doctor</returns>
         public async Task<IEnumerable<Models.Patient>> GetDoctorPatientsAsync(int id)
         {
             var DBPatients = await _context.Patients.Where(o => o.DoctorId == id).ToListAsync();
@@ -212,11 +229,6 @@ namespace VirtualClinic.Domain.Repositories
             return ModelDoctors;
 
         }
-
-        /// <summary>
-        /// Get all doctors async
-        /// </summary>
-        /// <returns>A list of all Doctors</returns>
 
         public async Task<IEnumerable<Models.Doctor>> GetDoctorsAsync()
         {
@@ -386,14 +398,15 @@ namespace VirtualClinic.Domain.Repositories
             return ConvertTimeslots(timeslots, true);        
         }
 
-        public Task<IEnumerable<Models.Timeslot>> GetPatientTimeslotsAsync(int id)
+        public async Task<IEnumerable<Models.Timeslot>> GetPatientTimeslotsAsync(int PatientId)
         {
-            throw new NotImplementedException();
+              List<DataModel.Timeslot> timeslots = await _context.Timeslots
+                    .Include(ts => ts.Appointment)
+                    .Where(ts => ts.Appointment.PatientId == PatientId)
+                    .ToListAsync ();
+
+            return ConvertTimeslots(timeslots, true); 
         }
-
-
-
-
 
         #region PrivateHelpers
         /// <summary>
