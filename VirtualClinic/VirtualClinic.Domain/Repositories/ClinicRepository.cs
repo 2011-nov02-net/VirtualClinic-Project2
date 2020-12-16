@@ -35,9 +35,16 @@ namespace VirtualClinic.Domain.Repositories
            _context.SaveChanges();
         }
 
-        public Task AddDoctorAsync(Models.Doctor doctor)
+        public async Task AddDoctorAsync(Models.Doctor doctor)
         {
-            throw new NotImplementedException();
+            var newDoctor = new DataModel.Doctor
+           {
+               Id = doctor.Id,
+               Name = doctor.Name,
+               Title = doctor.Title
+           };
+           await _context.Doctors.AddAsync(newDoctor);
+           await _context.SaveChangesAsync();
         }
 
         public void AddPatient(Models.Patient patient)
