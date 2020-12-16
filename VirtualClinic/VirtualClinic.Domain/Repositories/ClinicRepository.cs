@@ -12,7 +12,7 @@ using VirtualClinic.Domain.Mapper;
 
 namespace VirtualClinic.Domain.Repositories
 {
-    class ClinicRepository : IClinicRepository
+    public class ClinicRepository : IClinicRepository
     {
         private readonly ClinicDbContext _context;
         private readonly ILogger<ClinicRepository> _logger;
