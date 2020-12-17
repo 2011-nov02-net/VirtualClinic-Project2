@@ -67,7 +67,7 @@ namespace VirtualClinic.Domain.Repositories
 
         }
 
-        public async Task AddPatientAsync(Models.Patient patient)
+        public async Task<bool> AddPatientAsync(Models.Patient patient)
         {
             var newPatient = new DataModel.Patient
             {
@@ -79,6 +79,7 @@ namespace VirtualClinic.Domain.Repositories
             };
            await _context.Patients.AddAsync(newPatient);
            await _context.SaveChangesAsync();
+            return true;
         }
 
         /// <summary>
@@ -136,7 +137,7 @@ namespace VirtualClinic.Domain.Repositories
 
         }
 
-        public async Task AddPrescriptionAsync(Models.Prescription prescription)
+        public async Task<bool> AddPrescriptionAsync(Models.Prescription prescription)
         {
             var newPrescription = new DataModel.Prescription
             {
@@ -148,6 +149,7 @@ namespace VirtualClinic.Domain.Repositories
 
            await  _context.AddAsync(newPrescription);
            await  _context.SaveChangesAsync();
+            return true;
         }
 
         
@@ -322,6 +324,12 @@ namespace VirtualClinic.Domain.Repositories
             return ConvertTimeslots(timeslots);
         }
 
+
+        /// <summary>
+        /// Get a patient by the patients Id
+        /// </summary>
+        /// <param name="patientId">The Id of the patient to be retrieved </param>
+        /// <returns>A patient </returns>
         public Models.Patient GetPatientByID(int patientId)
         {
             var DBPatient = _context.Patients.Where(o => o.Id == patientId).First();
@@ -410,6 +418,12 @@ namespace VirtualClinic.Domain.Repositories
             return modelreport;
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IEnumerable<Models.PatientReport> GetPatientReports(int id)
         {
             throw new NotImplementedException();
@@ -420,6 +434,11 @@ namespace VirtualClinic.Domain.Repositories
             throw new NotImplementedException();
         }
 
+
+        /// <summary>
+        /// /
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<Models.Patient> GetPatients()
         {
             var DBPatients = _context.Patients

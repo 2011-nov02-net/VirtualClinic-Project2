@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using VirtualClinic.Domain.Repositories;
+using VirtualClinic.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using VirtualClinic.Domain.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,6 +16,14 @@ namespace VirtualClinic.Api.Controllers
     [ApiController]
     public class PatientsController : ControllerBase
     {
+        private readonly ILogger<PatientsController> _logger;
+        private readonly IClinicRepository _clinicRepository;
+
+        public PatientsController(ILogger<PatientsController> logger, IClinicRepository clinicRepository)
+        {
+            _logger = logger;
+            _clinicRepository = clinicRepository;
+        }
         // GET: api/<PatientsController>
         /// <summary>
         /// Requires DR Level Authentication. Gets a list of all the DR's Patients.
@@ -21,20 +33,31 @@ namespace VirtualClinic.Api.Controllers
         /// </param>
         /// <returns>Information on the patient, or error 403 not authorized.</returns>
         [HttpGet]
-        public IEnumerable<string> Get([FromQuery] string search = null)
+        public async Task<IActionResult> Get(int doctorId, [FromQuery] string search = null)
         {
             //check if logged in as dr, if not, then return not authorized
-
             //get all the patients of the currently logged in doctor.
-
-            if(search is not null)
+            if (await  _clinicRepository.GetDoctorPatientsAsync(doctorId) is IEnumerable<Patient> patients)
             {
-                //filter by name based on search string
 
+                //if(search is not null)
+                //{
+                //    //filter by name based on search string
+
+                //}
+                //else
+                {
+
+                    return Ok(patients);
+                }
+           
+            }
+            else
+            {
+
+                return NotFound();
             }
 
-
-            return new string[] { "value1", "value2" };
         }
 
         // GET api/<PatientsController>/5
@@ -45,20 +68,28 @@ namespace VirtualClinic.Api.Controllers
         /// <param name="id">The id of the patient who's information is to be retrieved</param>
         /// <returns>Information on the patient, 404 not found, or 403 not authorized</returns>
         [HttpGet("{id}")]
-        public string Get([FromRoute] int id)
+        public async Task<IActionResult> Get([FromRoute] int patientId)
         {
             // check if the patient with that id exists
 
 
             //if they exist, check authorization of the user
+            if( await _clinicRepository.GetPatientByIDAsync(patientId) is Patient patient)
+            {
 
+                return Ok(patient);
+            }
+            else
+            {
 
-            return "value";
+                return NotFound();
+            }
+
         }
 
 
         [HttpGet("{Patientid}/Reports")]
-        public string GetReports([FromRoute] int Patientid)
+        public async Task<IActionResult>  GetReports([FromRoute] int PatientId)
         {
             // check if the patient with that id exists
 
@@ -66,12 +97,22 @@ namespace VirtualClinic.Api.Controllers
             //if they exist, check authorization of the user
 
             //probably then forward this request to the reports controller
-            return "value";
+            if (await _clinicRepository.GetPatientReportsAsync(PatientId) is IEnumerable<PatientReport> reports)
+            { 
+
+                return Ok(reports);
+            }
+            else
+            {
+
+            return NotFound();
+            }
+
         }
 
 
-        [HttpGet("{PatientID}/Reports/id")]
-        public string GetReport([FromRoute] int PatientID, [FromRoute] int id)
+        [HttpGet("{PatientId}/Reports/id")]
+        public async Task<IActionResult>  GetReport([FromRoute] int PatientID, [FromRoute] int id)
         {
             // check if the patient with that id exists
 
@@ -79,7 +120,16 @@ namespace VirtualClinic.Api.Controllers
             //if they exist, check authorization of the user
 
             //probably then forward this request to the reports controller
-            return "value";
+            if (await _clinicRepository.GetPatientReportByIDAsync(id) is PatientReport report)
+            {
+
+                return Ok(report);
+            }
+            else
+            {
+
+                return NotFound();
+            }
         }
 
         // POST api/<PatientsController>
@@ -89,20 +139,31 @@ namespace VirtualClinic.Api.Controllers
         /// </summary>
         /// <param name="value"></param>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] Patient patient)
         {
+            if (await _clinicRepository.AddPatientAsync(patient))
+            {
+                return Ok();
+            }
+            else
+            {
+
+                return BadRequest();
+            }
         }
 
         // PUT api/<PatientsController>/5
         [HttpPut("{id}")]
         public void Put([FromRoute] int id, [FromBody] string value)
         {
+            //todo update patient by id method in repo async
         }
 
         // DELETE api/<PatientsController>/5
         [HttpDelete("{id}")]
         public void Delete([FromRoute] int id)
         {
+            //todo delete patient by id method in repo async
         }
     }
 }

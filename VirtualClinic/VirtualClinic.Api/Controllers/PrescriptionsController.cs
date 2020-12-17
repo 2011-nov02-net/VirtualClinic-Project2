@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using VirtualClinic.Domain.Models;
 using System.Linq;
 using System.Threading.Tasks;
+using VirtualClinic.Domain.Repositories;
+using VirtualClinic.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using VirtualClinic.Domain.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,6 +16,15 @@ namespace VirtualClinic.Api.Controllers
     [ApiController]
     public class PrescriptionsController : ControllerBase
     {
+
+        private readonly ILogger<PrescriptionsController> _logger;
+        private readonly IClinicRepository _clinicRepository;
+
+        public PrescriptionsController(ILogger<PrescriptionsController> logger, IClinicRepository clinicRepository)
+        {
+            _logger = logger;
+            _clinicRepository = clinicRepository;
+        }
         // GET: api/Prescriptions
         /// <summary>
         /// Get all prescriptions for the logged in user.
@@ -22,13 +34,20 @@ namespace VirtualClinic.Api.Controllers
         /// </param>
         /// <returns></returns>
         [HttpGet]
-        public IEnumerable<string> Get([FromQuery] string search = null)
+        public async Task<IActionResult> Get(int patientid,[FromQuery] string search = null)
         {
             //if logged in user is a DR, get all prescritpions for this doctor
 
 
             //else if user is a patient, get all prescriptions for this patient
-            return new string[] { "value1", "value2" };
+            if (await _clinicRepository.GetPatientPrescriptionsAsync(patientid) is IEnumerable<Prescription> prescriptions)
+            {
+                return Ok(prescriptions);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
         // GET api/Prescription/5
@@ -38,9 +57,9 @@ namespace VirtualClinic.Api.Controllers
         /// <param name="id">The id of the prescription to be retrieved </param>
         /// <returns>Information on the prescription, 404 not found or 403 not auhtprized</returns>
         [HttpGet("{id}")]
-        public string Get(int id)
+        public void Get(int id)
         {
-            return "value";
+          //todo get prescription by id Async
         }
 
 
@@ -53,11 +72,19 @@ namespace VirtualClinic.Api.Controllers
         /// Either forbidden, or Ok 201
         /// </returns>
         [HttpPost]
-        public void Post([FromBody] Prescription prescription)
+        public async Task<IActionResult>  Post([FromBody] Prescription prescription)
         {
             //If user is a DR, create a new prescription for a patient
 
             //If user is a patient, return 403 forbidden
+            if (await _clinicRepository.AddPrescriptionAsync(prescription))
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
 
@@ -76,6 +103,9 @@ namespace VirtualClinic.Api.Controllers
             //If user is a DR, edit this prescription
 
             //If user is a patient, return 403 forbidden
+
+            //todo update patient by id method in repo async
+
         }
 
         // DELETE api/Prescriptions/5
@@ -92,6 +122,8 @@ namespace VirtualClinic.Api.Controllers
             //If user is a DR, delete this prescription
 
             //If user is a patient, return 403 forbidden
+
+            //todo delete prescription by id method in repo async
         }
     }
 }
