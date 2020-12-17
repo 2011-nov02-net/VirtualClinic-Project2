@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using VirtualClinic.DataModel;
-using VirtualClinic.Domain.Interfaces;using VirtualClinic.Domain.Models;
+using VirtualClinic.Domain.Interfaces;
+using VirtualClinic.Domain.Models;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using VirtualClinic.Domain.Mapper;
@@ -29,7 +30,6 @@ namespace VirtualClinic.Domain.Repositories
         {
            var newDoctor = new DataModel.Doctor
            {
-               Id = doctor.Id,
                Name = doctor.Name,
                Title = doctor.Title
            };
@@ -41,7 +41,6 @@ namespace VirtualClinic.Domain.Repositories
         {
             var newDoctor = new DataModel.Doctor
            {
-               Id = doctor.Id,
                Name = doctor.Name,
                Title = doctor.Title
            };
@@ -57,7 +56,6 @@ namespace VirtualClinic.Domain.Repositories
         {
             var newPatient = new DataModel.Patient
             {
-                Id = patient.Id,
                 Name = patient.Name,
                 Dob = patient.DateOfBirth,
                 DoctorId = patient.PrimaryDoctor.Id,
@@ -69,11 +67,10 @@ namespace VirtualClinic.Domain.Repositories
 
         }
 
-        public async Task AddPatientAsync(Models.Patient patient)
+        public async Task<bool> AddPatientAsync(Models.Patient patient)
         {
             var newPatient = new DataModel.Patient
             {
-                Id = patient.Id,
                 Name = patient.Name,
                 Dob = patient.DateOfBirth,
                 DoctorId = patient.PrimaryDoctor.Id,
@@ -82,26 +79,77 @@ namespace VirtualClinic.Domain.Repositories
             };
            await _context.Patients.AddAsync(newPatient);
            await _context.SaveChangesAsync();
+            return true;
         }
 
+        /// <summary>
+        /// Add a patient report to the database
+        /// </summary>
+        /// <param name="report">The report to be added tp the database</param>
         public void AddPatientReport(Models.PatientReport report)
         {
-            throw new NotImplementedException();
+            var newPatientReport = new DataModel.PatientReport
+            {
+
+                PatientId  = report.Patient.Id,
+                ReportTime = report.Time,
+                Information = report.Info
+           //add vitals id for datamodel??
+
+            };
+
+            _context.Add(newPatientReport);
+            _context.SaveChanges();
+
         }
 
-        public Task AddPatientReportAsync(Models.PatientReport report)
+        public async Task AddPatientReportAsync(Models.PatientReport report)
         {
-            throw new NotImplementedException();
+            var newPatientReport = new DataModel.PatientReport
+            {
+
+                PatientId = report.Patient.Id,
+                ReportTime = report.Time,
+                Information = report.Info
+
+            };
+
+            await _context.AddAsync(newPatientReport);
+           await  _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Add a prescription to the database
+        /// </summary>
+        /// <param name="prescription">The prescition to be added to the databse</param>
         public void AddPrescription(Models.Prescription prescription)
         {
-            throw new NotImplementedException();
+            var newPrescription = new DataModel.Prescription
+            {
+                Information = prescription.Info,
+                Drug = prescription.DrugName,
+                PatientId = prescription.Patient.Id,
+                DoctorId  = prescription.Doctor.Id,
+            };
+
+            _context.Add(newPrescription);
+            _context.SaveChanges();
+
         }
 
-        public Task AddPrescriptionAsync(Models.Prescription prescription)
+        public async Task<bool> AddPrescriptionAsync(Models.Prescription prescription)
         {
-            throw new NotImplementedException();
+            var newPrescription = new DataModel.Prescription
+            {
+                Information = prescription.Info,
+                Drug = prescription.DrugName,
+                PatientId = prescription.Patient.Id,
+                DoctorId = prescription.Doctor.Id,
+            };
+
+           await  _context.AddAsync(newPrescription);
+           await  _context.SaveChangesAsync();
+            return true;
         }
 
         
@@ -301,9 +349,22 @@ namespace VirtualClinic.Domain.Repositories
             }
         }
 
-        public Task<Models.Patient> GetPatientByIDAsync(int id)
+        public async Task<Models.Patient> GetPatientByIDAsync(int patientId)
         {
-            throw new NotImplementedException();
+            var DBPatient = await _context.Patients.Where(o => o.Id == patientId).FirstAsync();
+
+            var doctor = new Models.Doctor()
+            {
+                Id = DBPatient.Doctor.Id,
+                Name = DBPatient.Doctor.Name,
+                Title = DBPatient.Doctor.Title
+
+            };
+
+            var patient = new Models.Patient(DBPatient.Id, DBPatient.Name, DBPatient.Dob, doctor);
+
+
+            return patient;
         }
 
         /// <summary>
@@ -356,9 +417,21 @@ namespace VirtualClinic.Domain.Repositories
             return modelreport;
         }
 
-        public Task<Models.PatientReport> GetPatientReportByIDAsync(int id)
+        public async Task<Models.PatientReport> GetPatientReportByIDAsync(int ReportId)
         {
-            throw new NotImplementedException();
+            DataModel.PatientReport report = await _context.PatientReports.FindAsync(ReportId);
+
+            if(report is null)
+            {
+                //then no report with that id exists in the DB
+                throw new ArgumentException("ID Not Found in DB.");
+            }
+
+
+            var modelreport = DB_DomainMapper.MapReport(report);
+            //technically could be null, but shouldn't be because this ID comes from DB information.
+            modelreport.Vitals = DB_DomainMapper.MapVitals(_context.Vitals.Find(report.VitalsId));
+            return modelreport;
         }
 
         /// <summary>
@@ -464,7 +537,7 @@ namespace VirtualClinic.Domain.Repositories
             }
         }
 
-        public Task GetPrescriptionAsync(int PerscriptionId)
+        public Task<bool> GetPrescriptionAsync(int PerscriptionId)
         {
             throw new NotImplementedException();
         }
@@ -498,6 +571,13 @@ namespace VirtualClinic.Domain.Repositories
 
             return modelTimeslots;
         }
+
+        Task IClinicRepository.GetPrescriptionAsync(int PerscriptionId)
+        {
+            throw new NotImplementedException();
+        }
+
+
         #endregion
     }
 }
