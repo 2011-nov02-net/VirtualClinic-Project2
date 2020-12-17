@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using VirtualClinic.DataModel;
-using VirtualClinic.Domain.Interfaces;using VirtualClinic.Domain.Models;
+using VirtualClinic.Domain.Interfaces;
+using VirtualClinic.Domain.Models;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using VirtualClinic.Domain.Mapper;
@@ -321,14 +322,40 @@ namespace VirtualClinic.Domain.Repositories
             return ConvertTimeslots(timeslots);
         }
 
-        public Models.Patient GetPatientByID(int id)
+        public Models.Patient GetPatientByID(int patientId)
         {
-            throw new NotImplementedException();
+            var DBPatient = _context.Patients.Where(o => o.Id == patientId).First();
+
+            var doctor = new Models.Doctor()
+            {
+                Id = DBPatient.Doctor.Id,
+                Name = DBPatient.Doctor.Name,
+                Title = DBPatient.Doctor.Title
+
+            };
+
+            var patient = new Models.Patient(DBPatient.Id, DBPatient.Name, DBPatient.Dob, doctor);
+           
+
+            return patient;
         }
 
-        public Task<Models.Patient> GetPatientByIDAsync(int id)
+        public async Task<Models.Patient> GetPatientByIDAsync(int patientId)
         {
-            throw new NotImplementedException();
+            var DBPatient = await _context.Patients.Where(o => o.Id == patientId).FirstAsync();
+
+            var doctor = new Models.Doctor()
+            {
+                Id = DBPatient.Doctor.Id,
+                Name = DBPatient.Doctor.Name,
+                Title = DBPatient.Doctor.Title
+
+            };
+
+            var patient = new Models.Patient(DBPatient.Id, DBPatient.Name, DBPatient.Dob, doctor);
+
+
+            return patient;
         }
 
         public IEnumerable<Models.Prescription> GetPatientPrescriptions(int id)
@@ -366,9 +393,21 @@ namespace VirtualClinic.Domain.Repositories
             return modelreport;
         }
 
-        public Task<Models.PatientReport> GetPatientReportByIDAsync(int id)
+        public async Task<Models.PatientReport> GetPatientReportByIDAsync(int ReportId)
         {
-            throw new NotImplementedException();
+            DataModel.PatientReport report = await _context.PatientReports.FindAsync(ReportId);
+
+            if(report is null)
+            {
+                //then no report with that id exists in the DB
+                throw new ArgumentException("ID Not Found in DB.");
+            }
+
+
+            var modelreport = DB_DomainMapper.MapReport(report);
+            //technically could be null, but shouldn't be because this ID comes from DB information.
+            modelreport.Vitals = DB_DomainMapper.MapVitals(_context.Vitals.Find(report.VitalsId));
+            return modelreport;
         }
 
         public IEnumerable<Models.PatientReport> GetPatientReports(int id)
