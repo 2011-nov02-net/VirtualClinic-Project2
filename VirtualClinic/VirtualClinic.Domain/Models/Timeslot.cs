@@ -7,6 +7,8 @@ namespace VirtualClinic.Domain.Models
 {
     public class Timeslot
     {
+        private int id;
+
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public Appointment Appointment { get; set; }
@@ -28,6 +30,13 @@ namespace VirtualClinic.Domain.Models
         /// <param name="end">when the apointment ends.</param>
         public Timeslot(DateTime start, DateTime end)
         {
+            Start = start;
+            End = end;
+        }
+
+        public Timeslot(int id, DateTime start, DateTime end)
+        {
+            this.id = id;
             Start = start;
             End = end;
         }
