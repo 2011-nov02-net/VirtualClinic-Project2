@@ -162,7 +162,6 @@ namespace VirtualClinic.Domain.Repositories
         public IEnumerable<Models.Timeslot> GetDoctorTimeslots(int doctorId)
         {
             List<DataModel.Timeslot> timeslots = _context.Timeslots
-                    .Include(ts => ts.Appointment)
                     .Where(ts => ts.DoctorId == doctorId)
                     .ToList();
 

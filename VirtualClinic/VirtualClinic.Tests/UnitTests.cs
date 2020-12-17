@@ -13,6 +13,30 @@ namespace VirtualClinic.Tests
     public class UnitTests
     {
         [Fact]
+        public void AddDoctor_Database_Test()
+        {
+            using var connection = new SqliteConnection("Data Source=:memory:");
+            connection.Open();
+            var options = new DbContextOptionsBuilder<ClinicDbContext>().UseSqlite(connection).Options;
+            var doctor = new VirtualClinic.Domain.Models.Doctor("Jerry Smith", "MD");
+
+            using (var context = new ClinicDbContext(options))
+            {
+                context.Database.EnsureCreated();
+                var repo = new ClinicRepository(context, new NullLogger<ClinicRepository>());
+
+                repo.AddDoctor(doctor);
+            }
+
+            using var context2 = new ClinicDbContext(options);
+            DataModel.Doctor doctorActual = context2.Doctors
+                .Single(l => l.Name == "Jerry Smith");
+
+            Assert.Equal(doctor.Name, doctorActual.Name);
+            Assert.Equal(doctor.Title, doctorActual.Title);
+
+        }
+        [Fact]
         public void AddPatient_Database_Test()
         {
             using var connection = new SqliteConnection("Data Source=:memory:");
@@ -23,6 +47,8 @@ namespace VirtualClinic.Tests
                 SSN = "293-38-0071",
                 InsuranceProvider = "Umbrella Corp"
             };
+
+            patient.PrimaryDoctor = new Domain.Models.Doctor("John Smith", "diagnostician");
 
             using (var context = new ClinicDbContext(options))
             {

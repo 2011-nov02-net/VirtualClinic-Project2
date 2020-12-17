@@ -1,6 +1,7 @@
-/*CREATE SCHEMA Clinic;
-GO
-*/
+
+--DROP SCHEMA Clinic
+--CREATE SCHEMA Clinic;
+--GO
 
 /* Added the Go's because of complaints 
  * about FK restraintrs 
@@ -11,8 +12,8 @@ DROP TABLE IF EXISTS Clinic.Doctors;
 GO
 DROP TABLE IF EXISTS Clinic.Vitals;
 GO
-DROP TABLE IF EXISTS Clinic.PatientReports;
 DROP TABLE IF EXISTS Clinic.Prescriptions;
+DROP TABLE IF EXISTS Clinic.PatientReports;
 DROP TABLE IF EXISTS Clinic.Timeslots;
 DROP TABLE IF EXISTS Clinic.Appointments;
 
@@ -82,13 +83,12 @@ CREATE TABLE Clinic.Appointments
     PatientId  INT NOT NULL,
 	DoctorId   INT NOT NULL,
 	[Start]    DATETIME NOT NULL,
-	[End]      DATETIME NOT NULL
+	[End]      DATETIME NOT NULL,
  
 	CONSTRAINT AppointmentDateTime CHECK (Appointments.[End] > Appointments.[Start]),
 	CONSTRAINT AppointmentDoctor_FK FOREIGN KEY (DoctorId) REFERENCES Clinic.Doctors (Id),
     CONSTRAINT ApointmentPatient_FK FOREIGN KEY (PatientId) REFERENCES Clinic.Patients (Id),
-    CONSTRAINT ApointmentVitals_FK FOREIGN KEY (VitalsId) REFERENCES Clinic.Vitals (Id)
-
+    CONSTRAINT ApointmentVitals_FK FOREIGN KEY (VitalsId) REFERENCES Clinic.Vitals (Id),
 );
 
 CREATE TABLE Clinic.Timeslots
@@ -100,8 +100,6 @@ CREATE TABLE Clinic.Timeslots
 	[End]         DATETIME NOT NULL,
 
 	CONSTRAINT TimeslotDateTIme CHECK (Timeslots.[End] > Timeslots.[Start]),
-	CHECK (Timeslots.[End] > Timeslots.[Start]),
     CONSTRAINT Doctor_FK FOREIGN KEY (DoctorId) REFERENCES Clinic.Doctors (Id),
     CONSTRAINT TimeslotAppointment_FK FOREIGN KEY (AppointmentId) REFERENCES Clinic.Appointments (Id)
-
 );
