@@ -38,22 +38,22 @@ namespace VirtualClinic.Domain.Interfaces
         /// Timeslot related queries
         /// </summary>
         #region TimeSlot
-        public void AddTimeslot(Timeslot timeslot);
-        public Task AddTimeslotAsync(Timeslot timeslot);
         public IEnumerable<Timeslot> GetPatientTimeslots(int id);
         public Task<IEnumerable<Timeslot>> GetPatientTimeslotsAsync(int id);
         public IEnumerable<Timeslot> GetDoctorTimeslots(int id);
         public Task<IEnumerable<Timeslot>> GetDoctorTimeslotsAsync(int id);
+        public void AddTimeslot(Timeslot timeslot);
+        public Task AddTimeslotAsync(Timeslot timeslot);
         #endregion
 
         /// <summary>
         /// Patient report related queries
         /// </summary>
         #region Reports
-        public IEnumerable<PatientReport> GetPatientReports(int id);
-        public Task<IEnumerable<Prescription>> GetPatientReportsAsync(int id);
         public PatientReport GetPatientReportByID(int id);
         public Task<PatientReport> GetPatientReportByIDAsync(int id);
+        public IEnumerable<PatientReport> GetPatientReports(int id);
+        public Task<IEnumerable<Prescription>> GetPatientReportsAsync(int id);
         public void AddPatientReport(PatientReport report);
         public Task AddPatientReportAsync(PatientReport report);
         #endregion
@@ -62,15 +62,15 @@ namespace VirtualClinic.Domain.Interfaces
         /// Prescription related queries
         /// </summary>
         #region Perscriptions
-        public void AddPrescription(Prescription prescription);
-        public Task AddPrescriptionAsync(Prescription prescription);
-
         public Prescription GetPrescription(int PerscriptionId);
 
         public Task GetPrescriptionAsync(int PerscriptionId);
 
         public IEnumerable<Prescription> GetPatientPrescriptions(int id);
         public Task<IEnumerable<Prescription>> GetPatientPrescriptionsAsync(int id);
+
+        public void AddPrescription(Prescription prescription);
+        public Task AddPrescriptionAsync(Prescription prescription);
         #endregion
     }
 }
