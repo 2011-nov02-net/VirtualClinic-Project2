@@ -64,6 +64,11 @@ namespace VirtualClinic.Domain.Interfaces
         #region Perscriptions
         public void AddPrescription(Prescription prescription);
         public Task AddPrescriptionAsync(Prescription prescription);
+
+        public Prescription GetPrescription(int PerscriptionId);
+
+        public Task GetPrescriptionAsync(int PerscriptionId);
+
         public IEnumerable<Prescription> GetPatientPrescriptions(int id);
         public Task<IEnumerable<Prescription>> GetPatientPrescriptionsAsync(int id);
         #endregion

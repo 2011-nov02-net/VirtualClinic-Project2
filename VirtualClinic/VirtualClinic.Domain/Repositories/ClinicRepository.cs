@@ -190,9 +190,25 @@ namespace VirtualClinic.Domain.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Models.Prescription> GetPatientPrescriptions(int id)
+        /// <summary>
+        /// Gets a patient's perscriptions.
+        /// </summary>
+        /// <param name="patientID">The patient's ID</param>
+        /// <returns>The patient's prescriptions.</returns>
+        public IEnumerable<Models.Prescription> GetPatientPrescriptions(int patientID)
         {
-            throw new NotImplementedException();
+            var DbPerscriptions = _context.Prescriptions
+                .Where(p => p.PatientId == patientID)
+                .ToList();
+
+            List<Models.Prescription> modelPresciptions = new List<Models.Prescription>();
+
+            foreach(var script in DbPerscriptions)
+            {
+                modelPresciptions.Add(DB_DomainMapper.MapPerscription(script));
+            }
+
+            return modelPresciptions;
         }
 
         public Task<IEnumerable<Models.Prescription>> GetPatientPrescriptionsAsync(int id)
@@ -323,7 +339,29 @@ namespace VirtualClinic.Domain.Repositories
         }
 
 
+        /// <summary>
+        /// Get's a specific prescription by it's ID
+        /// </summary>
+        /// <param name="PerscriptionId">The ID of the desired prescription</param>
+        /// <returns>The prescription with the given ID.</returns>
+        public Models.Prescription GetPrescription(int PerscriptionId)
+        {
+            var script = _context.Prescriptions.Find(PerscriptionId);
 
+            if (script is not null)
+            {
+                return DB_DomainMapper.MapPerscription(script);
+            }
+            else
+            {
+                throw new ArgumentException("Prescription, {id}, not found.");
+            }
+        }
+
+        public Task GetPrescriptionAsync(int PerscriptionId)
+        {
+            throw new NotImplementedException();
+        }
 
 
         #region PrivateHelpers
@@ -354,7 +392,6 @@ namespace VirtualClinic.Domain.Repositories
 
             return modelTimeslots;
         }
-
         #endregion
     }
 }

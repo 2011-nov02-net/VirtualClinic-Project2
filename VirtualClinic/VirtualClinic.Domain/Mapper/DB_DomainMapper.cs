@@ -85,5 +85,15 @@ namespace VirtualClinic.Domain.Mapper
         {
             return new Models.Appointment(Dbappointment.Id, Dbappointment.Notes, doctor);
         }
+
+        /// <summary>
+        /// Converts a DB prescription into a model prescription.
+        /// </summary>
+        /// <param name="script">The DB representation of the prescription.</param>
+        /// <returns>A model representation of the presctiption</returns>
+        internal static Models.Prescription MapPerscription(DataModel.Prescription script)
+        {
+            return new Models.Prescription(script.Id, script.Information, script.Drug);
+        }
     }
 }
