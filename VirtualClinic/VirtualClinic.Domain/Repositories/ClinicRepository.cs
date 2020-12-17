@@ -11,7 +11,7 @@ using VirtualClinic.Domain.Mapper;
 
 namespace VirtualClinic.Domain.Repositories
 {
-    class ClinicRepository : IClinicRepository
+    public class ClinicRepository : IClinicRepository
     {
         private readonly ClinicDbContext _context;
         private readonly ILogger<ClinicRepository> _logger;
@@ -263,7 +263,6 @@ namespace VirtualClinic.Domain.Repositories
         public IEnumerable<Models.Timeslot> GetDoctorTimeslots(int doctorId)
         {
             List<DataModel.Timeslot> timeslots = _context.Timeslots
-                    .Include(ts => ts.Appointment)
                     .Where(ts => ts.DoctorId == doctorId)
                     .ToList();
 
@@ -322,7 +321,7 @@ namespace VirtualClinic.Domain.Repositories
 
             foreach(var script in DbPerscriptions)
             {
-                modelPresciptions.Add(DB_DomainMapper.MapPerscription(script));
+                modelPresciptions.Add(DB_DomainMapper.MapPrescription(script));
             }
 
             return modelPresciptions;
@@ -457,7 +456,7 @@ namespace VirtualClinic.Domain.Repositories
 
             if (script is not null)
             {
-                return DB_DomainMapper.MapPerscription(script);
+                return DB_DomainMapper.MapPrescription(script);
             }
             else
             {

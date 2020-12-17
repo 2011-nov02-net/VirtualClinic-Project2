@@ -67,7 +67,6 @@ namespace VirtualClinic.Domain.Mapper
         /// <returns>The domain model version of a DB timeslot</returns>
         internal static Models.Timeslot MapTimeslot(DataModel.Timeslot DbTimeSlot)
         {
-
             Models.Timeslot timeslot = new Models.Timeslot();
             //TODO: get timeslot from db when added to db
 
@@ -75,6 +74,7 @@ namespace VirtualClinic.Domain.Mapper
 
             return timeslot;
         }
+
 
         /// <summary>
         /// Map a DB apointment to an equivilent model apointment. Will not fill in doctor, or patient reference.
@@ -87,12 +87,11 @@ namespace VirtualClinic.Domain.Mapper
         }
 
         /// <summary>
-        /// Converts a DB prescription into a model prescription.
+        /// Maps a DB prescription to a model one.
         /// </summary>
-        /// <param name="script">The DB representation of the prescription.</param>
-        /// <returns>A model representation of the presctiption</returns>
-        internal static Models.Prescription MapPerscription(DataModel.Prescription script)
-        {
+        /// <param name="script"></param>
+        /// <returns></returns>
+        internal static Models.Prescription MapPrescription(DataModel.Prescription script){
             return new Models.Prescription(script.Id, script.Information, script.Drug);
         }
 

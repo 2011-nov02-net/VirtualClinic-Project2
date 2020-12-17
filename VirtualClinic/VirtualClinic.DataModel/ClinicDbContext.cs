@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace VirtualClinic.DataModel
 {
-    public partial class ClinicDbContext : DbContext 
+    public partial class ClinicDbContext : DbContext
     {
         public ClinicDbContext()
         {
@@ -33,9 +33,17 @@ namespace VirtualClinic.DataModel
             {
                 entity.ToTable("Appointments", "Clinic");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.End).HasColumnType("datetime");
 
                 entity.Property(e => e.Notes).HasMaxLength(2000);
+
+                entity.Property(e => e.Start).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Doctor)
+                    .WithMany(p => p.Appointments)
+                    .HasForeignKey(d => d.DoctorId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("AppointmentDoctor_FK");
 
                 entity.HasOne(d => d.Patient)
                     .WithMany(p => p.Appointments)
@@ -48,13 +56,10 @@ namespace VirtualClinic.DataModel
                     .HasForeignKey(d => d.VitalsId)
                     .HasConstraintName("ApointmentVitals_FK");
             });
-      
 
             modelBuilder.Entity<Doctor>(entity =>
             {
                 entity.ToTable("Doctors", "Clinic");
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -63,12 +68,9 @@ namespace VirtualClinic.DataModel
                 entity.Property(e => e.Title).HasMaxLength(100);
             });
 
-
             modelBuilder.Entity<Patient>(entity =>
             {
                 entity.ToTable("Patients", "Clinic");
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.Dob)
                     .HasColumnType("date")
@@ -95,8 +97,6 @@ namespace VirtualClinic.DataModel
             {
                 entity.ToTable("PatientReports", "Clinic");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Information).HasMaxLength(2000);
 
                 entity.Property(e => e.ReportTime).HasColumnType("datetime");
@@ -116,8 +116,6 @@ namespace VirtualClinic.DataModel
             modelBuilder.Entity<Prescription>(entity =>
             {
                 entity.ToTable("Prescriptions", "Clinic");
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.Date).HasColumnType("datetime");
 
@@ -140,17 +138,19 @@ namespace VirtualClinic.DataModel
 
             modelBuilder.Entity<Timeslot>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("Timeslots", "Clinic");
 
+                entity.Property(e => e.End).HasColumnType("datetime");
+
+                entity.Property(e => e.Start).HasColumnType("datetime");
+
                 entity.HasOne(d => d.Appointment)
-                    .WithMany()
+                    .WithMany(p => p.Timeslots)
                     .HasForeignKey(d => d.AppointmentId)
                     .HasConstraintName("TimeslotAppointment_FK");
 
                 entity.HasOne(d => d.Doctor)
-                    .WithMany()
+                    .WithMany(p => p.Timeslots)
                     .HasForeignKey(d => d.DoctorId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Doctor_FK");
@@ -159,8 +159,6 @@ namespace VirtualClinic.DataModel
             modelBuilder.Entity<Vital>(entity =>
             {
                 entity.ToTable("Vitals", "Clinic");
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.Temperature).HasColumnType("decimal(18, 0)");
             });

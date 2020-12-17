@@ -57,3 +57,11 @@ INSERT INTO Clinic.Timeslots ( Id,DoctorId, AppointmentId)  VALUES
        (4,4,4),
        (5,1,5),
        (6,2,6);
+
+select * from Clinic.Doctors
+select * from Clinic.Appointments
+select * from Clinic.PatientReports
+select * from Clinic.Patients
+select * from Clinic.Timeslots
+select * from Clinic.Vitals
+select * from Clinic.Prescriptions
