@@ -28,7 +28,18 @@ namespace VirtualClinic.Domain.Models
 
             this.PatientReports = new List<PatientReport>();
             this.Prescriptions = new List<Prescription>();
+        }       
+        
+        public Patient(string name, DateTime dob, Doctor doctor = null)
+        {
+            base.Name = name;
+            this.DateOfBirth = dob;
+            this.PrimaryDoctor = doctor;
+
+            this.PatientReports = new List<PatientReport>();
+            this.Prescriptions = new List<Prescription>();
         }
+
 
     }
 }

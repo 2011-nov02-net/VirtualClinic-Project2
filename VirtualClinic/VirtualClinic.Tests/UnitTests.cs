@@ -7,6 +7,7 @@ using VirtualClinic.Domain.Repositories;
 using VirtualClinic.Domain;
 using Xunit;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace VirtualClinic.Tests
 {
@@ -34,57 +35,133 @@ namespace VirtualClinic.Tests
 
             Assert.Equal(doctor.Name, doctorActual.Name);
             Assert.Equal(doctor.Title, doctorActual.Title);
-
         }
         [Fact]
-        public void AddPatient_Database_Test()
+        public async void AddDoctorAsync_Database_Test()
         {
             using var connection = new SqliteConnection("Data Source=:memory:");
             connection.Open();
             var options = new DbContextOptionsBuilder<ClinicDbContext>().UseSqlite(connection).Options;
-            var patient = new VirtualClinic.Domain.Models.Patient(1, "Jerry Smith", DateTime.Now)
-            {
-                SSN = "293-38-0071",
-                InsuranceProvider = "Umbrella Corp"
-            };
-
-            patient.PrimaryDoctor = new Domain.Models.Doctor(100, "John Smith", "diagnostician");
+            var doctor = new VirtualClinic.Domain.Models.Doctor(101, "Jerry Smith", "MD");
 
             using (var context = new ClinicDbContext(options))
             {
                 context.Database.EnsureCreated();
                 var repo = new ClinicRepository(context, new NullLogger<ClinicRepository>());
 
-                repo.AddPatient(patient);
+                await repo.AddDoctorAsync(doctor);
             }
 
             using var context2 = new ClinicDbContext(options);
+            DataModel.Doctor doctorActual = context2.Doctors
+                .Single(l => l.Name == "Jerry Smith");
+
+            Assert.Equal(doctor.Name, doctorActual.Name);
+            Assert.Equal(doctor.Title, doctorActual.Title);
+
+        }
+        [Fact]
+        public void AddPatient_Database_Test()
+        {
+            using var connection = Database_init();
+            var options = new DbContextOptionsBuilder<ClinicDbContext>().UseSqlite(connection).Options;
+            using var context = new ClinicDbContext(options);
+            var repo = new ClinicRepository(context, new NullLogger<ClinicRepository>());
+
+            var patient = new VirtualClinic.Domain.Models.Patient("Billy Mays", DateTime.Now)
+            {
+                SSN = "293-38-0071",
+                InsuranceProvider = "Umbrella Corp",
+                PrimaryDoctor = repo.GetDoctorByID(1)
+            };
+
+            repo.AddPatient(patient);
+
+            using var context2 = new ClinicDbContext(options);
             DataModel.Patient patientActual = context2.Patients
-                .Single(l => l.Id == 1);
+                .Single(l => l.Name == "Billy Mays");
 
             Assert.Equal(patient.Name, patientActual.Name);
             Assert.Equal(patient.SSN, patientActual.Ssn);
-            Assert.Equal(patient.Id, patientActual.Id);
             Assert.Equal(patient.InsuranceProvider, patientActual.Insurance);
         }
+        [Fact]
+        public async void AddPatientAsync_Database_Test()
+        {
+            using var connection = Database_init();
+            var options = new DbContextOptionsBuilder<ClinicDbContext>().UseSqlite(connection).Options;
+            using var context = new ClinicDbContext(options);
+            var repo = new ClinicRepository(context, new NullLogger<ClinicRepository>());
 
+            var patient = new VirtualClinic.Domain.Models.Patient("Billy Mays", DateTime.Now)
+            {
+                SSN = "293-38-0071",
+                InsuranceProvider = "Umbrella Corp",
+                PrimaryDoctor = repo.GetDoctorByID(1)
+            };
+
+            await repo.AddPatientAsync(patient);
+
+            using var context2 = new ClinicDbContext(options);
+            DataModel.Patient patientActual = context2.Patients
+                .Single(l => l.Name == "Billy Mays");
+
+            Assert.Equal(patient.Name, patientActual.Name);
+            Assert.Equal(patient.SSN, patientActual.Ssn);
+            Assert.Equal(patient.InsuranceProvider, patientActual.Insurance);
+        }
         [Fact]
         public void GetDoctors_Database_test()
         {
             using var connection = Database_init();
             var options = new DbContextOptionsBuilder<ClinicDbContext>().UseSqlite(connection).Options;
-
             using var context = new ClinicDbContext(options);
-            
             var repo = new ClinicRepository(context, new NullLogger<ClinicRepository>());
 
             var doctors = repo.GetDoctors();
-
             var doctorsActual = context.Doctors.ToList();
 
             Assert.Equal(doctors.Count(), doctorsActual.Count());
         }
+        [Fact]
+        public async void GetDoctorsAsync_Database_test()
+        {
+            using var connection = Database_init();
+            var options = new DbContextOptionsBuilder<ClinicDbContext>().UseSqlite(connection).Options;
+            using var context = new ClinicDbContext(options);
+            var repo = new ClinicRepository(context, new NullLogger<ClinicRepository>());
 
+            var doctors = await repo.GetDoctorsAsync();
+            var doctorsActual = context.Doctors.ToList();
+
+            Assert.Equal(doctors.Count(), doctorsActual.Count());
+        }
+        [Fact]
+        public void GetPatients_Database_test()
+        {
+            using var connection = Database_init();
+            var options = new DbContextOptionsBuilder<ClinicDbContext>().UseSqlite(connection).Options;
+            using var context = new ClinicDbContext(options);
+            var repo = new ClinicRepository(context, new NullLogger<ClinicRepository>());
+
+            var patients = repo.GetPatients();
+            var patientsActual = context.Patients.ToList();
+
+            Assert.Equal(patients.Count(), patientsActual.Count());
+        }
+        [Fact]
+        public async void GetPatientsAsync_Database_test()
+        {
+            using var connection = Database_init();
+            var options = new DbContextOptionsBuilder<ClinicDbContext>().UseSqlite(connection).Options;
+            using var context = new ClinicDbContext(options);
+            var repo = new ClinicRepository(context, new NullLogger<ClinicRepository>());
+
+            var patients = await repo.GetPatientsAsync();
+            var patientsActual = context.Patients.ToList();
+
+            Assert.Equal(patients.Count(), patientsActual.Count());
+        }
         public SqliteConnection Database_init()
         {
             var connection = new SqliteConnection("Data Source=:memory:");
