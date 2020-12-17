@@ -12,41 +12,81 @@ using VirtualClinic.Domain.Mapper;
 
 namespace VirtualClinic.Domain.Repositories
 {
-    public class ClinicRepository : IClinicRepository
+    class ClinicRepository : IClinicRepository
     {
         private readonly ClinicDbContext _context;
         private readonly ILogger<ClinicRepository> _logger;
+
         public ClinicRepository(ClinicDbContext context, ILogger<ClinicRepository> logger)
         {
             _context = context ?? throw new ArgumentNullException();
             _logger = logger ?? throw new ArgumentNullException();
         }
 
+
+        //Made with https://patorjk.com/software/taag/#p=display&f=Big
+        /*    _____      _   _            _       
+         *   |  __ \    | | (_)          | |      
+         *   | |__) |_ _| |_ _  ___ _ __ | |_ ___ 
+         *   |  ___/ _` | __| |/ _ \ '_ \| __/ __|
+         *   | |  | (_| | |_| |  __/ | | | |_\__ \
+         *   |_|   \__,_|\__|_|\___|_| |_|\__|___/
+         */
+        #region Patients
+
         /// <summary>
-        /// Adds a doctor to the database
+        /// Get's all the patients from the DB.
         /// </summary>
-        /// <param name="doctor">The doctor to be added to the database</param>
-        public void AddDoctor(Models.Doctor doctor)
+        /// <returns>A list of paitents</returns>
+        public IEnumerable<Models.Patient> GetPatients()
         {
-           var newDoctor = new DataModel.Doctor
-           {
-               Name = doctor.Name,
-               Title = doctor.Title
-           };
-           _context.Doctors.Add(newDoctor);
-           _context.SaveChanges();
+            var DBPatients = _context.Patients
+                    .Include(thing => thing.PatientReports)
+                    .ToList();
+
+            List<Models.Patient> ModelPatients = new List<Models.Patient>();
+
+            foreach (var dbpatient in DBPatients)
+            {
+                ModelPatients.Add(DB_DomainMapper.MapPatient(dbpatient));
+            }
+
+            return ModelPatients;
         }
 
-        public async Task AddDoctorAsync(Models.Doctor doctor)
+        public Task<IEnumerable<Models.Patient>> GetPatientsAsync()
         {
-            var newDoctor = new DataModel.Doctor
-           {
-               Name = doctor.Name,
-               Title = doctor.Title
-           };
-           await _context.Doctors.AddAsync(newDoctor);
-           await _context.SaveChangesAsync();
+            throw new NotImplementedException();
         }
+
+
+        /// <summary>
+        /// Get's a specific patient based on their ID
+        /// </summary>
+        /// <exception cref="ArgumentException">
+        /// Throws an argument exception if there is no patient with that ID in the DB.
+        /// </exception>
+        /// <param name="patientId">The patient's ID in the database.</param>
+        /// <returns>A model representation of that patient.</returns>
+        public Models.Patient GetPatientByID(int patientId)
+        {
+            var DBPatient = _context.Patients.Find(patientId);
+
+            if (DBPatient is not null)
+            {
+                return DB_DomainMapper.MapPatient(DBPatient);
+            }
+            else
+            {
+                throw new ArgumentException("Patient Not found in DB.");
+            }
+        }
+
+        public Task<Models.Patient> GetPatientByIDAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
 
         /// <summary>
         /// Add a patient to the database 
@@ -54,6 +94,7 @@ namespace VirtualClinic.Domain.Repositories
         /// <param name="patient">A patient to be added to the database</param>
         public void AddPatient(Models.Patient patient)
         {
+            //todo: replace with mapper
             var newPatient = new DataModel.Patient
             {
                 Name = patient.Name,
@@ -67,6 +108,11 @@ namespace VirtualClinic.Domain.Repositories
 
         }
 
+
+        /// <summary>
+        /// Add a patient to the database 
+        /// </summary>
+        /// <param name="patient">A patient to be added to the database</param>
         public async Task<bool> AddPatientAsync(Models.Patient patient)
         {
             var newPatient = new DataModel.Patient
@@ -77,82 +123,277 @@ namespace VirtualClinic.Domain.Repositories
                 Ssn = patient.SSN,
                 Insurance = patient.InsuranceProvider
             };
-           await _context.Patients.AddAsync(newPatient);
-           await _context.SaveChangesAsync();
+            await _context.Patients.AddAsync(newPatient);
+            await _context.SaveChangesAsync();
             return true;
+        }
+        #endregion
+
+
+
+        /*     _____             _                 
+         *    |  __ \           | |                
+         *    | |  | | ___   ___| |_ ___  _ __ ___ 
+         *    | |  | |/ _ \ / __| __/ _ \| '__/ __|
+         *    | |__| | (_) | (__| || (_) | |  \__ \
+         *    |_____/ \___/ \___|\__\___/|_|  |___/                                
+         */
+        #region Doctors
+
+        /// <summary>
+        /// Get's all the doctors.
+        /// </summary>
+        /// <returns>A list of all the doctors.</returns>
+        public IEnumerable<Models.Doctor> GetDoctors()
+        {
+            var DBDoctors = _context.Doctors
+               .Include(o => o.Patients)
+               .ToList();
+
+            List<Models.Doctor> ModelDoctors = new List<Models.Doctor>();
+
+            foreach (var dbdoctor in DBDoctors)
+            {
+                Models.Doctor next = new Models.Doctor(dbdoctor.Id, dbdoctor.Name, dbdoctor.Title)
+                {
+                    Patients = (List<Models.Patient>)GetDoctorPatients(dbdoctor.Id)
+                };
+
+                ModelDoctors.Add(next);
+            }
+
+            return ModelDoctors;
         }
 
         /// <summary>
-        /// Add a patient report to the database
+        /// Get a list of doctors asynchornusly.
         /// </summary>
-        /// <param name="report">The report to be added tp the database</param>
-        public void AddPatientReport(Models.PatientReport report)
+        /// <returns>A task that can be awaited with the list of doctors.</returns>
+        public async Task<IEnumerable<Models.Doctor>> GetDoctorsAsync()
         {
-            var newPatientReport = new DataModel.PatientReport
+            var DBDoctors = await _context.Doctors
+              .Include(o => o.Patients)
+              .ToListAsync();
+
+            List<Models.Doctor> ModelDoctors = new List<Models.Doctor>();
+
+            foreach (var dbdoctor in DBDoctors)
             {
+                Models.Doctor next = new Models.Doctor(dbdoctor.Id, dbdoctor.Name, dbdoctor.Title)
+                {
+                    Patients = (List<Models.Patient>)GetDoctorPatients(dbdoctor.Id)
+                };
 
-                PatientId  = report.Patient.Id,
-                ReportTime = report.Time,
-                Information = report.Info
-           //add vitals id for datamodel??
+                ModelDoctors.Add(next);
+            }
 
-            };
-
-            _context.Add(newPatientReport);
-            _context.SaveChanges();
-
+            return ModelDoctors;
         }
 
-        public async Task AddPatientReportAsync(Models.PatientReport report)
+
+        /// <summary>
+        /// Get a doctor with a specific Id
+        /// </summary>
+        /// <param name="id">The id of the doctor to be returned</param>
+        /// <returns>A doctor with a list of its patient</returns>
+        public Models.Doctor GetDoctorByID(int doctorId)
         {
-            var newPatientReport = new DataModel.PatientReport
+
+            var DBDoctor = _context.Doctors.Where(o => o.Id == doctorId).First();
+
+            var doctor = new Models.Doctor(DBDoctor.Id, DBDoctor.Name, DBDoctor.Title)
             {
-
-                PatientId = report.Patient.Id,
-                ReportTime = report.Time,
-                Information = report.Info
-
+                Patients = (List<Models.Patient>)GetDoctorPatients(DBDoctor.Id)
             };
 
-            await _context.AddAsync(newPatientReport);
-           await  _context.SaveChangesAsync();
+            return doctor;
+        }
+
+
+
+        /// <summary>
+        /// Get a doctor with a specific Id
+        /// </summary>
+        /// <param name="id">The id of the doctor to be returned</param>
+        /// <returns>A doctor with a list of its patient</returns>
+        public async Task<Models.Doctor> GetDoctorByIDAsync(int doctorId)
+        {
+            var DBDoctor = await _context.Doctors.Where(o => o.Id == doctorId).FirstAsync();
+
+            var doctor = new Models.Doctor(DBDoctor.Id, DBDoctor.Name, DBDoctor.Title)
+            {
+                Patients = (List<Models.Patient>)await GetDoctorPatientsAsync(DBDoctor.Id)
+            };
+
+            return doctor;
+        }
+
+
+        /// <summary>
+        /// Get patients of a specific doctor
+        /// </summary>
+        /// <param name="id">The id of the doctor whose patients are being requested</param>
+        /// <returns>A list of patients of a doctor</returns>
+        public IEnumerable<Models.Patient> GetDoctorPatients(int doctorId)
+        {
+            var DBPatients = _context.Patients.Where(o => o.DoctorId == doctorId).ToList();
+
+            List<Models.Patient> patients = new List<Models.Patient>();
+
+            foreach (var patient in DBPatients)
+            {
+                Models.Patient next = new Models.Patient(patient.Id, patient.Name, patient.Dob);
+
+                patients.Add(next);
+            }
+
+            return patients;
+        }
+
+
+        /// <summary>
+        /// Get patients of a specific doctor
+        /// </summary>
+        /// <param name="id">The id of the doctor whose patients are being requested</param>
+        /// <returns>A list of patients of a doctor</returns>
+        public async Task<IEnumerable<Models.Patient>> GetDoctorPatientsAsync(int doctorId)
+        {
+            var DBPatients = await _context.Patients.Where(o => o.DoctorId == doctorId).ToListAsync();
+
+            List<Models.Patient> patients = new List<Models.Patient>();
+
+            foreach (var patient in DBPatients)
+            {
+                Models.Patient next = new Models.Patient(patient.Id, patient.Name, patient.Dob);
+
+                patients.Add(next);
+            }
+
+            return patients;
+        }
+
+
+        /// <summary>
+        /// Adds a doctor to the database
+        /// </summary>
+        /// <param name="doctor">The doctor to be added to the database</param>
+        public void AddDoctor(Models.Doctor doctor)
+        {
+            var newDoctor = new DataModel.Doctor
+            {
+                Name = doctor.Name,
+                Title = doctor.Title
+            };
+            _context.Doctors.Add(newDoctor);
+            _context.SaveChanges();
         }
 
         /// <summary>
-        /// Add a prescription to the database
+        /// Adds a doctor to the database
         /// </summary>
-        /// <param name="prescription">The prescition to be added to the databse</param>
-        public void AddPrescription(Models.Prescription prescription)
+        /// <param name="doctor">The doctor to be added to the database</param>
+        public async Task AddDoctorAsync(Models.Doctor doctor)
         {
-            var newPrescription = new DataModel.Prescription
+            var newDoctor = new DataModel.Doctor
             {
-                Information = prescription.Info,
-                Drug = prescription.DrugName,
-                PatientId = prescription.Patient.Id,
-                DoctorId  = prescription.Doctor.Id,
+                Name = doctor.Name,
+                Title = doctor.Title
             };
-
-            _context.Add(newPrescription);
-            _context.SaveChanges();
-
+            await _context.Doctors.AddAsync(newDoctor);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> AddPrescriptionAsync(Models.Prescription prescription)
-        {
-            var newPrescription = new DataModel.Prescription
-            {
-                Information = prescription.Info,
-                Drug = prescription.DrugName,
-                PatientId = prescription.Patient.Id,
-                DoctorId = prescription.Doctor.Id,
-            };
+        #endregion
 
-           await  _context.AddAsync(newPrescription);
-           await  _context.SaveChangesAsync();
-            return true;
+
+
+        /*    _______ _                     _       _       
+         *   |__   __(_)                   | |     | |      
+         *      | |   _ _ __ ___   ___  ___| | ___ | |_ ___ 
+         *      | |  | | '_ ` _ \ / _ \/ __| |/ _ \| __/ __|
+         *      | |  | | | | | | |  __/\__ \ | (_) | |_\__ \
+         *      |_|  |_|_| |_| |_|\___||___/_|\___/ \__|___/ 
+         */
+        #region Timeslot
+        /// <summary>
+        /// Get timeslot and apointment information for ones related to a specific patient.
+        /// </summary>
+        /// <remarks>
+        /// NOTE: because this matches to a patient id which is stored on apointments,
+        /// every item returned should have an apointment attached to the timeslot.
+        /// </remarks>
+        /// <param name="PatientId">The id of the desired patient in the DB.</param>
+        /// <returns>List of timeslots with any apointment informtion filled in.</returns>
+        public IEnumerable<Models.Timeslot> GetPatientTimeslots(int PatientId)
+        {
+            List<DataModel.Timeslot> timeslots = _context.Timeslots
+                    .Include(ts => ts.Appointment)
+                    .Where(ts => ts.Appointment.PatientId == PatientId)
+                    .ToList();
+
+            return ConvertTimeslots(timeslots, true);
         }
 
-        
+
+        /// <summary>
+        /// Get timeslot and apointment information for ones related to a specific patient.
+        /// </summary>
+        /// <remarks>
+        /// NOTE: because this matches to a patient id which is stored on apointments,
+        /// every item returned should have an apointment attached to the timeslot.
+        /// </remarks>
+        /// <param name="PatientId">The id of the desired patient in the DB.</param>
+        /// <returns>List of timeslots with any apointment informtion filled in.</returns>
+        public async Task<IEnumerable<Models.Timeslot>> GetPatientTimeslotsAsync(int PatientId)
+        {
+            List<DataModel.Timeslot> timeslots = await _context.Timeslots
+                  .Include(ts => ts.Appointment)
+                  .Where(ts => ts.Appointment.PatientId == PatientId)
+                  .ToListAsync();
+
+            return ConvertTimeslots(timeslots, true);
+        }
+
+
+
+        /// <summary>
+        /// Get all timeslots related to a doctor.
+        /// </summary>
+        /// <param name="doctorId">The id of the doctor who's timeslots are to be retrieved.</param>
+        /// <remarks>
+        /// Note: references to the dr, and patient are left out inside these.
+        /// </remarks>
+        /// <returns>List of timeslots with any apointments filled in.</returns>
+        public IEnumerable<Models.Timeslot> GetDoctorTimeslots(int doctorId)
+        {
+            List<DataModel.Timeslot> timeslots = _context.Timeslots
+                    .Include(ts => ts.Appointment)
+                    .Where(ts => ts.DoctorId == doctorId)
+                    .ToList();
+
+            return ConvertTimeslots(timeslots);
+        }
+
+        /// <summary>
+        /// Get timeslot and apointment information for ones related to a specific patient.
+        /// </summary>
+        /// <remarks>
+        /// NOTE: because this matches to a patient id which is stored on apointments,
+        /// every item returned should have an apointment attached to the timeslot.
+        /// </remarks>
+        /// <param name="PatientId">The id of the desired patient in the DB.</param>
+        /// <returns>List of timeslots with any apointment informtion filled in.</returns>
+        public async Task<IEnumerable<Models.Timeslot>> GetDoctorTimeslotsAsync(int doctorId)
+        {
+            List<DataModel.Timeslot> timeslots = await _context.Timeslots
+                    .Include(ts => ts.Appointment)
+                    .Where(ts => ts.DoctorId == doctorId)
+                    .ToListAsync();
+
+            return ConvertTimeslots(timeslots);
+        }
+
+
         /// <summary>
         /// Creates a DB timeslot based on a Model Timeslot, and sends it to the DB.
         /// </summary>
@@ -182,217 +423,20 @@ namespace VirtualClinic.Domain.Repositories
             throw new NotImplementedException();
         }
 
-
-        /// <summary>
-        /// Get a doctor with a specific Id
-        /// </summary>
-        /// <param name="id">The id of the doctor to be returned</param>
-        /// <returns>A doctor with a list of its patient</returns>
-        public Models.Doctor GetDoctorByID(int doctorId)
-        {
-
-            var DBDoctor = _context.Doctors.Where(o => o.Id == doctorId).First();
-
-            var doctor = new Models.Doctor(DBDoctor.Id, DBDoctor.Name, DBDoctor.Title)
-            {
-                Patients = (List<Models.Patient>)GetDoctorPatients(DBDoctor.Id)
-            };
-
-            return doctor;
-        }
-
-        public async Task<Models.Doctor> GetDoctorByIDAsync(int doctorId)
-        {
-            var DBDoctor = await _context.Doctors.Where(o => o.Id == doctorId).FirstAsync();
-
-            var doctor = new Models.Doctor(DBDoctor.Id, DBDoctor.Name, DBDoctor.Title)
-            {
-                Patients = (List<Models.Patient>)await GetDoctorPatientsAsync(DBDoctor.Id)
-            };
-
-            return doctor;
-        }
+        #endregion
 
 
-        /// <summary>
-        /// Get patients of a specific doctor
-        /// </summary>
-        /// <param name="id">The id of the doctor whose patients are being requested</param>
-        /// <returns>A list of patients of a doctor</returns>
 
-        public IEnumerable<Models.Patient> GetDoctorPatients(int doctorId)
-        {
-            var DBPatients = _context.Patients.Where(o => o.DoctorId == doctorId).ToList();
-
-            List<Models.Patient> patients = new List<Models.Patient>();
-
-            foreach( var patient in DBPatients)
-            {
-                Models.Patient next = new Models.Patient(patient.Id, patient.Name, patient.Dob);
-
-                patients.Add(next);
-            }
-
-            return patients;
-        }
-
-
-        public async Task<IEnumerable<Models.Patient>> GetDoctorPatientsAsync(int doctorId)
-        {
-            var DBPatients = await _context.Patients.Where(o => o.DoctorId == doctorId).ToListAsync();
-
-            List<Models.Patient> patients = new List<Models.Patient>();
-
-            foreach (var patient in DBPatients)
-            {
-                Models.Patient next = new Models.Patient(patient.Id, patient.Name, patient.Dob);
-
-                patients.Add(next);
-            }
-
-            return patients;
-        }
-
-
-        /// <summary>
-        /// Get's all the doctors.
-        /// </summary>
-        /// <returns>A list of all the doctors.</returns>
-        public IEnumerable<Models.Doctor> GetDoctors()
-        {
-            var DBDoctors = _context.Doctors
-               .Include(o => o.Patients)
-               .ToList();
-
-            List<Models.Doctor> ModelDoctors = new List<Models.Doctor>();
-
-            foreach (var dbdoctor in DBDoctors)
-            {
-                Models.Doctor next = new Models.Doctor(dbdoctor.Id, dbdoctor.Name, dbdoctor.Title);
-          
-                ModelDoctors.Add(next);
-            }
-
-            return ModelDoctors;
-
-        }
-
-        /// <summary>
-        /// Get a list of doctors asynchornusly.
-        /// </summary>
-        /// <returns>A task that can be awaited with the list of doctors.</returns>
-        public async Task<IEnumerable<Models.Doctor>> GetDoctorsAsync()
-        {
-            var DBDoctors = await _context.Doctors
-              .Include(o => o.Patients)
-              .ToListAsync();
-
-            List<Models.Doctor> ModelDoctors = new List<Models.Doctor>();
-
-            foreach (var dbdoctor in DBDoctors)
-            {
-                Models.Doctor next = new Models.Doctor(dbdoctor.Id, dbdoctor.Name, dbdoctor.Title);
-                
-                ModelDoctors.Add(next);
-            }
-
-            return ModelDoctors;
-
-        }
-
-        /// <summary>
-        /// Get all timeslots related to a doctor.
-        /// </summary>
-        /// <param name="doctorId">The id of the doctor who's timeslots are to be retrieved.</param>
-        /// <remarks>
-        /// Note: references to the dr, and patient are left out inside these.
-        /// </remarks>
-        /// <returns>List of timeslots with any apointments filled in.</returns>
-        public IEnumerable<Models.Timeslot> GetDoctorTimeslots(int doctorId)
-        {
-            List<DataModel.Timeslot> timeslots = _context.Timeslots
-                    .Where(ts => ts.DoctorId == doctorId)
-                    .ToList();
-
-            return ConvertTimeslots(timeslots);
-        }
-
-        public async Task<IEnumerable<Models.Timeslot>> GetDoctorTimeslotsAsync(int doctorId)
-        {
-            List<DataModel.Timeslot> timeslots = await _context.Timeslots
-                    .Include(ts => ts.Appointment)
-                    .Where(ts => ts.DoctorId == doctorId)
-                    .ToListAsync();
-
-            return ConvertTimeslots(timeslots);
-        }
-
-        /// <summary>
-        /// Get's a specific patient based on their ID
-        /// </summary>
-        /// <exception cref="ArgumentException">
-        /// Throws an argument exception if there is no patient with that ID in the DB.
-        /// </exception>
-        /// <param name="patientId">The patient's ID in the database.</param>
-        /// <returns>A model representation of that patient.</returns>
-        public Models.Patient GetPatientByID(int patientId)
-        {
-            var DBPatient = _context.Patients.Find(patientId);
-
-            if (DBPatient is not null)
-            {
-                return DB_DomainMapper.MapPatient(DBPatient);
-            }
-            else
-            {
-                throw new ArgumentException("Patient Not found in DB.");
-            }
-        }
-
-        public async Task<Models.Patient> GetPatientByIDAsync(int patientId)
-        {
-            var DBPatient = await _context.Patients.Where(o => o.Id == patientId).FirstAsync();
-
-            var doctor = new Models.Doctor()
-            {
-                Id = DBPatient.Doctor.Id,
-                Name = DBPatient.Doctor.Name,
-                Title = DBPatient.Doctor.Title
-
-            };
-
-            var patient = new Models.Patient(DBPatient.Id, DBPatient.Name, DBPatient.Dob, doctor);
-
-
-            return patient;
-        }
-
-        /// <summary>
-        /// Gets a patient's perscriptions.
-        /// </summary>
-        /// <param name="patientID">The patient's ID</param>
-        /// <returns>The patient's prescriptions.</returns>
-        public IEnumerable<Models.Prescription> GetPatientPrescriptions(int patientID)
-        {
-            var DbPerscriptions = _context.Prescriptions
-                .Where(p => p.PatientId == patientID)
-                .ToList();
-
-            List<Models.Prescription> modelPresciptions = new List<Models.Prescription>();
-
-            foreach(var script in DbPerscriptions)
-            {
-                modelPresciptions.Add(DB_DomainMapper.MapPrescription(script));
-            }
-
-            return modelPresciptions;
-        }
-
-        public Task<IEnumerable<Models.Prescription>> GetPatientPrescriptionsAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
+        /*    _____                       _       
+         *   |  __ \                     | |      
+         *   | |__) |___ _ __   ___  _ __| |_ ___ 
+         *   |  _  // _ \ '_ \ / _ \| '__| __/ __|
+         *   | | \ \  __/ |_) | (_) | |  | |_\__ \
+         *   |_|  \_\___| .__/ \___/|_|   \__|___/
+         *              | |                       
+         *              |_|                      
+         */
+        #region Reports
         /// <summary>
         /// Given a report id, gets the report with the given id.
         /// </summary>
@@ -405,7 +449,7 @@ namespace VirtualClinic.Domain.Repositories
         {
             DataModel.PatientReport report = _context.PatientReports.Find(ReportID);
 
-            if(report is null)
+            if (report is null)
             {
                 //then no report with that id exists in the DB
                 throw new ArgumentException("ID Not Found in DB.");
@@ -417,11 +461,20 @@ namespace VirtualClinic.Domain.Repositories
             return modelreport;
         }
 
+
+        /// <summary>
+        /// Given a report id, gets the report with the given id.
+        /// </summary>
+        /// <remarks>
+        /// will not fill in the references to patient.
+        /// </remarks>
+        /// <param name="ReportID">The id value of the report in the DB</param>
+        /// <returns>The patient report with the given ID</returns>
         public async Task<Models.PatientReport> GetPatientReportByIDAsync(int ReportId)
         {
             DataModel.PatientReport report = await _context.PatientReports.FindAsync(ReportId);
 
-            if(report is null)
+            if (report is null)
             {
                 //then no report with that id exists in the DB
                 throw new ArgumentException("ID Not Found in DB.");
@@ -433,6 +486,8 @@ namespace VirtualClinic.Domain.Repositories
             modelreport.Vitals = DB_DomainMapper.MapVitals(_context.Vitals.Find(report.VitalsId));
             return modelreport;
         }
+
+
 
         /// <summary>
         /// Get's all of a single patient's reports.
@@ -447,7 +502,7 @@ namespace VirtualClinic.Domain.Repositories
 
             List<Models.PatientReport> modelreports = new List<Models.PatientReport>();
 
-            foreach(var r in reports)
+            foreach (var r in reports)
             {
                 modelreports.Add(DB_DomainMapper.MapReport(r));
             }
@@ -461,60 +516,61 @@ namespace VirtualClinic.Domain.Repositories
         }
 
         /// <summary>
-        /// Get's all the patients from the DB.
+        /// Add a patient report to the database
         /// </summary>
-        /// <returns>A list of paitents</returns>
-        public IEnumerable<Models.Patient> GetPatients()
+        /// <param name="report">The report to be added tp the database</param>
+        public void AddPatientReport(Models.PatientReport report)
         {
-            var DBPatients = _context.Patients
-                    .Include(thing => thing.PatientReports)
-                    .ToList();
-
-            List<Models.Patient> ModelPatients = new List<Models.Patient>();
-
-            foreach(var dbpatient in DBPatients)
+            var newPatientReport = new DataModel.PatientReport
             {
-                ModelPatients.Add(DB_DomainMapper.MapPatient(dbpatient));
-            }
 
-            return ModelPatients;
-        }
+                PatientId = report.Patient.Id,
+                ReportTime = report.Time,
+                Information = report.Info
+                //add vitals id for datamodel??
 
-        public Task<IEnumerable<Models.Patient>> GetPatientsAsync()
-        {
-            throw new NotImplementedException();
+            };
+
+            _context.Add(newPatientReport);
+            _context.SaveChanges();
+
         }
 
         /// <summary>
-        /// Get timeslot and apointment information for ones related to a specific patient.
+        /// Add a patient report to the database
         /// </summary>
-        /// <remarks>
-        /// NOTE: because this matches to a patient id which is stored on apointments,
-        /// every item returned should have an apointment attached to the timeslot.
-        /// </remarks>
-        /// <param name="PatientId">The id of the desired patient in the DB.</param>
-        /// <returns>List of timeslots with any apointment informtion filled in.</returns>
-        public IEnumerable<Models.Timeslot> GetPatientTimeslots(int PatientId)
+        /// <param name="report">The report to be added tp the database</param>
+        public async Task AddPatientReportAsync(Models.PatientReport report)
         {
-            List<DataModel.Timeslot> timeslots = _context.Timeslots
-                    .Include(ts => ts.Appointment)
-                    .Where(ts => ts.Appointment.PatientId == PatientId)
-                    .ToList();
+            var newPatientReport = new DataModel.PatientReport
+            {
 
-            return ConvertTimeslots(timeslots, true);        
+                PatientId = report.Patient.Id,
+                ReportTime = report.Time,
+                Information = report.Info
+
+            };
+
+            await _context.AddAsync(newPatientReport);
+            await _context.SaveChangesAsync();
         }
-
-        public async Task<IEnumerable<Models.Timeslot>> GetPatientTimeslotsAsync(int PatientId)
-        {
-              List<DataModel.Timeslot> timeslots = await _context.Timeslots
-                    .Include(ts => ts.Appointment)
-                    .Where(ts => ts.Appointment.PatientId == PatientId)
-                    .ToListAsync ();
-
-            return ConvertTimeslots(timeslots, true); 
-        }
+        #endregion
 
 
+
+
+
+
+        /*    _____                         _       _   _                 
+         *   |  __ \                       (_)     | | (_)                
+         *   | |__) | __ ___  ___  ___ _ __ _ _ __ | |_ _  ___  _ __  ___ 
+         *   |  ___/ '__/ _ \/ __|/ __| '__| | '_ \| __| |/ _ \| '_ \/ __|
+         *   | |   | | |  __/\__ \ (__| |  | | |_) | |_| | (_) | | | \__ \
+         *   |_|   |_|  \___||___/\___|_|  |_| .__/ \__|_|\___/|_| |_|___/
+         *                                   | |                          
+         *                                   |_|                         
+         */
+        #region Prescriptions
         /// <summary>
         /// Get's a specific prescription by it's ID
         /// </summary>
@@ -543,6 +599,85 @@ namespace VirtualClinic.Domain.Repositories
         }
 
 
+
+        /// <summary>
+        /// Gets a patient's perscriptions.
+        /// </summary>
+        /// <param name="patientID">The patient's ID</param>
+        /// <returns>The patient's prescriptions.</returns>
+        public IEnumerable<Models.Prescription> GetPatientPrescriptions(int patientID)
+        {
+            var DbPerscriptions = _context.Prescriptions
+                .Where(p => p.PatientId == patientID)
+                .ToList();
+
+            List<Models.Prescription> modelPresciptions = new List<Models.Prescription>();
+
+            foreach (var script in DbPerscriptions)
+            {
+                modelPresciptions.Add(DB_DomainMapper.MapPrescription(script));
+            }
+
+            return modelPresciptions;
+        }
+
+        public Task<IEnumerable<Models.Prescription>> GetPatientPrescriptionsAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        /// <summary>
+        /// Add a prescription to the database
+        /// </summary>
+        /// <param name="prescription">The prescition to be added to the databse</param>
+        public void AddPrescription(Models.Prescription prescription)
+        {
+            var newPrescription = new DataModel.Prescription
+            {
+                Information = prescription.Info,
+                Drug = prescription.DrugName,
+                PatientId = prescription.Patient.Id,
+                DoctorId = prescription.Doctor.Id,
+            };
+
+            _context.Add(newPrescription);
+            _context.SaveChanges();
+
+        }
+
+
+        /// <summary>
+        /// Add a prescription to the database
+        /// </summary>
+        /// <param name="prescription">The prescition to be added to the databse</param>
+        public async Task<bool> AddPrescriptionAsync(Models.Prescription prescription)
+        {
+            var newPrescription = new DataModel.Prescription
+            {
+                Information = prescription.Info,
+                Drug = prescription.DrugName,
+                PatientId = prescription.Patient.Id,
+                DoctorId = prescription.Doctor.Id,
+            };
+
+            await _context.AddAsync(newPrescription);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        #endregion
+
+
+
+        /*    _    _      _                     
+         *   | |  | |    | |                    
+         *   | |__| | ___| |_ __   ___ _ __ ___ 
+         *   |  __  |/ _ \ | '_ \ / _ \ '__/ __|
+         *   | |  | |  __/ | |_) |  __/ |  \__ \
+         *   |_|  |_|\___|_| .__/ \___|_|  |___/
+         *                 | |                  
+         *                 |_|                  
+         */
         #region PrivateHelpers
         /// <summary>
         /// Takes a list of db timeslots and converts them to apointments
@@ -558,26 +693,20 @@ namespace VirtualClinic.Domain.Repositories
                 Models.Timeslot modelts = DB_DomainMapper.MapTimeslot(DBTimeSlot);
 
                 //does not fill in dr or patient
-                if(DBTimeSlot.Appointment is not null)
+                if (DBTimeSlot.Appointment is not null)
                 {
                     modelts.Appointment = DB_DomainMapper.MapApointment(DBTimeSlot.Appointment);
-                } else if (AllowNullApointmentsFlag)
+                }
+                else if (AllowNullApointmentsFlag)
                 {
                     throw new NullReferenceException("A timeslot has a null apointment reference");
                 }
-                
+
                 modelTimeslots.Add(modelts);
             }
 
             return modelTimeslots;
         }
-
-        Task IClinicRepository.GetPrescriptionAsync(int PerscriptionId)
-        {
-            throw new NotImplementedException();
-        }
-
-
         #endregion
     }
 }
