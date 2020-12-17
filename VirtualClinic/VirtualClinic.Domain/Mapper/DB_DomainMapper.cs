@@ -95,5 +95,19 @@ namespace VirtualClinic.Domain.Mapper
         {
             return new Models.Prescription(script.Id, script.Information, script.Drug);
         }
+
+        internal static Models.Patient MapPatient(DataModel.Patient dBPatient)
+        {
+            var patient = new Models.Patient(dBPatient.Id, dBPatient.Name, dBPatient.Dob);
+            patient.InsuranceProvider = dBPatient.Insurance;
+            patient.SSN = dBPatient.Ssn;
+
+            //create lists for these.
+            patient.Timeslots = new List<Models.Timeslot>();
+            patient.Prescriptions = new List<Models.Prescription>();
+            patient.PatientReports = new List<Models.PatientReport>();
+
+            return patient;
+        }
     }
 }

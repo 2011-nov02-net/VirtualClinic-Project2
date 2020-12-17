@@ -180,9 +180,26 @@ namespace VirtualClinic.Domain.Repositories
             throw new NotImplementedException();
         }
 
-        public Models.Patient GetPatientByID(int id)
+        /// <summary>
+        /// Get's a specific patient based on their ID
+        /// </summary>
+        /// <exception cref="ArgumentException">
+        /// Throws an argument exception if there is no patient with that ID in the DB.
+        /// </exception>
+        /// <param name="patientId">The patient's ID in the database.</param>
+        /// <returns>A model representation of that patient.</returns>
+        public Models.Patient GetPatientByID(int patientId)
         {
-            throw new NotImplementedException();
+            var DBPatient = _context.Patients.Find(patientId);
+
+            if (DBPatient is not null)
+            {
+                return DB_DomainMapper.MapPatient(DBPatient);
+            }
+            else
+            {
+                throw new ArgumentException("Patient Not found in DB.");
+            }
         }
 
         public Task<Models.Patient> GetPatientByIDAsync(int id)
@@ -267,6 +284,10 @@ namespace VirtualClinic.Domain.Repositories
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Get's all the patients from the DB.
+        /// </summary>
+        /// <returns>A list of paitents</returns>
         public IEnumerable<Models.Patient> GetPatients()
         {
             var DBPatients = _context.Patients
@@ -277,33 +298,7 @@ namespace VirtualClinic.Domain.Repositories
 
             foreach(var dbpatient in DBPatients)
             {
-                Models.Patient next = new Models.Patient(dbpatient.Id, dbpatient.Name,dbpatient.Dob);
-
-                next.InsuranceProvider = dbpatient.Insurance;
-
-                next.SSN = dbpatient.Ssn;
-            
-                //could get dr
-                next.PrimaryDoctor = GetDoctorByID(dbpatient.DoctorId);
-
-                //todo, fill in timeslots
-                next.Timeslots = new List<Models.Timeslot>();
-
-                //todo: fill in perscriptions
-                next.Prescriptions = new List<Models.Prescription>();
-
-                next.PatientReports = new List<Models.PatientReport>();
-                foreach(var dbPatientReport in dbpatient.PatientReports)
-                {
-                    var report = DB_DomainMapper.MapReport(dbPatientReport);
-                    report.Patient = next;
-                    //TODO: note vitals still not filled in.
-
-                    next.PatientReports.Add(report);
-                }
-                
-
-                ModelPatients.Add(next);
+                ModelPatients.Add(DB_DomainMapper.MapPatient(dbpatient));
             }
 
             return ModelPatients;
@@ -342,6 +337,9 @@ namespace VirtualClinic.Domain.Repositories
         /// <summary>
         /// Get's a specific prescription by it's ID
         /// </summary>
+        /// <exception cref="ArgumentException">
+        /// Throws an argument exception if there is no perscription with that ID in the DB.
+        /// </exception>
         /// <param name="PerscriptionId">The ID of the desired prescription</param>
         /// <returns>The prescription with the given ID.</returns>
         public Models.Prescription GetPrescription(int PerscriptionId)
