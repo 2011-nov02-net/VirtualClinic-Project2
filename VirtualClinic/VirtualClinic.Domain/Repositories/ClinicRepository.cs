@@ -54,6 +54,7 @@ namespace VirtualClinic.Domain.Repositories
             return ModelPatients;
         }
 
+        //TODO: get patients asnych
         public Task<IEnumerable<Models.Patient>> GetPatientsAsync()
         {
             throw new NotImplementedException();
