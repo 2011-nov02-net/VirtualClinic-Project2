@@ -113,6 +113,11 @@ namespace VirtualClinic.Domain.Repositories
             throw new NotImplementedException();
         }
 
+
+        /// <summary>
+        /// Get's all the doctors.
+        /// </summary>
+        /// <returns>A list of all the doctors.</returns>
         public IEnumerable<Models.Doctor> GetDoctors()
         {
             var DBDoctors = _context.Doctors
@@ -135,6 +140,10 @@ namespace VirtualClinic.Domain.Repositories
 
         }
 
+        /// <summary>
+        /// Get a list of doctors asynchornusly.
+        /// </summary>
+        /// <returns>A task that can be awaited with the list of doctors.</returns>
         public async Task<IEnumerable<Models.Doctor>> GetDoctorsAsync()
         {
             var DBDoctors = await _context.Doctors
@@ -251,7 +260,6 @@ namespace VirtualClinic.Domain.Repositories
                 throw new ArgumentException("ID Not Found in DB.");
             }
 
-
             var modelreport = DB_DomainMapper.MapReport(report);
             //technically could be null, but shouldn't be because this ID comes from DB information.
             modelreport.Vitals = DB_DomainMapper.MapVitals(_context.Vitals.Find(report.VitalsId));
@@ -263,6 +271,11 @@ namespace VirtualClinic.Domain.Repositories
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Get's all of a single patient's reports.
+        /// </summary>
+        /// <param name="PatientId">The ID of the patient who's reports are desired.</param>
+        /// <returns>All reports of the given patient.</returns>
         public IEnumerable<Models.PatientReport> GetPatientReports(int PatientId)
         {
             List<DataModel.PatientReport> reports = _context.PatientReports
