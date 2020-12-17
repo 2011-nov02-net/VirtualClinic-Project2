@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using VirtualClinic.DataModel;
-using VirtualClinic.Domain.Interfaces;
-using VirtualClinic.Domain.Models;
+using VirtualClinic.Domain.Interfaces;using VirtualClinic.Domain.Models;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using VirtualClinic.Domain.Mapper;
@@ -22,25 +21,67 @@ namespace VirtualClinic.Domain.Repositories
             _logger = logger ?? throw new ArgumentNullException();
         }
 
-
+        /// <summary>
+        /// Adds a doctor to the database
+        /// </summary>
+        /// <param name="doctor">The doctor to be added to the database</param>
         public void AddDoctor(Models.Doctor doctor)
         {
-            throw new NotImplementedException();
+           var newDoctor = new DataModel.Doctor
+           {
+               Id = doctor.Id,
+               Name = doctor.Name,
+               Title = doctor.Title
+           };
+           _context.Doctors.Add(newDoctor);
+           _context.SaveChanges();
         }
 
-        public Task AddDoctorAsync(Models.Doctor doctor)
+        public async Task AddDoctorAsync(Models.Doctor doctor)
         {
-            throw new NotImplementedException();
+            var newDoctor = new DataModel.Doctor
+           {
+               Id = doctor.Id,
+               Name = doctor.Name,
+               Title = doctor.Title
+           };
+           await _context.Doctors.AddAsync(newDoctor);
+           await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Add a patient to the database 
+        /// </summary>
+        /// <param name="patient">A patient to be added to the database</param>
         public void AddPatient(Models.Patient patient)
         {
-            throw new NotImplementedException();
+            var newPatient = new DataModel.Patient
+            {
+                Id = patient.Id,
+                Name = patient.Name,
+                Dob = patient.DateOfBirth,
+                DoctorId = patient.PrimaryDoctor.Id,
+                Ssn = patient.SSN,
+                Insurance = patient.InsuranceProvider
+            };
+            _context.Patients.Add(newPatient);
+            _context.SaveChanges();
+
         }
 
-        public Task AddPatientAsync(Models.Patient patient)
+        public async Task AddPatientAsync(Models.Patient patient)
         {
-            throw new NotImplementedException();
+            var newPatient = new DataModel.Patient
+            {
+                Id = patient.Id,
+                Name = patient.Name,
+                Dob = patient.DateOfBirth,
+                DoctorId = patient.PrimaryDoctor.Id,
+                Ssn = patient.SSN,
+                Insurance = patient.InsuranceProvider
+            };
+           await _context.Patients.AddAsync(newPatient);
+           await _context.SaveChangesAsync();
         }
 
         public void AddPatientReport(Models.PatientReport report)
@@ -93,24 +134,75 @@ namespace VirtualClinic.Domain.Repositories
             throw new NotImplementedException();
         }
 
-        public Models.Doctor GetDoctorByID(int id)
+
+        /// <summary>
+        /// Get a doctor with a specific Id
+        /// </summary>
+        /// <param name="id">The id of the doctor to be returned</param>
+        /// <returns>A doctor with a list of its patient</returns>
+        public Models.Doctor GetDoctorByID(int doctorId)
         {
-            throw new NotImplementedException();
+
+            var DBDoctor = _context.Doctors.Where(o => o.Id == doctorId).First();
+
+            var doctor = new Models.Doctor(DBDoctor.Id, DBDoctor.Name, DBDoctor.Title)
+            {
+                Patients = (List<Models.Patient>)GetDoctorPatients(DBDoctor.Id)
+            };
+
+            return doctor;
         }
 
-        public Task<Models.Doctor> GetDoctorByIDAsync(int id)
+        public async Task<Models.Doctor> GetDoctorByIDAsync(int doctorId)
         {
-            throw new NotImplementedException();
+            var DBDoctor = await _context.Doctors.Where(o => o.Id == doctorId).FirstAsync();
+
+            var doctor = new Models.Doctor(DBDoctor.Id, DBDoctor.Name, DBDoctor.Title)
+            {
+                Patients = (List<Models.Patient>)await GetDoctorPatientsAsync(DBDoctor.Id)
+            };
+
+            return doctor;
         }
 
-        public IEnumerable<Models.Patient> GetDoctorPatients(int id)
+
+        /// <summary>
+        /// Get patients of a specific doctor
+        /// </summary>
+        /// <param name="id">The id of the doctor whose patients are being requested</param>
+        /// <returns>A list of patients of a doctor</returns>
+
+        public IEnumerable<Models.Patient> GetDoctorPatients(int doctorId)
         {
-            throw new NotImplementedException();
+            var DBPatients = _context.Patients.Where(o => o.DoctorId == doctorId).ToList();
+
+            List<Models.Patient> patients = new List<Models.Patient>();
+
+            foreach( var patient in DBPatients)
+            {
+                Models.Patient next = new Models.Patient(patient.Id, patient.Name, patient.Dob);
+
+                patients.Add(next);
+            }
+
+            return patients;
         }
 
-        public Task<IEnumerable<Models.Patient>> GetDoctorPatientsAsync(int id)
+
+        public async Task<IEnumerable<Models.Patient>> GetDoctorPatientsAsync(int doctorId)
         {
-            throw new NotImplementedException();
+            var DBPatients = await _context.Patients.Where(o => o.DoctorId == doctorId).ToListAsync();
+
+            List<Models.Patient> patients = new List<Models.Patient>();
+
+            foreach (var patient in DBPatients)
+            {
+                Models.Patient next = new Models.Patient(patient.Id, patient.Name, patient.Dob);
+
+                patients.Add(next);
+            }
+
+            return patients;
         }
 
 
@@ -128,11 +220,8 @@ namespace VirtualClinic.Domain.Repositories
 
             foreach (var dbdoctor in DBDoctors)
             {
-                Models.Doctor next = new Models.Doctor(dbdoctor.Id, dbdoctor.Name, dbdoctor.Title)
-                {
-                    Patients = (List<Models.Patient>)GetDoctorPatients(dbdoctor.Id)
-                };
-
+                Models.Doctor next = new Models.Doctor(dbdoctor.Id, dbdoctor.Name, dbdoctor.Title);
+          
                 ModelDoctors.Add(next);
             }
 
@@ -154,11 +243,8 @@ namespace VirtualClinic.Domain.Repositories
 
             foreach (var dbdoctor in DBDoctors)
             {
-                Models.Doctor next = new Models.Doctor(dbdoctor.Id, dbdoctor.Name, dbdoctor.Title)
-                {
-                    Patients = (List<Models.Patient>)GetDoctorPatients(dbdoctor.Id)
-                };
-
+                Models.Doctor next = new Models.Doctor(dbdoctor.Id, dbdoctor.Name, dbdoctor.Title);
+                
                 ModelDoctors.Add(next);
             }
 
@@ -184,9 +270,14 @@ namespace VirtualClinic.Domain.Repositories
             return ConvertTimeslots(timeslots);
         }
 
-        public Task<IEnumerable<Models.Timeslot>> GetDoctorTimeslotsAsync(int id)
+        public async Task<IEnumerable<Models.Timeslot>> GetDoctorTimeslotsAsync(int doctorId)
         {
-            throw new NotImplementedException();
+            List<DataModel.Timeslot> timeslots = await _context.Timeslots
+                    .Include(ts => ts.Appointment)
+                    .Where(ts => ts.DoctorId == doctorId)
+                    .ToListAsync();
+
+            return ConvertTimeslots(timeslots);
         }
 
         /// <summary>
@@ -341,9 +432,14 @@ namespace VirtualClinic.Domain.Repositories
             return ConvertTimeslots(timeslots, true);        
         }
 
-        public Task<IEnumerable<Models.Timeslot>> GetPatientTimeslotsAsync(int id)
+        public async Task<IEnumerable<Models.Timeslot>> GetPatientTimeslotsAsync(int PatientId)
         {
-            throw new NotImplementedException();
+              List<DataModel.Timeslot> timeslots = await _context.Timeslots
+                    .Include(ts => ts.Appointment)
+                    .Where(ts => ts.Appointment.PatientId == PatientId)
+                    .ToListAsync ();
+
+            return ConvertTimeslots(timeslots, true); 
         }
 
 
