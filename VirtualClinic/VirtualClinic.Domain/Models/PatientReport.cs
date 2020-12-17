@@ -4,7 +4,7 @@ using System.Text;
 
 namespace VirtualClinic.Domain.Models
 {
-    public class PatientReport
+    public class  PatientReport
     {
         public int Id { get; set; }
         public Patient Patient { get; set; }

@@ -29,7 +29,6 @@ namespace VirtualClinic.Domain.Repositories
         {
            var newDoctor = new DataModel.Doctor
            {
-               Id = doctor.Id,
                Name = doctor.Name,
                Title = doctor.Title
            };
@@ -41,7 +40,6 @@ namespace VirtualClinic.Domain.Repositories
         {
             var newDoctor = new DataModel.Doctor
            {
-               Id = doctor.Id,
                Name = doctor.Name,
                Title = doctor.Title
            };
@@ -57,7 +55,6 @@ namespace VirtualClinic.Domain.Repositories
         {
             var newPatient = new DataModel.Patient
             {
-                Id = patient.Id,
                 Name = patient.Name,
                 Dob = patient.DateOfBirth,
                 DoctorId = patient.PrimaryDoctor.Id,
@@ -73,7 +70,6 @@ namespace VirtualClinic.Domain.Repositories
         {
             var newPatient = new DataModel.Patient
             {
-                Id = patient.Id,
                 Name = patient.Name,
                 Dob = patient.DateOfBirth,
                 DoctorId = patient.PrimaryDoctor.Id,
@@ -84,24 +80,73 @@ namespace VirtualClinic.Domain.Repositories
            await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Add a patient report to the database
+        /// </summary>
+        /// <param name="report">The report to be added tp the database</param>
         public void AddPatientReport(Models.PatientReport report)
         {
-            throw new NotImplementedException();
+            var newPatientReport = new DataModel.PatientReport
+            {
+
+                PatientId  = report.Patient.Id,
+                ReportTime = report.Time,
+                Information = report.Info
+           //add vitals id for datamodel??
+
+            };
+
+            _context.Add(newPatientReport);
+            _context.SaveChanges();
+
         }
 
-        public Task AddPatientReportAsync(Models.PatientReport report)
+        public async Task AddPatientReportAsync(Models.PatientReport report)
         {
-            throw new NotImplementedException();
+            var newPatientReport = new DataModel.PatientReport
+            {
+
+                PatientId = report.Patient.Id,
+                ReportTime = report.Time,
+                Information = report.Info
+
+            };
+
+            await _context.AddAsync(newPatientReport);
+           await  _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Add a prescription to the database
+        /// </summary>
+        /// <param name="prescription">The prescition to be added to the databse</param>
         public void AddPrescription(Models.Prescription prescription)
         {
-            throw new NotImplementedException();
+            var newPrescription = new DataModel.Prescription
+            {
+                Information = prescription.Info,
+                Drug = prescription.DrugName,
+                PatientId = prescription.Patient.Id,
+                DoctorId  = prescription.Doctor.Id,
+            };
+
+            _context.Add(newPrescription);
+            _context.SaveChanges();
+
         }
 
-        public Task AddPrescriptionAsync(Models.Prescription prescription)
+        public async Task AddPrescriptionAsync(Models.Prescription prescription)
         {
-            throw new NotImplementedException();
+            var newPrescription = new DataModel.Prescription
+            {
+                Information = prescription.Info,
+                Drug = prescription.DrugName,
+                PatientId = prescription.Patient.Id,
+                DoctorId = prescription.Doctor.Id,
+            };
+
+           await  _context.AddAsync(newPrescription);
+           await  _context.SaveChangesAsync();
         }
 
         
