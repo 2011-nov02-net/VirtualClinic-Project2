@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtualClinic.Domain", "Vir
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtualClinic.Api", "VirtualClinic.Api\VirtualClinic.Api.csproj", "{C1214C06-C875-4AC3-A9AD-7B200C683BA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtualClinic.Tests", "VirtualClinic.Tests\VirtualClinic.Tests.csproj", "{B22808A2-4BB4-4416-ABD2-10729254E8BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtualClinic.Tests", "VirtualClinic.Tests\VirtualClinic.Tests.csproj", "{B22808A2-4BB4-4416-ABD2-10729254E8BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
