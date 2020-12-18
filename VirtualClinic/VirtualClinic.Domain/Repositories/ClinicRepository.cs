@@ -54,11 +54,21 @@ namespace VirtualClinic.Domain.Repositories
             return ModelPatients;
         }
 
-        public Task<IEnumerable<Models.Patient>> GetPatientsAsync()
+        public async Task<IEnumerable<Models.Patient>> GetPatientsAsync()
         {
-            throw new NotImplementedException();
-        }
+            var DBPatients = await _context.Patients
+                .Include(thing => thing.PatientReports)
+                .ToListAsync();
 
+            List<Models.Patient> ModelPatients = new List<Models.Patient>();
+
+            foreach (var dbpatient in DBPatients)
+            {
+                ModelPatients.Add(DB_DomainMapper.MapPatient(dbpatient));
+            }
+
+            return ModelPatients;
+        }
 
         /// <summary>
         /// Get's a specific patient based on their ID
@@ -82,9 +92,18 @@ namespace VirtualClinic.Domain.Repositories
             }
         }
 
-        public Task<Models.Patient> GetPatientByIDAsync(int id)
+        public async Task<Models.Patient> GetPatientByIDAsync(int id)
         {
-            throw new NotImplementedException();
+            var DBPatient = await _context.Patients.FindAsync(id);
+
+            if (DBPatient is not null)
+            {
+                return DB_DomainMapper.MapPatient(DBPatient);
+            }
+            else
+            {
+                throw new ArgumentException("Patient Not found in DB.");
+            }
         }
 
 
@@ -107,7 +126,6 @@ namespace VirtualClinic.Domain.Repositories
             _context.SaveChanges();
 
         }
-
 
         /// <summary>
         /// Add a patient to the database 
@@ -239,10 +257,12 @@ namespace VirtualClinic.Domain.Repositories
             var DBPatients = _context.Patients.Where(o => o.DoctorId == doctorId).ToList();
 
             List<Models.Patient> patients = new List<Models.Patient>();
+            var doctor = GetDoctorByID(doctorId);
 
             foreach (var patient in DBPatients)
             {
-                Models.Patient next = new Models.Patient(patient.Id, patient.Name, patient.Dob);
+                Models.Patient next = new Models.Patient(patient.Id, patient.Name, patient.Dob, patient.Ssn, patient.Insurance);
+                next.PrimaryDoctor = doctor;
 
                 patients.Add(next);
             }
@@ -264,7 +284,7 @@ namespace VirtualClinic.Domain.Repositories
 
             foreach (var patient in DBPatients)
             {
-                Models.Patient next = new Models.Patient(patient.Id, patient.Name, patient.Dob);
+                Models.Patient next = new Models.Patient(patient.Id, patient.Name, patient.Dob, patient.Ssn, patient.Insurance);
 
                 patients.Add(next);
             }

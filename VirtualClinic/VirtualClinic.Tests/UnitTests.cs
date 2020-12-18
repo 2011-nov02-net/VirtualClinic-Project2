@@ -257,9 +257,9 @@ namespace VirtualClinic.Tests
             using var context = new ClinicDbContext(options);
             var repo = new ClinicRepository(context, new NullLogger<ClinicRepository>());
 
-            var patients = repo.GetDoctorPatients(4);
+            var patients = repo.GetDoctorPatients(3);
 
-            var patientsActual = context.Patients.Where(x => x.DoctorId == 4).ToList();
+            var patientsActual = context.Patients.Where(x => x.DoctorId == 3).ToList();
 
             foreach (var patient in patients)
             {

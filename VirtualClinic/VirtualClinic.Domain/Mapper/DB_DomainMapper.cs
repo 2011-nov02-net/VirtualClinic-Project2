@@ -97,7 +97,7 @@ namespace VirtualClinic.Domain.Mapper
 
         internal static Models.Patient MapPatient(DataModel.Patient dBPatient)
         {
-            var patient = new Models.Patient(dBPatient.Id, dBPatient.Name, dBPatient.Dob);
+            var patient = new Models.Patient(dBPatient.Id, dBPatient.Name, dBPatient.Dob, dBPatient.Ssn, dBPatient.Insurance);
             patient.InsuranceProvider = dBPatient.Insurance;
             patient.SSN = dBPatient.Ssn;
 
