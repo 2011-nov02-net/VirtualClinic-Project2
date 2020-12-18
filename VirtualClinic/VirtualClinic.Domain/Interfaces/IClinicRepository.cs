@@ -44,7 +44,7 @@ namespace VirtualClinic.Domain.Interfaces
         public IEnumerable<Timeslot> GetDoctorTimeslots(int id);
         public Task<IEnumerable<Timeslot>> GetDoctorTimeslotsAsync(int id);
         public void AddTimeslot(Timeslot timeslot);
-        public Task AddTimeslotAsync(Timeslot timeslot);
+        public Task<Timeslot> AddTimeslotAsync(Timeslot timeslot);
         #endregion
 
         /// <summary>
