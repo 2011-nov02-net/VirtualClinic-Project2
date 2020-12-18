@@ -600,7 +600,7 @@ namespace VirtualClinic.Domain.Repositories
         /// Add a patient report to the database
         /// </summary>
         /// <param name="report">The report to be added tp the database</param>
-        public async Task AddPatientReportAsync(Models.PatientReport report)
+        public async Task<bool> AddPatientReportAsync(Models.PatientReport report)
         {
             var newPatientReport = new DataModel.PatientReport
             {
@@ -613,6 +613,7 @@ namespace VirtualClinic.Domain.Repositories
 
             await _context.AddAsync(newPatientReport);
             await _context.SaveChangesAsync();
+            return true;
         }
         #endregion
 

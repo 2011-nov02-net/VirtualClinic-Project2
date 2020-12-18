@@ -79,12 +79,21 @@ namespace VirtualClinic.Api.Controllers
         /// Either forbidden, or OK?
         /// </returns>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] PatientReport report)
         {
             //figure out if the user has permission to accsess the apointment the report will
             // be associated with, and if not return 403 forbidden
 
             //if they do, create the report with the given details.
+
+            if(await _clinicRepository.AddPatientReportAsync(report))
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest("Request could not be processed.");
+            }
         }
 
         // PUT api/<ReportsController>/5

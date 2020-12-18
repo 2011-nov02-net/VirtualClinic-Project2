@@ -56,7 +56,7 @@ namespace VirtualClinic.Domain.Interfaces
         public IEnumerable<PatientReport> GetPatientReports(int id);
         public Task<IEnumerable<Prescription>> GetPatientReportsAsync(int id);
         public void AddPatientReport(PatientReport report);
-        public Task AddPatientReportAsync(PatientReport report);
+        public Task<bool> AddPatientReportAsync(PatientReport report);
         #endregion
 
         /// <summary>
