@@ -15,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using VirtualClinic.Domain.Interfaces;
 using VirtualClinic.Domain.Repositories;
+using VirtualClinic.DataModel;
 
 namespace VirtualClinic.Api
 {
@@ -42,6 +43,9 @@ namespace VirtualClinic.Api
 
                 options.ReturnHttpNotAcceptable = true;
             });
+
+            services.AddDbContext<ClinicDbContext>(options =>
+           options.UseSqlServer(Configuration.GetConnectionString("")));
 
             services.AddSwaggerGen(c =>
             {

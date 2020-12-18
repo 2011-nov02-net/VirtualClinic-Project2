@@ -19,6 +19,7 @@ namespace VirtualClinic.Domain.Interfaces
         public void AddPatient(Patient patient);
         public Task<bool> AddPatientAsync(Patient patient);
         public Task<bool> UpdatePatientAsync(int id, Patient patient);
+        public Task<bool> DeletePatientAsync(int id);
         #endregion
 
         /// <summary>

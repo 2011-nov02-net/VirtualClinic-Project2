@@ -212,9 +212,20 @@ namespace VirtualClinic.Api.Controllers
 
         // DELETE api/<PatientsController>/5
         [HttpDelete("{id}")]
-        public void Delete([FromRoute] int id)
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            //todo delete patient by id method in repo async
+            var patient = await _clinicRepository.GetPatientByIDAsync(id);
+
+            if ( patient != null)
+            {
+                await _clinicRepository.DeletePatientAsync(id);
+
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
         }
     }
 }

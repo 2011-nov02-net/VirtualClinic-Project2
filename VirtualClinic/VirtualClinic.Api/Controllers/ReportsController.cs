@@ -108,6 +108,7 @@ namespace VirtualClinic.Api.Controllers
         [HttpPut("{id}")]
         public void Put([FromRoute]int id, [FromBody] string value)
         {
+
         }
 
         // DELETE api/<ReportsController>/5
