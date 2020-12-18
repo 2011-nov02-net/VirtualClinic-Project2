@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using VirtualClinic.Domain.Interfaces;
+using VirtualClinic.Domain.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,7 +15,20 @@ namespace VirtualClinic.Api.Controllers
     [ApiController]
     public class AppointmentsController : ControllerBase
     {
-        // GET: api/<ApointmentsController>
+
+        private readonly ILogger<AppointmentsController> _logger;
+        private readonly IClinicRepository _ApointmentRepo;
+
+        public AppointmentsController(ILogger<AppointmentsController> logger, IClinicRepository clinicRepository)
+        {
+            _logger = logger;
+            _ApointmentRepo = clinicRepository;
+        }
+
+
+
+
+        // GET: api/Apointment?after=datetime/
         /// <summary>
         /// Gets a list of all apointments for the user. This list may be empty.
         /// </summary>
@@ -21,9 +37,55 @@ namespace VirtualClinic.Api.Controllers
         /// </param>
         /// <returns>A list of all apointments.</returns>
         [HttpGet]
-        public IEnumerable<string> Get([FromQuery] DateTime after)
+        public async Task<IActionResult> GetAsync([FromQuery] DateTime? after = null)
         {
-            return new string[] { "value1", "value2" };
+            //todo: authentication
+
+            //todo: get user id and if dr or patient
+            bool isDr = true;
+            int id = -1;
+
+            Task<IEnumerable<Timeslot>> apointmentsTask;
+            if (isDr)
+            {
+                apointmentsTask = _ApointmentRepo.GetPatientTimeslotsAsync(id);
+            } else
+            {
+                apointmentsTask = _ApointmentRepo.GetPatientTimeslotsAsync(id);
+            }
+
+            IEnumerable<Timeslot> apointments;
+
+            // check for if the person's ID cannot be found.
+            // see https://docs.microsoft.com/en-us/dotnet/standard/parallel-programming/exception-handling-task-parallel-library#attached-child-tasks-and-nested-aggregateexceptions
+            try
+            {
+                apointments = await apointmentsTask;
+            } catch(AggregateException e)
+            {
+                var exception = e.Flatten();
+
+                if(exception.InnerExceptions is not null && exception.InnerException is ArgumentException)
+                {
+                    _logger.LogError(exception.InnerException.Message);
+                    _logger.LogError(e.StackTrace);
+
+                    return NotFound();
+
+                } else
+                {
+                    //don't want to catch other kinds
+                    _logger.LogError(e.StackTrace);
+                    throw e.InnerException;
+                }
+            }
+
+            if(after != null)
+            {
+                apointments = apointments.Where(apoint => apoint.Start > after);
+            }
+
+            return Ok(apointments.ToList());
         }
 
         // GET api/<ApointmentsController>/5
