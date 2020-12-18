@@ -28,7 +28,13 @@ namespace VirtualClinic.Domain.Models
             Temperature = temperature;
             PainLevel = painLevel;
         }
-
+        public Vitals(int heartRate, string bloodPressure, double? temperature, int painLevel)
+        {
+            HeartRate = heartRate;
+            BloodPressure = bloodPressure;
+            Temperature = temperature;
+            PainLevel = painLevel;
+        }
         /// <summary>
         /// create a default vitals with just an id
         /// </summary>

@@ -26,6 +26,12 @@ namespace VirtualClinic.Domain.Models
             Info = info;
             Patient = patient;
         }
+        public PatientReport(string info, DateTime time, Patient patient = null)
+        {
+            Time = time;
+            Info = info;
+            Patient = patient;
+        }
 
         /// <summary>
         /// Creates a new report at date time now.

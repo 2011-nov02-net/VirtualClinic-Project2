@@ -25,5 +25,11 @@ namespace VirtualClinic.Domain.Models
             Doctor = doctor;
             Patient = patient;        
         }
+        public Appointment(string notes, Doctor doctor = null, Patient patient = null)
+        {
+            Notes = notes;
+            Doctor = doctor;
+            Patient = patient;
+        }
     }
 }
