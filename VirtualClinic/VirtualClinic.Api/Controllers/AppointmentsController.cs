@@ -119,11 +119,16 @@ namespace VirtualClinic.Api.Controllers
         /// </summary>
         /// <returns>???</returns>
         [HttpPost]
-        public void Post([FromBody] Timeslot value)
+        public async Task<IActionResult> Post([FromBody] Timeslot value)
         {
             //check authorization
+            Task<Timeslot> apointmentTask = _ApointmentRepo.AddTimeslotAsync(value);
 
+            //try catch for errors
+            Timeslot createdApointment = await apointmentTask;
 
+            //TODO: replace with ID
+            return CreatedAtAction(nameof(Get), createdApointment);
         }
 
         // PUT api/<ApointmentsController>/5
