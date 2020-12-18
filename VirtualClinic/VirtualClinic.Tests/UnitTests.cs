@@ -271,8 +271,6 @@ namespace VirtualClinic.Tests
                 Assert.Contains(patient.PrimaryDoctor.Id, patientsActual.Select(x => x.DoctorId));
             }
         }
-
-
         public SqliteConnection Database_init()
         {
             var connection = new SqliteConnection("Data Source=:memory:");
