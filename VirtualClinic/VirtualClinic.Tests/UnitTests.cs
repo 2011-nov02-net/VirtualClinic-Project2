@@ -121,7 +121,12 @@ namespace VirtualClinic.Tests
             var doctors = repo.GetDoctors();
             var doctorsActual = context.Doctors.ToList();
 
-            Assert.Equal(doctors.Count(), doctorsActual.Count());
+            foreach (var doctor in doctors)
+            {
+                Assert.Contains(doctor.Name, doctorsActual.Select(x => x.Name));
+                Assert.Contains(doctor.Id, doctorsActual.Select(x => x.Id));
+                Assert.Contains(doctor.Title, doctorsActual.Select(x => x.Title));
+            }
         }
         [Fact]
         public async void GetDoctorsAsync_Database_test()
@@ -134,7 +139,12 @@ namespace VirtualClinic.Tests
             var doctors = await repo.GetDoctorsAsync();
             var doctorsActual = context.Doctors.ToList();
 
-            Assert.Equal(doctors.Count(), doctorsActual.Count());
+            foreach (var doctor in doctors)
+            {
+                Assert.Contains(doctor.Name, doctorsActual.Select(x => x.Name));
+                Assert.Contains(doctor.Id, doctorsActual.Select(x => x.Id));
+                Assert.Contains(doctor.Title, doctorsActual.Select(x => x.Title));
+            }
         }
         [Fact]
         public void GetPatients_Database_test()
@@ -147,7 +157,14 @@ namespace VirtualClinic.Tests
             var patients = repo.GetPatients();
             var patientsActual = context.Patients.ToList();
 
-            Assert.Equal(patients.Count(), patientsActual.Count());
+            foreach (var patient in patients)
+            {
+                Assert.Contains(patient.Name, patientsActual.Select(x => x.Name));
+                Assert.Contains(patient.Id, patientsActual.Select(x => x.Id));
+                Assert.Contains(patient.SSN, patientsActual.Select(x => x.Ssn));
+                Assert.Contains(patient.InsuranceProvider, patientsActual.Select(x => x.Insurance));
+                Assert.Contains(patient.DateOfBirth, patientsActual.Select(x => x.Dob));
+            }
         }
         [Fact]
         public async void GetPatientsAsync_Database_test()
@@ -160,8 +177,102 @@ namespace VirtualClinic.Tests
             var patients = await repo.GetPatientsAsync();
             var patientsActual = context.Patients.ToList();
 
-            Assert.Equal(patients.Count(), patientsActual.Count());
+            foreach (var patient in patients)
+            {
+                Assert.Contains(patient.Name, patientsActual.Select(x => x.Name));
+                Assert.Contains(patient.Id, patientsActual.Select(x => x.Id));
+                Assert.Contains(patient.SSN, patientsActual.Select(x => x.Ssn));
+                Assert.Contains(patient.InsuranceProvider, patientsActual.Select(x => x.Insurance));
+                Assert.Contains(patient.DateOfBirth, patientsActual.Select(x => x.Dob));
+            }
         }
+        [Fact]
+        public void GetPatientbyID_Database_test()
+        {
+            using var connection = Database_init();
+            var options = new DbContextOptionsBuilder<ClinicDbContext>().UseSqlite(connection).Options;
+            using var context = new ClinicDbContext(options);
+            var repo = new ClinicRepository(context, new NullLogger<ClinicRepository>());
+
+            var patient = repo.GetPatientByID(2);
+
+            var patientsActual = context.Patients.Where(x => x.Id == 2).Single();
+
+            Assert.Equal(patient.Id, patientsActual.Id);
+            Assert.Equal(patient.Name, patientsActual.Name);
+            Assert.Equal(patient.SSN, patientsActual.Ssn);
+        }
+        [Fact]
+        public async void GetPatientbyIDAsync_Database_test()
+        {
+            using var connection = Database_init();
+            var options = new DbContextOptionsBuilder<ClinicDbContext>().UseSqlite(connection).Options;
+            using var context = new ClinicDbContext(options);
+            var repo = new ClinicRepository(context, new NullLogger<ClinicRepository>());
+
+            var patient = await repo.GetPatientByIDAsync(2);
+
+            var patientsActual = context.Patients.Where(x => x.Id == 2).Single();
+
+            Assert.Equal(patient.Id, patientsActual.Id);
+            Assert.Equal(patient.Name, patientsActual.Name);
+            Assert.Equal(patient.SSN, patientsActual.Ssn);
+        }
+        [Fact]
+        public void GetDoctorbyID_Database_test()
+        {
+            using var connection = Database_init();
+            var options = new DbContextOptionsBuilder<ClinicDbContext>().UseSqlite(connection).Options;
+            using var context = new ClinicDbContext(options);
+            var repo = new ClinicRepository(context, new NullLogger<ClinicRepository>());
+
+            var doctor = repo.GetDoctorByID(2);
+
+            var doctorActual = context.Doctors.Where(x => x.Id == 2).Single();
+
+            Assert.Equal(doctor.Id, doctorActual.Id);
+            Assert.Equal(doctor.Name, doctorActual.Name);
+        }
+        [Fact]
+        public async void GetDoctorbyIDAsync_Database_test()
+        {
+            using var connection = Database_init();
+            var options = new DbContextOptionsBuilder<ClinicDbContext>().UseSqlite(connection).Options;
+            using var context = new ClinicDbContext(options);
+            var repo = new ClinicRepository(context, new NullLogger<ClinicRepository>());
+
+            var doctor = await repo.GetDoctorByIDAsync(2);
+
+            var doctorActual = context.Doctors.Where(x => x.Id == 2).Single();
+
+            Assert.Equal(doctor.Id, doctorActual.Id);
+            Assert.Equal(doctor.Name, doctorActual.Name);
+            Assert.Equal(doctor.Title, doctorActual.Title);
+        }
+        [Fact]
+        public void GetDoctorPatients_Database_test()
+        {
+            using var connection = Database_init();
+            var options = new DbContextOptionsBuilder<ClinicDbContext>().UseSqlite(connection).Options;
+            using var context = new ClinicDbContext(options);
+            var repo = new ClinicRepository(context, new NullLogger<ClinicRepository>());
+
+            var patients = repo.GetDoctorPatients(4);
+
+            var patientsActual = context.Patients.Where(x => x.DoctorId == 4).ToList();
+
+            foreach (var patient in patients)
+            {
+                Assert.Contains(patient.Name, patientsActual.Select(x => x.Name));
+                Assert.Contains(patient.Id, patientsActual.Select(x => x.Id));
+                Assert.Contains(patient.SSN, patientsActual.Select(x => x.Ssn));
+                Assert.Contains(patient.InsuranceProvider, patientsActual.Select(x => x.Insurance));
+                Assert.Contains(patient.DateOfBirth, patientsActual.Select(x => x.Dob));
+                Assert.Contains(patient.PrimaryDoctor.Id, patientsActual.Select(x => x.DoctorId));
+            }
+        }
+
+
         public SqliteConnection Database_init()
         {
             var connection = new SqliteConnection("Data Source=:memory:");
