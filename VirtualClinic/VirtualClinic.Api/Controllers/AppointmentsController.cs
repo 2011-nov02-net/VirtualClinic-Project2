@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -117,7 +118,7 @@ namespace VirtualClinic.Api.Controllers
         /// <summary>
         /// If patient, create an apointment, if dr create an open timeslot?
         /// </summary>
-        /// <returns>???</returns>
+        /// <returns>403 unauthorized, some other error for id collision, or CreatedAt</returns>
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Timeslot value)
         {
@@ -141,8 +142,18 @@ namespace VirtualClinic.Api.Controllers
         /// 404 not found, 403 unauthorized or something to do with succsess
         /// </returns>
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult Put([FromRoute]int id, [FromBody] string value)
         {
+
+            //get the one with the id
+
+            //check auth
+
+            //replace stuff with new values
+
+            //update in DB
+
+            throw new NotImplementedException("Not Yet Implemented");
         }
 
         // DELETE api/<ApointmentsController>/5
@@ -154,8 +165,22 @@ namespace VirtualClinic.Api.Controllers
         /// OK, 404 not found, or 403 not authroized
         /// </returns>
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        [ProducesResponseType(403, Type = typeof(IActionResult))]
+        public IActionResult Delete(int id)
         {
+            //tood: check auth
+            bool authorized = false;
+
+            if (authorized)
+            {
+                //todo: create a delete method in repo.
+                _logger.LogInformation($"Tried to delete Apointment/Timeslot {id}");
+                
+                return Ok(); 
+            } else
+            {
+                return Forbid();
+            }
         }
     }
 }
