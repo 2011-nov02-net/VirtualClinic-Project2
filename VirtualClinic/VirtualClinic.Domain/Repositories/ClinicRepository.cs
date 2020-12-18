@@ -451,7 +451,7 @@ namespace VirtualClinic.Domain.Repositories
         /// of the given timeslot is already in use on the DB
         /// </exception>
         /// <param name="timeslot">A Model Timeslot </param>
-        public Task<Models.Timeslot> AddTimeslot(Models.Timeslot timeslot)
+        public Models.Timeslot AddTimeslot(Models.Timeslot timeslot)
         {
             DataModel.Timeslot DBTimeslot = new DataModel.Timeslot();
 
@@ -467,7 +467,7 @@ namespace VirtualClinic.Domain.Repositories
             _context.SaveChanges();
         }
 
-        public Task AddTimeslotAsync(Models.Timeslot timeslot)
+        public Task<Models.Timeslot> AddTimeslotAsync(Models.Timeslot timeslot)
         {
             throw new NotImplementedException();
         }
