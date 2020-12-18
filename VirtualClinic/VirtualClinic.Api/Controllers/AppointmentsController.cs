@@ -95,9 +95,22 @@ namespace VirtualClinic.Api.Controllers
         /// <param name="id"> The apointment's ID</param>
         /// <returns>The apointments information, 404 not found, or 403 unauthorized</returns>
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            //todo: get the specific apointment.
+            Timeslot timeslot = null;
+
+            //await the result + check for error
+
+            //TODO: check authorization before rturning
+            if (true)
+            {
+                return Ok(timeslot);
+            }
+            else
+            {
+                return Forbid();
+            }
         }
 
         // POST api/<ApointmentsController>
@@ -106,8 +119,11 @@ namespace VirtualClinic.Api.Controllers
         /// </summary>
         /// <returns>???</returns>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] Timeslot value)
         {
+            //check authorization
+
+
         }
 
         // PUT api/<ApointmentsController>/5
