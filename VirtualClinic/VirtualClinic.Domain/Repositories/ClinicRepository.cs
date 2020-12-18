@@ -481,7 +481,7 @@ namespace VirtualClinic.Domain.Repositories
 
             _context.Timeslots.Attach(DBTimeslot);
             _context.SaveChanges();
-     
+    
         }
 
         public async Task<Models.Timeslot> AddTimeslotAsync(Models.Timeslot timeslot)
