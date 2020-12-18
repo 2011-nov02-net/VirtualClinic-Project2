@@ -24,6 +24,8 @@ namespace VirtualClinic.Api.Controllers
             _logger = logger;
             _clinicRepository = clinicRepository;
         }
+
+
         // GET: api/<PatientsController>
         /// <summary>
         /// Requires DR Level Authentication. Gets a list of all the DR's Patients.
@@ -37,6 +39,8 @@ namespace VirtualClinic.Api.Controllers
         {
             //check if logged in as dr, if not, then return not authorized
             //get all the patients of the currently logged in doctor.
+
+
             if (await _clinicRepository.GetDoctorPatientsAsync(doctorId) is IEnumerable<Patient> patients)
             {
 
@@ -216,16 +220,26 @@ namespace VirtualClinic.Api.Controllers
         {
             var patient = await _clinicRepository.GetPatientByIDAsync(id);
 
-            if ( patient != null)
+            if (patient != null)
             {
-                await _clinicRepository.DeletePatientAsync(id);
 
-                return Ok();
+                try
+                {
+                    await _clinicRepository.DeletePatientAsync(id);
+
+                    return Ok();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e.InnerException.Message);
+                    return NotFound();
+                }
             }
             else
             {
                 return NotFound();
             }
+           
         }
     }
 }

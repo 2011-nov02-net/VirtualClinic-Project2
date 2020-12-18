@@ -175,24 +175,40 @@ namespace VirtualClinic.Domain.Repositories
             }
 
         }
-        #endregion
+
+        public async Task<bool> DeletePatientAsync(int id)
+        {
+            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Id == id);
+
+            if (patient != null)
+            {
+                _context.Patients.Remove(patient);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            else
+            {
+                throw new Exception(" This patient doesn't exist");
+            }
+        }
+            #endregion
 
 
 
-        /*     _____             _                 
-         *    |  __ \           | |                
-         *    | |  | | ___   ___| |_ ___  _ __ ___ 
-         *    | |  | |/ _ \ / __| __/ _ \| '__/ __|
-         *    | |__| | (_) | (__| || (_) | |  \__ \
-         *    |_____/ \___/ \___|\__\___/|_|  |___/                                
-         */
-        #region Doctors
+            /*     _____             _                 
+             *    |  __ \           | |                
+             *    | |  | | ___   ___| |_ ___  _ __ ___ 
+             *    | |  | |/ _ \ / __| __/ _ \| '__/ __|
+             *    | |__| | (_) | (__| || (_) | |  \__ \
+             *    |_____/ \___/ \___|\__\___/|_|  |___/                                
+             */
+            #region Doctors
 
-        /// <summary>
-        /// Get's all the doctors.
-        /// </summary>
-        /// <returns>A list of all the doctors.</returns>
-        public IEnumerable<Models.Doctor> GetDoctors()
+            /// <summary>
+            /// Get's all the doctors.
+            /// </summary>
+            /// <returns>A list of all the doctors.</returns>
+            public IEnumerable<Models.Doctor> GetDoctors()
         {
             var DBDoctors = _context.Doctors
                .Include(o => o.Patients)
@@ -451,7 +467,7 @@ namespace VirtualClinic.Domain.Repositories
         /// of the given timeslot is already in use on the DB
         /// </exception>
         /// <param name="timeslot">A Model Timeslot </param>
-        public Task<Models.Timeslot> AddTimeslot(Models.Timeslot timeslot)
+        public void AddTimeslot(Models.Timeslot timeslot)
         {
             DataModel.Timeslot DBTimeslot = new DataModel.Timeslot();
 
@@ -461,15 +477,28 @@ namespace VirtualClinic.Domain.Repositories
             DBTimeslot.AppointmentId = timeslot.Appointment?.Id;
             //DBTimeslot.DoctorId = timeslot.dr.id;         
 
-            throw new NotImplementedException();
+            
 
             _context.Timeslots.Attach(DBTimeslot);
             _context.SaveChanges();
+     
         }
 
-        public Task AddTimeslotAsync(Models.Timeslot timeslot)
+        public async Task<Models.Timeslot> AddTimeslotAsync(Models.Timeslot timeslot)
         {
-            throw new NotImplementedException();
+            DataModel.Timeslot DBTimeslot = new DataModel.Timeslot();
+
+            //DBTimeslot.Id = timeslot.Id;
+            //todo: check if Id is valid in DB, and if not, throw some argument exception.
+
+            DBTimeslot.AppointmentId = timeslot.Appointment?.Id;
+            //DBTimeslot.DoctorId = timeslot.dr.id;         
+
+
+
+            _context.Timeslots.Attach(DBTimeslot);
+             await  _context.SaveChangesAsync();
+            return timeslot;
         }
 
         #endregion

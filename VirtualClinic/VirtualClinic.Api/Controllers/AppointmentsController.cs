@@ -48,7 +48,7 @@ namespace VirtualClinic.Api.Controllers
             Task<IEnumerable<Timeslot>> apointmentsTask;
             if (isDr)
             {
-                apointmentsTask = _ApointmentRepo.GetPatientTimeslotsAsync(id);
+                apointmentsTask = _ApointmentRepo.GetDoctorTimeslotsAsync(id);
             } else
             {
                 apointmentsTask = _ApointmentRepo.GetPatientTimeslotsAsync(id);
