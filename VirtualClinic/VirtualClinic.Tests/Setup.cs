@@ -49,6 +49,17 @@ namespace VirtualClinic.Tests
                 new DataModel.PatientReport {Id = 6, VitalsId = null, Information = "My goldfish has alzheimers", PatientId = 5, ReportTime = new DateTime(2019, 3, 25, 11, 19, 6)}
             };
 
+            DataModel.Prescription[] prescriptions =
+            {
+                new DataModel.Prescription {Id = 1, DoctorId = 1, PatientId = 1, Drug = "Mycoxafloppin", Information = "Take orally every 6 hours", Date = new DateTime(2020, 12, 6, 8, 12, 00)},
+                new DataModel.Prescription {Id = 2, DoctorId = 1, PatientId = 1, Drug = "DuderSoluzone", Information = "Radically take", Date = new DateTime(2019, 5, 23, 12, 11, 00)},
+                new DataModel.Prescription {Id = 3, DoctorId = 1, PatientId = 2, Drug = "Mafializone", Information = "Take it every day or you will regret it", Date = new DateTime(2020, 5, 29, 15, 46, 00)},
+                new DataModel.Prescription {Id = 4, DoctorId = 3, PatientId = 4, Drug = "Ambien", Information = "Take orally every night", Date = new DateTime(2020, 7, 15, 13, 32, 00)},
+                new DataModel.Prescription {Id = 5, DoctorId = 3, PatientId = 5, Drug = "gibberish", Information = "literally useless", Date = new DateTime(2018, 9, 3, 9, 17, 00)},
+                new DataModel.Prescription {Id = 6, DoctorId = 4, PatientId = 6, Drug = "Mycoxafloppin", Information = "Take orally every 6 hours", Date = new DateTime(2019, 1, 6, 11, 15, 00)},
+                new DataModel.Prescription {Id = 7, DoctorId = 4, PatientId = 7, Drug = "Mycoxafloppin", Information = "Take orally every 6 hours", Date = new DateTime(2020, 2, 29, 10, 9, 00)},
+            };
+
             var context = new ClinicDbContext(options);
 
             context.Database.EnsureCreated();
@@ -64,6 +75,10 @@ namespace VirtualClinic.Tests
             foreach (var report in patientReports)
             {
                 context.PatientReports.Add(report);
+            }
+            foreach (var prescription in prescriptions)
+            {
+                context.Prescriptions.Add(prescription);
             }
             context.SaveChanges();
 
