@@ -38,12 +38,14 @@ namespace VirtualClinic.Api.Controllers
         {
             if (await _clinicRepository.GetDoctorsAsync() is IEnumerable<Doctor> doctors)
             {
-            //if search isn't null, filter list of all doctors by name
-                //    if(search is not null)
-                //    {
-                //     //todo: return getdoctorsbyname
-                //    }
-                //else
+                //if search isn't null, filter list of all doctors by name
+                    if (search is not null)
+                {
+                    var searchDoctor = doctors.FirstOrDefault(d => d.Name.ToLower() == search.ToLower());
+
+                    return Ok(searchDoctor);
+                }
+                else
                 {
 
                     return Ok(doctors);
@@ -85,6 +87,21 @@ namespace VirtualClinic.Api.Controllers
 
                 return NotFound();
             }
+        }
+
+        //PUT: api/Doctors/{id}
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int doctorId, [FromBody] Doctor doctor)
+        {
+            if (await _clinicRepository.GetDoctorByIDAsync(doctorId) is Doctor)
+            {
+               // _clinicRepository.UpdateDoctorAsync(doctor);
+
+                return NoContent();
+            }
+
+
+            return NotFound();
         }
 
     }

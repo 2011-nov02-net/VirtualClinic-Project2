@@ -10,7 +10,7 @@ namespace VirtualClinic.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ApointmentsController : ControllerBase
+    public class AppointmentsController : ControllerBase
     {
         // GET: api/<ApointmentsController>
         /// <summary>

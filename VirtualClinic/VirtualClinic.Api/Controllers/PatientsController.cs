@@ -33,19 +33,22 @@ namespace VirtualClinic.Api.Controllers
         /// </param>
         /// <returns>Information on the patient, or error 403 not authorized.</returns>
         [HttpGet]
-        public async Task<IActionResult> Get(int doctorId, [FromQuery] string search = null)
+        public async Task<IActionResult> Get([FromQuery] int doctorId, [FromQuery] string search = null)
         {
             //check if logged in as dr, if not, then return not authorized
             //get all the patients of the currently logged in doctor.
-            if (await  _clinicRepository.GetDoctorPatientsAsync(doctorId) is IEnumerable<Patient> patients)
+            if (await _clinicRepository.GetDoctorPatientsAsync(doctorId) is IEnumerable<Patient> patients)
             {
 
-                //if(search is not null)
-                //{
-                //    //filter by name based on search string
+                if (search is not null)
+                {
+                    //filter by name based on search string
+                    var searchPatient = patients.FirstOrDefault(p => p.Name.ToLower() == search.ToLower());
 
-                //}
-                //else
+                    return Ok(searchPatient);
+
+                }
+                else
                 {
 
                     return Ok(patients);
@@ -86,9 +89,42 @@ namespace VirtualClinic.Api.Controllers
             }
 
         }
+        //Get api/Patients/{id}/Prescriptions
+        /// <summary>
+        /// Get a list prescriptions for the specific patient
+        /// </summary>
+        /// <param name="PatientId">The id of the patients who's prescription is to be retrieved</param>
+        /// <returns>Returns a list of reports for this patient.</returns>
+
+        [HttpGet("{id}/Prescriptions")]
+        public async Task<IActionResult> GetPresctiptions([FromRoute] int PatientId)
+        {
+            // check if the patient with that id exists
 
 
-        [HttpGet("{Patientid}/Reports")]
+            //if they exist, check authorization of the user
+
+            //probably then forward this request to the reports controller
+            if (await _clinicRepository.GetPatientPrescriptionsAsync(PatientId) is IEnumerable<Prescription> prescriptions)
+            {
+
+                return Ok(prescriptions);
+            }
+            else
+            {
+
+                return NotFound();
+            }
+
+        }
+        //Get api/Patients/{id}/Reports
+        /// <summary>
+        /// Get a list reports for the specific patient
+        /// </summary>
+        /// <param name="PatientId">The id of the patients who's report is to be retrieved</param>
+        /// <returns>Returns a list of reports for this patient.</returns>
+
+        [HttpGet("{id}/Reports")]
         public async Task<IActionResult>  GetReports([FromRoute] int PatientId)
         {
             // check if the patient with that id exists
@@ -110,9 +146,10 @@ namespace VirtualClinic.Api.Controllers
 
         }
 
+      
 
         [HttpGet("{PatientId}/Reports/id")]
-        public async Task<IActionResult>  GetReport([FromRoute] int PatientID, [FromRoute] int id)
+        public async Task<IActionResult>  GetReport([FromRoute] int id)
         {
             // check if the patient with that id exists
 
@@ -132,6 +169,7 @@ namespace VirtualClinic.Api.Controllers
             }
         }
 
+
         // POST api/<PatientsController>
         /// <summary>
         /// Adds the patient to the currently logged in dr's list of patients.
@@ -148,15 +186,28 @@ namespace VirtualClinic.Api.Controllers
             else
             {
 
-                return BadRequest();
+                return BadRequest("Request could not be processed.");
             }
         }
 
         // PUT api/<PatientsController>/5
         [HttpPut("{id}")]
-        public void Put([FromRoute] int id, [FromBody] string value)
+        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] Patient newPatient)
         {
-            //todo update patient by id method in repo async
+            var check = await _clinicRepository.GetPatientByIDAsync(id);
+
+            if (check != null)
+            {
+
+                bool updated = await _clinicRepository.UpdatePatientAsync(id, newPatient);
+
+                return Ok(updated);
+            }
+            else
+            {
+                return BadRequest("Request could not be processed.");
+            }
+
         }
 
         // DELETE api/<PatientsController>/5

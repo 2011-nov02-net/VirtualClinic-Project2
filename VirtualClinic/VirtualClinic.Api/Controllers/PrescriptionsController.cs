@@ -34,13 +34,13 @@ namespace VirtualClinic.Api.Controllers
         /// </param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> Get(int patientid,[FromQuery] string search = null)
+        public async Task<IActionResult> Get(int patientId,[FromQuery] string search = null)
         {
             //if logged in user is a DR, get all prescritpions for this doctor
 
 
             //else if user is a patient, get all prescriptions for this patient
-            if (await _clinicRepository.GetPatientPrescriptionsAsync(patientid) is IEnumerable<Prescription> prescriptions)
+            if (await _clinicRepository.GetPatientPrescriptionsAsync(patientId) is IEnumerable<Prescription> prescriptions)
             {
                 return Ok(prescriptions);
             }
@@ -57,9 +57,16 @@ namespace VirtualClinic.Api.Controllers
         /// <param name="id">The id of the prescription to be retrieved </param>
         /// <returns>Information on the prescription, 404 not found or 403 not auhtprized</returns>
         [HttpGet("{id}")]
-        public void Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-          //todo get prescription by id Async
+            if (await _clinicRepository.GetPrescriptionAsync(id) is Prescription prescription)
+            {
+                return Ok(prescription);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
 

@@ -54,10 +54,21 @@ namespace VirtualClinic.Domain.Repositories
             return ModelPatients;
         }
 
-        //TODO: get patients asnych
-        public Task<IEnumerable<Models.Patient>> GetPatientsAsync()
+       
+        public async Task<IEnumerable<Models.Patient>> GetPatientsAsync()
         {
-            throw new NotImplementedException();
+            var DBPatients = await _context.Patients
+                   .Include(thing => thing.PatientReports)
+                   .ToListAsync();
+
+            List<Models.Patient> ModelPatients = new List<Models.Patient>();
+
+            foreach (var dbpatient in DBPatients)
+            {
+                ModelPatients.Add(DB_DomainMapper.MapPatient(dbpatient));
+            }
+
+            return ModelPatients;
         }
 
 
@@ -83,9 +94,18 @@ namespace VirtualClinic.Domain.Repositories
             }
         }
 
-        public Task<Models.Patient> GetPatientByIDAsync(int id)
+        public async Task<Models.Patient> GetPatientByIDAsync(int patientId)
         {
-            throw new NotImplementedException();
+            var DBPatient = await _context.Patients.FindAsync(patientId);
+
+            if (DBPatient is not null)
+            {
+                return DB_DomainMapper.MapPatient(DBPatient);
+            }
+            else
+            {
+                throw new ArgumentException("Patient Not found in DB.");
+            }
         }
 
 
@@ -127,6 +147,33 @@ namespace VirtualClinic.Domain.Repositories
             await _context.Patients.AddAsync(newPatient);
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        /// <summary>
+        /// Update a patient in the database
+        /// </summary>
+        /// <param name="id">The id of teh patient to be updated</param>
+        /// <param name="patient">The update </param>
+        /// <returns>True if the patient is in the datase and has been updated </returns>
+        public async Task<bool> UpdatePatientAsync(int id, Models.Patient patient)
+        {
+            var updatedPatient = await _context.Patients.Where(p => p.Id == id).FirstAsync();
+            if (updatedPatient == null)
+            {
+                return false;
+            }else
+            {
+
+            updatedPatient.Id = patient.Id;
+            updatedPatient.Name = patient.Name;
+            updatedPatient.DoctorId = patient.PrimaryDoctor.Id;
+            updatedPatient.Ssn = patient.SSN;
+            updatedPatient.Dob = patient.DateOfBirth;
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+
         }
         #endregion
 
@@ -293,7 +340,7 @@ namespace VirtualClinic.Domain.Repositories
         /// Adds a doctor to the database
         /// </summary>
         /// <param name="doctor">The doctor to be added to the database</param>
-        public async Task AddDoctorAsync(Models.Doctor doctor)
+        public async Task<bool> AddDoctorAsync(Models.Doctor doctor)
         {
             var newDoctor = new DataModel.Doctor
             {
@@ -302,6 +349,7 @@ namespace VirtualClinic.Domain.Repositories
             };
             await _context.Doctors.AddAsync(newDoctor);
             await _context.SaveChangesAsync();
+            return true;
         }
 
         #endregion
@@ -511,9 +559,20 @@ namespace VirtualClinic.Domain.Repositories
             return modelreports;
         }
 
-        public Task<IEnumerable<Models.Prescription>> GetPatientReportsAsync(int id)
+        public async Task<IEnumerable<Models.Prescription>> GetPatientReportsAsync(int PatientId)
         {
-            throw new NotImplementedException();
+            List<DataModel.PatientReport> reports = await  _context.PatientReports
+               .Where(report => report.PatientId == PatientId)
+               .ToListAsync();
+
+            List<Models.PatientReport> modelreports = new List<Models.PatientReport>();
+
+            foreach (var r in reports)
+            {
+                modelreports.Add(DB_DomainMapper.MapReport(r));
+            }
+
+            return (IEnumerable<Models.Prescription>)modelreports;
         }
 
         /// <summary>
@@ -594,9 +653,18 @@ namespace VirtualClinic.Domain.Repositories
             }
         }
 
-        public Task<bool> GetPrescriptionAsync(int PerscriptionId)
+        public async Task<Models.Prescription> GetPrescriptionAsync(int PerscriptionId)
         {
-            throw new NotImplementedException();
+            var script = await _context.Prescriptions.FindAsync(PerscriptionId);
+
+            if (script is not null)
+            {
+                return DB_DomainMapper.MapPrescription(script);
+            }
+            else
+            {
+                throw new ArgumentException("Prescription, {id}, not found.");
+            }
         }
 
 
@@ -622,9 +690,20 @@ namespace VirtualClinic.Domain.Repositories
             return modelPresciptions;
         }
 
-        public Task<IEnumerable<Models.Prescription>> GetPatientPrescriptionsAsync(int id)
+        public async Task<IEnumerable<Models.Prescription>> GetPatientPrescriptionsAsync(int patientID)
         {
-            throw new NotImplementedException();
+            var DbPerscriptions = await _context.Prescriptions
+              .Where(p => p.PatientId == patientID)
+              .ToListAsync();
+
+            List<Models.Prescription> modelPresciptions = new List<Models.Prescription>();
+
+            foreach (var script in DbPerscriptions)
+            {
+                modelPresciptions.Add(DB_DomainMapper.MapPrescription(script));
+            }
+
+            return modelPresciptions;
         }
 
 

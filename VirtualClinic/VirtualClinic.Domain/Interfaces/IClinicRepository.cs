@@ -18,6 +18,7 @@ namespace VirtualClinic.Domain.Interfaces
         public Task<Patient> GetPatientByIDAsync(int id);
         public void AddPatient(Patient patient);
         public Task<bool> AddPatientAsync(Patient patient);
+        public Task<bool> UpdatePatientAsync(int id, Patient patient);
         #endregion
 
         /// <summary>
@@ -31,7 +32,7 @@ namespace VirtualClinic.Domain.Interfaces
         public IEnumerable<Patient> GetDoctorPatients(int id);
         public Task<IEnumerable<Patient>> GetDoctorPatientsAsync(int id);
         public void AddDoctor(Doctor doctor);
-        public Task AddDoctorAsync(Doctor doctor);
+        public Task<bool> AddDoctorAsync(Doctor doctor);
         #endregion
 
         /// <summary>
@@ -64,7 +65,7 @@ namespace VirtualClinic.Domain.Interfaces
         #region Perscriptions
         public Prescription GetPrescription(int PerscriptionId);
 
-        public Task<bool> GetPrescriptionAsync(int PerscriptionId);
+        public Task<Prescription> GetPrescriptionAsync(int PerscriptionId);
 
         public IEnumerable<Prescription> GetPatientPrescriptions(int id);
         public Task<IEnumerable<Prescription>> GetPatientPrescriptionsAsync(int id);
