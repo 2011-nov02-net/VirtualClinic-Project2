@@ -216,18 +216,12 @@ namespace VirtualClinic.Domain.Repositories
         /// <returns>A doctor with a list of its patient</returns>
         public Models.Doctor GetDoctorByID(int doctorId)
         {
-
             var DBDoctor = _context.Doctors.Where(o => o.Id == doctorId).First();
 
-            var doctor = new Models.Doctor(DBDoctor.Id, DBDoctor.Name, DBDoctor.Title)
-            {
-                Patients = (List<Models.Patient>)GetDoctorPatients(DBDoctor.Id)
-            };
+            var doctor = new Models.Doctor(DBDoctor.Id, DBDoctor.Name, DBDoctor.Title);
 
             return doctor;
         }
-
-
 
         /// <summary>
         /// Get a doctor with a specific Id
@@ -238,10 +232,7 @@ namespace VirtualClinic.Domain.Repositories
         {
             var DBDoctor = await _context.Doctors.Where(o => o.Id == doctorId).FirstAsync();
 
-            var doctor = new Models.Doctor(DBDoctor.Id, DBDoctor.Name, DBDoctor.Title)
-            {
-                Patients = (List<Models.Patient>)await GetDoctorPatientsAsync(DBDoctor.Id)
-            };
+            var doctor = new Models.Doctor(DBDoctor.Id, DBDoctor.Name, DBDoctor.Title);
 
             return doctor;
         }
