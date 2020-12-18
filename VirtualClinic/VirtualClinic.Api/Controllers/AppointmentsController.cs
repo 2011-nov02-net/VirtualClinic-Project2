@@ -41,7 +41,7 @@ namespace VirtualClinic.Api.Controllers
         {
             //todo: authentication
 
-            //todo: get user id and if dr or patient
+            //todo: get user id and of dr or patient via auth
             bool isDr = true;
             int id = -1;
 
