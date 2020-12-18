@@ -255,15 +255,14 @@ namespace VirtualClinic.Domain.Repositories
         public IEnumerable<Models.Patient> GetDoctorPatients(int doctorId)
         {
             var DBPatients = _context.Patients.Where(o => o.DoctorId == doctorId).ToList();
+            var doctor = GetDoctorByID(doctorId);
 
             List<Models.Patient> patients = new List<Models.Patient>();
-            var doctor = GetDoctorByID(doctorId);
 
             foreach (var patient in DBPatients)
             {
                 Models.Patient next = new Models.Patient(patient.Id, patient.Name, patient.Dob, patient.Ssn, patient.Insurance);
                 next.PrimaryDoctor = doctor;
-
                 patients.Add(next);
             }
 
@@ -279,13 +278,14 @@ namespace VirtualClinic.Domain.Repositories
         public async Task<IEnumerable<Models.Patient>> GetDoctorPatientsAsync(int doctorId)
         {
             var DBPatients = await _context.Patients.Where(o => o.DoctorId == doctorId).ToListAsync();
+            var doctor = await GetDoctorByIDAsync(doctorId);
 
             List<Models.Patient> patients = new List<Models.Patient>();
 
             foreach (var patient in DBPatients)
             {
                 Models.Patient next = new Models.Patient(patient.Id, patient.Name, patient.Dob, patient.Ssn, patient.Insurance);
-
+                next.PrimaryDoctor = doctor;
                 patients.Add(next);
             }
 
