@@ -74,12 +74,19 @@ namespace VirtualClinic.Tests
 
             DataModel.Timeslot[] timeslots =
             {
-               // new DataModel.Timeslot {},
+               new DataModel.Timeslot {Id = 1, AppointmentId = null, DoctorId = 1, Start = new DateTime(2020, 12, 20, 8, 0, 0), End = new DateTime(2020, 12, 20, 17, 0, 0)},
+               new DataModel.Timeslot {Id = 2, AppointmentId = null, DoctorId = 2, Start = new DateTime(2020, 12, 20, 8, 0, 0), End = new DateTime(2020, 12, 20, 17, 0, 0)},
+               new DataModel.Timeslot {Id = 3, AppointmentId = null, DoctorId = 3, Start = new DateTime(2020, 12, 20, 8, 0, 0), End = new DateTime(2020, 12, 20, 17, 0, 0)},
+               new DataModel.Timeslot {Id = 4, AppointmentId = null, DoctorId = 4, Start = new DateTime(2020, 12, 20, 8, 0, 0), End = new DateTime(2020, 12, 20, 17, 0, 0)}
+
             };
 
             DataModel.Appointment[] appointments =
             {
-               // new DataModel.Appointment { },
+               new DataModel.Appointment { Id = 1, Notes = "first appointment of the day", DoctorId = 1, PatientId = 1, VitalsId = 5, Start = new DateTime(2020, 12, 20, 8, 0, 0), End = new DateTime(2020, 12, 20, 8, 30, 0) },
+               new DataModel.Appointment { Id = 2, Notes = "second appointment of the day", DoctorId = 1, PatientId = 3, VitalsId = 6, Start = new DateTime(2020, 12, 20, 9, 0, 0), End = new DateTime(2020, 12, 20, 9, 30, 0) },
+               new DataModel.Appointment { Id = 3, Notes = "", DoctorId = 3, PatientId = 5, VitalsId = 7, Start = new DateTime(2020, 12, 20, 11, 0, 0), End = new DateTime(2020, 12, 20, 12, 0, 0) },
+               new DataModel.Appointment { Id = 4, Notes = "very rude", DoctorId = 4, PatientId = 8, VitalsId = 8, Start = new DateTime(2020, 12, 21, 8, 0, 0), End = new DateTime(2020, 12, 21, 8, 30, 0) }
             };
 
             var context = new ClinicDbContext(options);
