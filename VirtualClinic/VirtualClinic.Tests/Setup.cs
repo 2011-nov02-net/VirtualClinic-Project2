@@ -41,10 +41,10 @@ namespace VirtualClinic.Tests
 
             DataModel.PatientReport[] patientReports =
             {
-                new DataModel.PatientReport {Id = 1, VitalsId = null, Information = "I am dying to death", PatientId = 1, ReportTime = new DateTime(2018, 7, 11, 12, 31, 32)},
-                new DataModel.PatientReport {Id = 2, VitalsId = null, Information = "I am dying", PatientId = 3, ReportTime = new DateTime(2020, 9, 22, 9, 1, 7)},
-                new DataModel.PatientReport {Id = 3, VitalsId = null, Information = "My hands are cold", PatientId = 4, ReportTime = new DateTime(2020, 3, 16, 4, 55, 22)},
-                new DataModel.PatientReport {Id = 4, VitalsId = null, Information = "I am dying to death again", PatientId = 1, ReportTime = new DateTime(2019, 1, 21, 6, 29, 23)},
+                new DataModel.PatientReport {Id = 1, VitalsId = 1, Information = "I am dying to death", PatientId = 1, ReportTime = new DateTime(2018, 7, 11, 12, 31, 32)},
+                new DataModel.PatientReport {Id = 2, VitalsId = 2, Information = "I am dying", PatientId = 3, ReportTime = new DateTime(2020, 9, 22, 9, 1, 7)},
+                new DataModel.PatientReport {Id = 3, VitalsId = 3, Information = "My hands are cold", PatientId = 4, ReportTime = new DateTime(2020, 3, 16, 4, 55, 22)},
+                new DataModel.PatientReport {Id = 4, VitalsId = 4, Information = "I am dying to death again", PatientId = 1, ReportTime = new DateTime(2019, 1, 21, 6, 29, 23)},
                 new DataModel.PatientReport {Id = 5, VitalsId = null, Information = "I saw a pretty bird by the window", PatientId = 2, ReportTime = new DateTime(2020, 7, 19, 20, 45, 11)},
                 new DataModel.PatientReport {Id = 6, VitalsId = null, Information = "My goldfish has alzheimers", PatientId = 5, ReportTime = new DateTime(2019, 3, 25, 11, 19, 6)}
             };
@@ -58,6 +58,28 @@ namespace VirtualClinic.Tests
                 new DataModel.Prescription {Id = 5, DoctorId = 3, PatientId = 5, Drug = "gibberish", Information = "literally useless", Date = new DateTime(2018, 9, 3, 9, 17, 00)},
                 new DataModel.Prescription {Id = 6, DoctorId = 4, PatientId = 6, Drug = "Mycoxafloppin", Information = "Take orally every 6 hours", Date = new DateTime(2019, 1, 6, 11, 15, 00)},
                 new DataModel.Prescription {Id = 7, DoctorId = 4, PatientId = 7, Drug = "Mycoxafloppin", Information = "Take orally every 6 hours", Date = new DateTime(2020, 2, 29, 10, 9, 00)},
+            };
+
+            DataModel.Vital[] vitals =
+            {
+                new DataModel.Vital {Id = 1, Systolic = 120, Diastolic = 76, HeartRate = 78},
+                new DataModel.Vital {Id = 2, Systolic = 140, Diastolic = 57, HeartRate = 76},
+                new DataModel.Vital {Id = 3, Systolic = 142, Diastolic = 123, HeartRate = 81},
+                new DataModel.Vital {Id = 4, Systolic = 117, Diastolic = 98, HeartRate = 149},
+                new DataModel.Vital {Id = 5, Systolic = 120, Diastolic = 79, HeartRate = 201},
+                new DataModel.Vital {Id = 6, Systolic = 154, Diastolic = 99, HeartRate = 189},
+                new DataModel.Vital {Id = 7, Systolic = 175, Diastolic = 134, HeartRate = 110},
+                new DataModel.Vital {Id = 8, Systolic = 132, Diastolic = 144, HeartRate = 90},
+            };
+
+            DataModel.Timeslot[] timeslots =
+            {
+               // new DataModel.Timeslot {},
+            };
+
+            DataModel.Appointment[] appointments =
+            {
+               // new DataModel.Appointment { },
             };
 
             var context = new ClinicDbContext(options);
@@ -79,6 +101,18 @@ namespace VirtualClinic.Tests
             foreach (var prescription in prescriptions)
             {
                 context.Prescriptions.Add(prescription);
+            }
+            foreach (var vital in vitals)
+            {
+                context.Vitals.Add(vital);
+            }
+            foreach (var timeslot in timeslots)
+            {
+                context.Timeslots.Add(timeslot);
+            }
+            foreach (var appointment in appointments)
+            {
+                context.Appointments.Add(appointment);
             }
             context.SaveChanges();
 
