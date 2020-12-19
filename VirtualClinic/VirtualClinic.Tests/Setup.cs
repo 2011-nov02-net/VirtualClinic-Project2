@@ -77,7 +77,11 @@ namespace VirtualClinic.Tests
                new DataModel.Timeslot {Id = 1, AppointmentId = null, DoctorId = 1, Start = new DateTime(2020, 12, 20, 8, 0, 0), End = new DateTime(2020, 12, 20, 17, 0, 0)},
                new DataModel.Timeslot {Id = 2, AppointmentId = null, DoctorId = 2, Start = new DateTime(2020, 12, 20, 8, 0, 0), End = new DateTime(2020, 12, 20, 17, 0, 0)},
                new DataModel.Timeslot {Id = 3, AppointmentId = null, DoctorId = 3, Start = new DateTime(2020, 12, 20, 8, 0, 0), End = new DateTime(2020, 12, 20, 17, 0, 0)},
-               new DataModel.Timeslot {Id = 4, AppointmentId = null, DoctorId = 4, Start = new DateTime(2020, 12, 20, 8, 0, 0), End = new DateTime(2020, 12, 20, 17, 0, 0)}
+               new DataModel.Timeslot {Id = 4, AppointmentId = null, DoctorId = 4, Start = new DateTime(2020, 12, 20, 8, 0, 0), End = new DateTime(2020, 12, 20, 17, 0, 0)},
+               new DataModel.Timeslot {Id = 5, AppointmentId = 1, DoctorId = 1, Start = new DateTime(2020, 12, 20, 8, 0, 0), End = new DateTime(2020, 12, 20, 8, 30, 0)},
+               new DataModel.Timeslot {Id = 6, AppointmentId = 2, DoctorId = 1, Start = new DateTime(2020, 12, 20, 9, 0, 0), End =  new DateTime(2020, 12, 20, 9, 30, 0)},
+               new DataModel.Timeslot {Id = 7, AppointmentId = 3, DoctorId = 3, Start = new DateTime(2020, 12, 20, 11, 0, 0), End = new DateTime(2020, 12, 20, 12, 0, 0)},
+               new DataModel.Timeslot {Id = 8, AppointmentId = 4, DoctorId = 4, Start = new DateTime(2020, 12, 21, 8, 0, 0), End = new DateTime(2020, 12, 21, 8, 30, 0)}
 
             };
 
@@ -121,6 +125,7 @@ namespace VirtualClinic.Tests
             {
                 context.Appointments.Add(appointment);
             }
+
             context.SaveChanges();
 
             return connection;

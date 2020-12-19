@@ -68,9 +68,13 @@ namespace VirtualClinic.Domain.Mapper
         internal static Models.Timeslot MapTimeslot(DataModel.Timeslot DbTimeSlot)
         {
             Models.Timeslot timeslot = new Models.Timeslot();
+
             //TODO: get timeslot from db when added to db
 
-            //TODO: get id from timeslot
+
+            timeslot.Id = DbTimeSlot.Id;
+            timeslot.Start = DbTimeSlot.Start;
+            timeslot.End = DbTimeSlot.End;
 
             return timeslot;
         }
