@@ -216,7 +216,7 @@ namespace VirtualClinic.Domain.Repositories
         /// <returns>A doctor with a list of its patient</returns>
         public Models.Doctor GetDoctorByID(int doctorId)
         {
-            var DBDoctor = _context.Doctors.Where(o => o.Id == doctorId).First();
+            var DBDoctor = _context.Doctors.Find(doctorId);
 
             var doctor = new Models.Doctor(DBDoctor.Id, DBDoctor.Name, DBDoctor.Title);
 
@@ -230,7 +230,7 @@ namespace VirtualClinic.Domain.Repositories
         /// <returns>A doctor with a list of its patient</returns>
         public async Task<Models.Doctor> GetDoctorByIDAsync(int doctorId)
         {
-            var DBDoctor = await _context.Doctors.Where(o => o.Id == doctorId).FirstAsync();
+            var DBDoctor = await _context.Doctors.FindAsync(doctorId);
 
             var doctor = new Models.Doctor(DBDoctor.Id, DBDoctor.Name, DBDoctor.Title);
 
