@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -45,9 +46,22 @@ namespace VirtualClinic.Api
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                                   builder =>
                                   {
-                                      builder.WithOrigins("http://example.com",
-                                                          "http://www.contoso.com");
+                                      builder.WithOrigins("http://dev-7862904.okta.com",
+                                                          "http://theFrontend.com",
+                                                          "http://localhost:5000",
+                                                          "http://localhost:5001",
+                                                          "http://localhost:4200");
                                   });
+            });
+
+
+
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.Authority = "https://dev-723797.okta.com/oauth2/default";
+                options.Audience = "api://default";
             });
         }
 
@@ -66,6 +80,8 @@ namespace VirtualClinic.Api
             app.UseRouting();
 
             app.UseCors(MyAllowSpecificOrigins);
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
