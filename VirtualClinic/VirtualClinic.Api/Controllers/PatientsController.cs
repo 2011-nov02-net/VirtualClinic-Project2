@@ -35,13 +35,12 @@ namespace VirtualClinic.Api.Controllers
         /// </param>
         /// <returns>Information on the patient, or error 403 not authorized.</returns>
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] int doctorId, [FromQuery] string search = null)
+        public async Task<IActionResult> Get([FromQuery] string search = null)
         {
             //check if logged in as dr, if not, then return not authorized
-            //get all the patients of the currently logged in doctor.
+            //get all the patients
 
-
-            if (await _clinicRepository.GetDoctorPatientsAsync(doctorId) is IEnumerable<Patient> patients)
+            if (await _clinicRepository.GetPatientsAsync() is IEnumerable<Patient> patients)
             {
 
                 if (search is not null)
@@ -75,13 +74,13 @@ namespace VirtualClinic.Api.Controllers
         /// <param name="id">The id of the patient who's information is to be retrieved</param>
         /// <returns>Information on the patient, 404 not found, or 403 not authorized</returns>
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get([FromRoute] int patientId)
+        public async Task<IActionResult> Get([FromRoute] int id)
         {
             // check if the patient with that id exists
 
 
             //if they exist, check authorization of the user
-            if( await _clinicRepository.GetPatientByIDAsync(patientId) is Patient patient)
+            if( await _clinicRepository.GetPatientByIDAsync(id) is Patient patient)
             {
 
                 return Ok(patient);
@@ -101,7 +100,7 @@ namespace VirtualClinic.Api.Controllers
         /// <returns>Returns a list of reports for this patient.</returns>
 
         [HttpGet("{id}/Prescriptions")]
-        public async Task<IActionResult> GetPresctiptions([FromRoute] int PatientId)
+        public async Task<IActionResult> GetPresctiptions([FromRoute] int id)
         {
             // check if the patient with that id exists
 
@@ -109,7 +108,7 @@ namespace VirtualClinic.Api.Controllers
             //if they exist, check authorization of the user
 
             //probably then forward this request to the reports controller
-            if (await _clinicRepository.GetPatientPrescriptionsAsync(PatientId) is IEnumerable<Prescription> prescriptions)
+            if (await _clinicRepository.GetPatientPrescriptionsAsync(id) is IEnumerable<Prescription> prescriptions)
             {
 
                 return Ok(prescriptions);
@@ -129,7 +128,7 @@ namespace VirtualClinic.Api.Controllers
         /// <returns>Returns a list of reports for this patient.</returns>
 
         [HttpGet("{id}/Reports")]
-        public async Task<IActionResult>  GetReports([FromRoute] int PatientId)
+        public async Task<IActionResult>  GetReports([FromRoute] int id)
         {
             // check if the patient with that id exists
 
@@ -137,7 +136,7 @@ namespace VirtualClinic.Api.Controllers
             //if they exist, check authorization of the user
 
             //probably then forward this request to the reports controller
-            if (await _clinicRepository.GetPatientReportsAsync(PatientId) is IEnumerable<PatientReport> reports)
+            if (await _clinicRepository.GetPatientReportsAsync(id) is IEnumerable<PatientReport> reports)
             { 
 
                 return Ok(reports);
@@ -148,29 +147,6 @@ namespace VirtualClinic.Api.Controllers
             return NotFound();
             }
 
-        }
-
-      
-
-        [HttpGet("{PatientId}/Reports/id")]
-        public async Task<IActionResult>  GetReport([FromRoute] int id)
-        {
-            // check if the patient with that id exists
-
-
-            //if they exist, check authorization of the user
-
-            //probably then forward this request to the reports controller
-            if (await _clinicRepository.GetPatientReportByIDAsync(id) is PatientReport report)
-            {
-
-                return Ok(report);
-            }
-            else
-            {
-
-                return NotFound();
-            }
         }
 
 

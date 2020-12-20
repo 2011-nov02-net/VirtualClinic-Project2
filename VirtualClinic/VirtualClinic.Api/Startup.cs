@@ -21,6 +21,10 @@ namespace VirtualClinic.Api
 {
     public class Startup
     {
+
+        readonly private static string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -45,13 +49,27 @@ namespace VirtualClinic.Api
             });
 
             services.AddDbContext<ClinicDbContext>(options =>
-           options.UseSqlServer(Configuration.GetConnectionString("")));
+           options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "VirtualClinic.Api", Version = "v1" });
             });
 
+
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                                  builder =>
+                                  {
+                                      builder.WithOrigins("http://localhost:4200/",
+                                                          "http://www.contoso.com")
+                                      .AllowAnyMethod()
+                                      .AllowCredentials()
+                                      .AllowAnyHeader();
+                                  });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,6 +85,8 @@ namespace VirtualClinic.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseAuthorization();
 

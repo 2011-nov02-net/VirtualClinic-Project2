@@ -588,7 +588,7 @@ namespace VirtualClinic.Domain.Repositories
             return modelreports;
         }
 
-        public async Task<IEnumerable<Models.Prescription>> GetPatientReportsAsync(int PatientId)
+        public async Task<IEnumerable<Models.PatientReport>> GetPatientReportsAsync(int PatientId)
         {
             List<DataModel.PatientReport> reports = await  _context.PatientReports
                .Where(report => report.PatientId == PatientId)
@@ -601,7 +601,7 @@ namespace VirtualClinic.Domain.Repositories
                 modelreports.Add(DB_DomainMapper.MapReport(r));
             }
 
-            return (IEnumerable<Models.Prescription>)modelreports;
+            return modelreports;
         }
 
         /// <summary>
