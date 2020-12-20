@@ -1,5 +1,18 @@
-<nav>
-    <a routerLink="/login"> Log in</a>
+<!-- based on: 
+    https://ng-bootstrap.github.io/#/components/nav/overview#basic-usage 
+    + the asp.net mvc generated nav bar
+-->
+<nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3">
+    <div class="container">
+        <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+            <ul class="navbar-nav flex-grow-1" #nav="ngbNav" ngbNav [activeId]="route.fragment | async">
+                <li [ngbNavItem]="link.fragment" *ngFor="let link of links" class="nav-item">
+                    <a ngbNavLink routerLink="{{link.page}}" [fragment]="link.fragment" class="nav-link text-dark">{{ link.title }}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </nav>
+
 
 <router-outlet></router-outlet>
