@@ -6,6 +6,8 @@
     <div class="container">
         <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
             <ul class="navbar-nav flex-grow-1" #nav="ngbNav" ngbNav [activeId]="route.fragment | async">
+                <!-- the *ngfor loops over the links array on the component. the [ngbNavItem] just lets it 
+                know which one to highlight-->
                 <li [ngbNavItem]="link.fragment" *ngFor="let link of links" class="nav-item">
                     <a ngbNavLink routerLink="{{link.page}}" [fragment]="link.fragment" class="nav-link text-dark">{{ link.title }}</a>
                 </li>
@@ -13,6 +15,10 @@
         </div>
     </div>
 </nav>
+
+<!-- from nick's code, basic if check to decide weather or not there should be the log in or log out button. -->
+<button *ngIf="!isAuthenticated" (click)="login()">Login</button>
+<button *ngIf="isAuthenticated" (click)="logout()">Logout</button>
 
 
 <router-outlet></router-outlet>
