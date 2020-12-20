@@ -14,9 +14,6 @@ $warning: #c7c12c;
 $danger: #c2bc19;
 $light: #32a852;
 $dark: #8f7f7f;
-@import "~bootstrap/scss/functions";
-@import "~bootstrap/scss/mixins";
-@import "~bootstrap/scss/variables";
 //includes all of bootstrap
 @import "~bootstrap/scss/bootstrap";
 a.navbar-brand {
