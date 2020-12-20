@@ -8,9 +8,10 @@ namespace VirtualClinic.Domain.Models
     {
         public int Id { get; set; }
         public int HeartRate { get; set; }
-        public string BloodPressure { get; set; }
+        public int Diastolic { get; set; }
+        public int Systolic { get; set; }
         public double? Temperature { get; set; }
-        public int PainLevel { get; set; }
+        public int? PainLevel { get; set; }
 
         /// <summary>
         /// Creates a new Vitals with the given information.
@@ -20,18 +21,20 @@ namespace VirtualClinic.Domain.Models
         /// <param name="bloodPressure">The patient's blood pressure.</param>
         /// <param name="temperature">The patient's temperature.</param>
         /// <param name="painLevel">The patient's pain level.</param>
-        public Vitals(int id, int heartRate, string bloodPressure, double? temperature, int painLevel)
+        public Vitals(int id, int heartRate, int systolic, int diastolic, double? temperature, int painLevel)
         {
             Id = id;
             HeartRate = heartRate;
-            BloodPressure = bloodPressure;
+            Systolic = systolic;
+            Diastolic = diastolic;
             Temperature = temperature;
             PainLevel = painLevel;
         }
-        public Vitals(int heartRate, string bloodPressure, double? temperature, int painLevel)
+        public Vitals(int heartRate, int systolic, int diastolic, double? temperature, int painLevel)
         {
             HeartRate = heartRate;
-            BloodPressure = bloodPressure;
+            Systolic = systolic;
+            Diastolic = diastolic;
             Temperature = temperature;
             PainLevel = painLevel;
         }

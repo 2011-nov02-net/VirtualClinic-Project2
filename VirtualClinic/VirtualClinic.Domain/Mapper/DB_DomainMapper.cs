@@ -40,22 +40,13 @@ namespace VirtualClinic.Domain.Mapper
         public static Models.Vitals MapVitals(DataModel.Vital vital)
         {
             Models.Vitals modelvitals = new Models.Vitals(vital.Id);
+
             modelvitals.Id = vital.Id;
-
-            if(vital.Temperature is not null)
-            {
-                decimal d = (decimal) vital.Temperature;
-                modelvitals.Temperature = decimal.ToDouble(d);
-            } else
-            {
-                modelvitals.Temperature = null;
-            }
-
-            //todo: make sure this is correct.
-            modelvitals.HeartRate = vital.Diastolic;
-
-            //todo: get blood pressure or remove from model
-            modelvitals.BloodPressure = null;
+            modelvitals.HeartRate = vital.HeartRate;
+            modelvitals.Systolic = vital.Systolic;
+            modelvitals.Diastolic = vital.Diastolic;
+            modelvitals.PainLevel = vital.Pain;
+            modelvitals.Temperature = (double?)vital.Temperature;
 
             return modelvitals;
         }

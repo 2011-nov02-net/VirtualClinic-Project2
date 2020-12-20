@@ -96,32 +96,40 @@ namespace VirtualClinic.Tests
                 Assert.Contains(doctor.Title, doctorsActual.Select(x => x.Title));
             }
         }
-        [Fact]
-        public void GetDoctorbyID_Database_test()
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        public void GetDoctorbyID_Database_test(int id)
         {
             using var connection = Database_init();
             var options = new DbContextOptionsBuilder<ClinicDbContext>().UseSqlite(connection).Options;
             using var context = new ClinicDbContext(options);
             var repo = new ClinicRepository(context, new NullLogger<ClinicRepository>());
 
-            var doctor = repo.GetDoctorByID(2);
+            var doctor = repo.GetDoctorByID(id);
 
-            var doctorActual = context.Doctors.Where(x => x.Id == 2).Single();
+            var doctorActual = context.Doctors.Where(x => x.Id == id).Single();
 
             Assert.Equal(doctor.Id, doctorActual.Id);
             Assert.Equal(doctor.Name, doctorActual.Name);
         }
-        [Fact]
-        public async Task GetDoctorbyIDAsync_Database_test()
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        public async Task GetDoctorbyIDAsync_Database_test(int id)
         {
             using var connection = Database_init();
             var options = new DbContextOptionsBuilder<ClinicDbContext>().UseSqlite(connection).Options;
             using var context = new ClinicDbContext(options);
             var repo = new ClinicRepository(context, new NullLogger<ClinicRepository>());
 
-            var doctor = await repo.GetDoctorByIDAsync(2);
+            var doctor = await repo.GetDoctorByIDAsync(id);
 
-            var doctorActual = context.Doctors.Where(x => x.Id == 2).Single();
+            var doctorActual = context.Doctors.Where(x => x.Id == id).Single();
 
             Assert.Equal(doctor.Id, doctorActual.Id);
             Assert.Equal(doctor.Name, doctorActual.Name);
