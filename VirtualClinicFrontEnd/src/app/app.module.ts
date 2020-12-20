@@ -6,10 +6,11 @@ import { OktaAuthModule, OKTA_CONFIG } from '@okta/okta-angular/';
 import { AppComponent } from './app.component';
 import { LogInComponent } from './log-in/log-in.component';
 import { AppRoutingModule } from './app-routing.module';
+import { StyletestsComponent } from './styletests/styletests.component';
 
 
 
-
+//the object to be provided by the DI
 const config = {
   // Configuration here
   // https://developer.okta.com/docs/guides/sign-into-spa/angular/configure-the-sdk/
@@ -25,7 +26,8 @@ const config = {
 @NgModule({
   declarations: [
     AppComponent,
-    LogInComponent
+    LogInComponent,
+    StyletestsComponent
   ],
   imports: [
     NgbModule,
