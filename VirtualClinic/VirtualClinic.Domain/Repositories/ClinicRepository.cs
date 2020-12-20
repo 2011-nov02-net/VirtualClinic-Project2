@@ -447,9 +447,38 @@ namespace VirtualClinic.Domain.Repositories
             _context.SaveChanges();
         }
 
-        public Task AddTimeslotAsync(Models.Timeslot timeslot)
+        public async Task AddTimeslotAsync(Models.Timeslot timeslot)
         {
-            throw new NotImplementedException();
+            DataModel.Timeslot DBTimeslot = new DataModel.Timeslot();
+
+            //DBTimeslot.Id = timeslot.Id;
+            //todo: check if Id is valid in DB, and if not, throw some argument exception.
+
+            DBTimeslot.DoctorId = timeslot.DoctorId;
+            DBTimeslot.Start = timeslot.Start;
+            DBTimeslot.End = timeslot.End;
+            DBTimeslot.AppointmentId = timeslot.Appointment?.Id;
+
+            //DBTimeslot.DoctorId = timeslot.dr.id;
+
+            if (timeslot.Appointment is not null)
+            {
+                // TODO: construct appointment record and insert into table
+
+                DataModel.Appointment appointment = new DataModel.Appointment
+                {
+                    Notes = timeslot.Appointment.Notes,
+                    PatientId = timeslot.Appointment.PatientId,
+                    DoctorId = timeslot.Appointment.DoctorId,
+                    Start = timeslot.Start,
+                    End = timeslot.End
+                };
+                await _context.Appointments.AddAsync(appointment);
+
+            }
+
+            await _context.Timeslots.AddAsync(DBTimeslot);
+            _context.SaveChanges();
         }
 
         #endregion
