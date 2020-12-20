@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { OktaAuthService } from '@okta/okta-angular';
 
 
 @Component({
@@ -8,8 +9,9 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./app.component.scss'],
   
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'VirtualClinicFrontEnd';
+  isAuthenticated = false;
 
   links = [
     /*{titel: link display text, }
@@ -23,5 +25,36 @@ export class AppComponent {
 
   //https://ng-bootstrap.github.io/#/components/nav/overview#routing
   //gives the component a ref to the active route for the nav
-  constructor(public route: ActivatedRoute) {}
+  constructor(
+    public route: ActivatedRoute,
+    private oktaAuth: OktaAuthService
+    /*, private api service*/) 
+    {    
+      this.oktaAuth.$authenticationState.subscribe((isAuthenticated) =>
+        this.updateAuthState(isAuthenticated)
+      );
+    }
+
+
+    ngOnInit(): void {
+      this.oktaAuth
+        .isAuthenticated()
+        .then((isAuthenticated) => this.updateAuthState(isAuthenticated));
+    }
+
+
+    updateAuthState(isAuthenticated: boolean) {
+      this.isAuthenticated = isAuthenticated;
+      if (isAuthenticated) {
+        this.oktaAuth.getUser().then(console.log);
+      }
+    }
+  
+    login() {
+      this.oktaAuth.signInWithRedirect();
+    }
+  
+    logout() {
+      this.oktaAuth.signOut();
+    }
 }
