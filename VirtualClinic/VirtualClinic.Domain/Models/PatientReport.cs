@@ -8,6 +8,8 @@ namespace VirtualClinic.Domain.Models
     {
         public int Id { get; set; }
         public Patient Patient { get; set; }
+        public int PatientId { get; set; }
+
         public DateTime Time { get; set; }
         public string Info { get; set; }
         public Vitals Vitals { get; set; }
@@ -19,15 +21,17 @@ namespace VirtualClinic.Domain.Models
         /// <param name="time">The time the report was recorded.</param>
         /// <param name="info">Any information or notes on the patient report.</param>
         /// <param name="patient">(Optional) The patient who this report is about.</param>
-        public PatientReport(int id,  string info, DateTime time, Patient patient = null)
+        public PatientReport(int id,  string info, DateTime time, int patientId, Patient patient = null)
         {
+            PatientId = patientId;
             Id = id;
             Time = time;
             Info = info;
             Patient = patient;
         }
-        public PatientReport(string info, DateTime time, Patient patient = null)
+        public PatientReport(string info, DateTime time, int patientId, Patient patient = null)
         {
+            PatientId = patientId;
             Time = time;
             Info = info;
             Patient = patient;

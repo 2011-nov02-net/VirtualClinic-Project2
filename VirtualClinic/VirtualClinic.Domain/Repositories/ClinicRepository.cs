@@ -541,13 +541,18 @@ namespace VirtualClinic.Domain.Repositories
             if (report is null)
             {
                 //then no report with that id exists in the DB
-                throw new ArgumentException("ID Not Found in DB.");
+                throw new ArgumentException($"Patient Report ID {ReportId} Not Found in DB.");
             }
 
-
             var modelreport = DB_DomainMapper.MapReport(report);
+
             //technically could be null, but shouldn't be because this ID comes from DB information.
-            modelreport.Vitals = DB_DomainMapper.MapVitals(_context.Vitals.Find(report.VitalsId));
+
+            if (report.VitalsId is not null)
+            {
+                modelreport.Vitals = DB_DomainMapper.MapVitals(_context.Vitals.Find(report.VitalsId));
+            }
+
             return modelreport;
         }
 
@@ -588,7 +593,7 @@ namespace VirtualClinic.Domain.Repositories
             var newPatientReport = new DataModel.PatientReport
             {
 
-                PatientId = report.Patient.Id,
+                PatientId = report.PatientId,
                 ReportTime = report.Time,
                 Information = report.Info
                 //add vitals id for datamodel??
@@ -609,7 +614,7 @@ namespace VirtualClinic.Domain.Repositories
             var newPatientReport = new DataModel.PatientReport
             {
 
-                PatientId = report.Patient.Id,
+                PatientId = report.PatientId,
                 ReportTime = report.Time,
                 Information = report.Info
 
