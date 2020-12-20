@@ -55,14 +55,14 @@ namespace VirtualClinic.Api
             });
 
 
-
-
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
-            {
-                options.Authority = "https://dev-723797.okta.com/oauth2/default";
-                options.Audience = "api://default";
-            });
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = "https://dev-723797.okta.com/oauth2/default";
+                    options.Audience = "api://default";
+                    options.RequireHttpsMetadata = false;
+                }
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
