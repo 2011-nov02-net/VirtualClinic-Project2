@@ -420,12 +420,30 @@ namespace VirtualClinic.Domain.Repositories
             //DBTimeslot.Id = timeslot.Id;
             //todo: check if Id is valid in DB, and if not, throw some argument exception.
 
+            DBTimeslot.DoctorId = timeslot.DoctorId;
+            DBTimeslot.Start = timeslot.Start;
+            DBTimeslot.End = timeslot.End;
             DBTimeslot.AppointmentId = timeslot.Appointment?.Id;
-            //DBTimeslot.DoctorId = timeslot.dr.id;         
 
-            throw new NotImplementedException();
+            //DBTimeslot.DoctorId = timeslot.dr.id;
 
-            _context.Timeslots.Attach(DBTimeslot);
+            if (timeslot.Appointment is not null)
+            {
+                // TODO: construct appointment record and insert into table
+
+                DataModel.Appointment appointment = new DataModel.Appointment
+                {
+                    Notes = timeslot.Appointment.Notes,
+                    PatientId = timeslot.Appointment.PatientId,
+                    DoctorId = timeslot.Appointment.DoctorId,
+                    Start = timeslot.Start,
+                    End = timeslot.End
+                };
+                _context.Appointments.Add(appointment);
+
+            }
+
+            _context.Timeslots.Add(DBTimeslot);
             _context.SaveChanges();
         }
 

@@ -95,5 +95,58 @@ namespace VirtualClinic.Tests
                 Assert.Contains(timeslot.End, timeslotsActual.Select(x => x.End));
             }
         }
+        [Fact]
+        public void AddTimeslot_Database_test1()
+        {
+            using var connection = Database_init();
+            var options = new DbContextOptionsBuilder<ClinicDbContext>().UseSqlite(connection).Options;
+            using var context = new ClinicDbContext(options);
+            var repo = new ClinicRepository(context, new NullLogger<ClinicRepository>());
+
+            var timeslot = new Domain.Models.Timeslot(new DateTime(2020, 12, 20, 8, 0, 0))
+            {
+                
+                Appointment = new Domain.Models.Appointment(5, "idiot can't find his stethoscope")
+                {
+                    PatientId = 7, DoctorId = 4
+                },
+                Id = 9,
+                DoctorId = 4
+            };
+
+            repo.AddTimeslot(timeslot);
+
+            var timeslotActual = context.Timeslots.Find(9);
+
+            Assert.Equal(timeslotActual.Id, timeslot.Id);
+            Assert.Equal(timeslotActual.DoctorId, timeslot.DoctorId);
+            Assert.Equal(timeslotActual.AppointmentId, timeslot.Appointment?.Id);
+            Assert.Equal(timeslotActual.Start, timeslot.Start);
+            Assert.Equal(timeslotActual.End, timeslot.End);
+        }
+        [Fact]
+        public void AddTimeslot_Database_test2()
+        {
+            using var connection = Database_init();
+            var options = new DbContextOptionsBuilder<ClinicDbContext>().UseSqlite(connection).Options;
+            using var context = new ClinicDbContext(options);
+            var repo = new ClinicRepository(context, new NullLogger<ClinicRepository>());
+
+            var timeslot = new Domain.Models.Timeslot(new DateTime(2020, 12, 20, 8, 0, 0))
+            {
+                Id = 9,
+                DoctorId = 4
+            };
+
+            repo.AddTimeslot(timeslot);
+
+            var timeslotActual = context.Timeslots.Find(9);
+
+            Assert.Equal(timeslotActual.Id, timeslot.Id);
+            Assert.Equal(timeslotActual.DoctorId, timeslot.DoctorId);
+            Assert.Equal(timeslotActual.Start, timeslot.Start);
+            Assert.Equal(timeslotActual.End, timeslot.End);
+            
+        }
     }
 }

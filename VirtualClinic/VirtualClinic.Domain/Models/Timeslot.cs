@@ -11,6 +11,7 @@ namespace VirtualClinic.Domain.Models
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public Appointment Appointment { get; set; }
+        public int DoctorId { get; set; }
 
         /// <summary>
         /// Creates a 30 minute Appointment starting now.
