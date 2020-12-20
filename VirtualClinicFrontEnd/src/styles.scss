@@ -1,10 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
 
+//variable overrides for bootstrap
+//affects body background
+$body-bg: hsl(71, 100%, 88%);
+//affects body text
+$body-color: #1f093b;
+//overrides theme colors
+$primary: rgb(77, 235, 120);
+$secondary: rgb(41, 240, 236);
+$success: #238222;
+$info: #87c7c7;
+$warning: #c7c12c;
+$danger: #c2bc19;
+$light: #32a852;
+$dark: #8f7f7f;
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/variables";
+//includes all of bootstrap
 @import "~bootstrap/scss/bootstrap";
-
-/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
-
 a.navbar-brand {
     white-space: normal;
     text-align: center;
@@ -13,10 +27,6 @@ a.navbar-brand {
 
 
 /* Provide sufficient contrast against white background */
-
-a {
-    color: #0366d6;
-}
 
 .btn-primary {
     color: #FFFBBD;

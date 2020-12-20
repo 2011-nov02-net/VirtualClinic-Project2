@@ -8,10 +8,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DoctorsComponent } from './doctors/doctors.component';
 import { LogInComponent } from './log-in/log-in.component';
 import { AppRoutingModule } from './app-routing.module';
+import { StyletestsComponent } from './styletests/styletests.component';
 
 
 
-
+//the object to be provided by the DI
 const config = {
   // Configuration here
   // https://developer.okta.com/docs/guides/sign-into-spa/angular/configure-the-sdk/
@@ -28,7 +29,8 @@ const config = {
   declarations: [
     AppComponent,
     LogInComponent,
-    DoctorsComponent
+    DoctorsComponent,
+    StyletestsComponent
   ],
   imports: [
     NgbModule,
