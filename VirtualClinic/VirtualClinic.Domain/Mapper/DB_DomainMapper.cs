@@ -28,6 +28,7 @@ namespace VirtualClinic.Domain.Mapper
             Models.PatientReport modelreport = new Models.PatientReport(report.Id, report.Information);
 
             modelreport.Time = report.ReportTime;
+            modelreport.PatientId = report.PatientId;
 
             return modelreport;
         }

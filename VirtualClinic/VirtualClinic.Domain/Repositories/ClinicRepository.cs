@@ -573,15 +573,28 @@ namespace VirtualClinic.Domain.Repositories
 
             foreach (var r in reports)
             {
+                r.PatientId = PatientId;
                 modelreports.Add(DB_DomainMapper.MapReport(r));
             }
 
             return modelreports;
         }
 
-        public Task<IEnumerable<Models.Prescription>> GetPatientReportsAsync(int id)
+        public async Task<IEnumerable<Models.PatientReport>> GetPatientReportsAsync(int PatientId)
         {
-            throw new NotImplementedException();
+            List<DataModel.PatientReport> reports = await _context.PatientReports
+                .Where(report => report.PatientId == PatientId)
+                .ToListAsync();
+
+            List<Models.PatientReport> modelreports = new List<Models.PatientReport>();
+
+            foreach (var r in reports)
+            {
+                r.PatientId = PatientId;
+                modelreports.Add(DB_DomainMapper.MapReport(r));
+            }
+
+            return modelreports;
         }
 
         /// <summary>
