@@ -58,8 +58,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-          projectBaseDir: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }} # optional, default is 
+           args: >
+                -Dsonar.organization=2011-nov02-net
+                -Dsonar.projectKey=VirtualClinic-Project2
+                -Dsonar.sources=src
+                -Dsonar.verbose=true
+           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis          
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
 
