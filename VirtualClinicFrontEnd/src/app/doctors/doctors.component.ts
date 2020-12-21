@@ -9,7 +9,7 @@ import { DoctorsService } from '../services/doctors.service';
 @Component({
   selector: 'app-doctors',
   templateUrl: './doctors.component.html',
-  styleUrls: ['./doctors.component.css']
+  styleUrls: ['./doctors.component.scss']
 })
 export class DoctorsComponent implements OnInit {
   doctor: Doctor | undefined;
@@ -22,7 +22,7 @@ export class DoctorsComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    this.getDoctorByID(1);
+    //this.getDoctorByID(1);
 
   }
 
