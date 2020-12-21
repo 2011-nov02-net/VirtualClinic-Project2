@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Doctor } from '../doctor';
-import { Patient}  from '../patient';
-import { SharedService} from '../shared.service';
+import { Doctor } from '../models/doctor';
+import { Patient }  from '../models/patient';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 
@@ -16,7 +15,6 @@ export class DoctorsComponent implements OnInit {
   selectedPatient : Patient | undefined;
 
   constructor(
-    private sharedService : SharedService,
     private route: ActivatedRoute,
     private location: Location
     ) { }
