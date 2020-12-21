@@ -9,6 +9,11 @@ import { DoctorsComponent } from './doctors/doctors.component';
 import { LogInComponent } from './log-in/log-in.component';
 import { AppRoutingModule } from './app-routing.module';
 import { StyletestsComponent } from './styletests/styletests.component';
+import { AppointmentsComponent } from './appointments/appointments/appointments.component';
+import { TimeslotsComponent } from './timeslots/timeslots/timeslots.component';
+import { PrescriptionsComponent } from './prescriptions/prescriptions.component';
+import { PatientsComponent } from './patients/patients.component';
+import { VitalsComponent } from './vitals/vitals.component';
 
 
 
@@ -29,8 +34,13 @@ const config = {
   declarations: [
     AppComponent,
     LogInComponent,
+    StyletestsComponent,
+    AppointmentsComponent,
+    TimeslotsComponent,
+    PrescriptionsComponent,
+    PatientsComponent,
     DoctorsComponent,
-    StyletestsComponent
+    VitalsComponent
   ],
   imports: [
     NgbModule,

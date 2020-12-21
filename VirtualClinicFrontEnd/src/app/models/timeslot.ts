@@ -1,8 +1,8 @@
-import { apointment } from "./apointment";
+import { appointment } from "./appointment";
 
 export class timeslot {
     id: number;
     start: Date;
     end: Date;
-    apointment: apointment;
+    appointment: appointment;
 }

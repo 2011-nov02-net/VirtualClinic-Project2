@@ -1,9 +1,9 @@
 import { Doctor } from "./doctor";
-import { patient } from "./patient";
+import { Patient } from "./patient";
 
-export class apointment{
+export class appointment{
     id: number;
     doctor: Doctor;
-    patient: patient;
+    patient: Patient;
     notes: string | null;
 }
