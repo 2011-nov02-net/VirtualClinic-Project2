@@ -68,6 +68,7 @@ namespace VirtualClinic.Domain.Mapper
             timeslot.Start = DbTimeSlot.Start;
             timeslot.End = DbTimeSlot.End;
 
+
             return timeslot;
         }
 

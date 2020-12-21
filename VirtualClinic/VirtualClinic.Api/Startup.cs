@@ -16,6 +16,13 @@ namespace VirtualClinic.Api
 {
     public class Startup
     {
+        /// <summary>
+        /// Read only string to name the CORS policy
+        /// </summary>
+        /// <seealso cref="https://docs.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-5.0"/>
+        readonly private static string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -32,6 +39,16 @@ namespace VirtualClinic.Api
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "VirtualClinic.Api", Version = "v1" });
             });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                                  builder =>
+                                  {
+                                      builder.WithOrigins("http://example.com",
+                                                          "http://www.contoso.com");
+                                  });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,6 +64,8 @@ namespace VirtualClinic.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseAuthorization();
 
