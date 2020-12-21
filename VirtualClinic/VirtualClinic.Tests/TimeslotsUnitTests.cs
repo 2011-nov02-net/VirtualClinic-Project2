@@ -203,5 +203,45 @@ namespace VirtualClinic.Tests
             Assert.Equal(timeslotActual.End, timeslot.End);
             Assert.Null(timeslotActual.Appointment);
         }
+        [Fact]
+        public void AddTimeslotAppointment_Database_test1()
+        {
+            using var connection = Database_init();
+            var options = new DbContextOptionsBuilder<ClinicDbContext>().UseSqlite(connection).Options;
+            using var context = new ClinicDbContext(options);
+            var repo = new ClinicRepository(context, new NullLogger<ClinicRepository>());
+
+            var appointment = new Domain.Models.Appointment("")
+            {
+                DoctorId = 1,
+                PatientId = 3
+            };
+
+            repo.AddAppointmentToTimeslot(appointment, 1);
+
+            var timeslotActual = context.Timeslots.Find(1);
+
+            Assert.NotNull(timeslotActual.AppointmentId);
+        }
+        [Fact]
+        public async Task AddTimeslotAppointmentAsync_Database_test1()
+        {
+            using var connection = Database_init();
+            var options = new DbContextOptionsBuilder<ClinicDbContext>().UseSqlite(connection).Options;
+            using var context = new ClinicDbContext(options);
+            var repo = new ClinicRepository(context, new NullLogger<ClinicRepository>());
+
+            var appointment = new Domain.Models.Appointment("")
+            {
+                DoctorId = 1,
+                PatientId = 3
+            };
+
+            await repo.AddAppointmentToTimeslotAsync(appointment, 1);
+
+            var timeslotActual = context.Timeslots.Find(1);
+
+            Assert.NotNull(timeslotActual.AppointmentId);
+        }
     }
 }

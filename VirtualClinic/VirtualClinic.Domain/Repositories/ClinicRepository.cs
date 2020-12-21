@@ -480,7 +480,58 @@ namespace VirtualClinic.Domain.Repositories
             await _context.Timeslots.AddAsync(DBTimeslot);
             _context.SaveChanges();
         }
+        public void AddAppointmentToTimeslot(Models.Appointment appointment, int TimeslotId)
+        {
+            var timeslot = _context.Timeslots.Find(TimeslotId);
 
+            if (timeslot == null)
+            {
+                throw new ArgumentException($"Timeslot id:{TimeslotId} can't be modified because it doesn't exist");
+            }
+            if (timeslot.AppointmentId is not null)
+            {
+                throw new ArgumentException($"Timeslot id:{TimeslotId} already has an appointment");
+            }
+
+            var new_appointment = new DataModel.Appointment
+            {
+                DoctorId = appointment.DoctorId,
+                PatientId = appointment.PatientId,
+                Start = timeslot.Start,
+                End = timeslot.End
+            };
+
+            _context.Appointments.Add(new_appointment);
+            _context.SaveChanges();
+            timeslot.AppointmentId = new_appointment.Id;
+            _context.SaveChanges();
+        }
+        public async Task AddAppointmentToTimeslotAsync(Models.Appointment appointment, int TimeslotId)
+        {
+            var timeslot = await _context.Timeslots.FindAsync(TimeslotId);
+
+            if (timeslot == null)
+            {
+                throw new ArgumentException($"Timeslot id:{TimeslotId} can't be modified because it doesn't exist");
+            }
+            if (timeslot.AppointmentId is not null)
+            {
+                throw new ArgumentException($"Timeslot id:{TimeslotId} already has an appointment");
+            }
+
+            var new_appointment = new DataModel.Appointment
+            {
+                DoctorId = appointment.DoctorId,
+                PatientId = appointment.PatientId,
+                Start = timeslot.Start,
+                End = timeslot.End
+            };
+
+            await _context.Appointments.AddAsync(new_appointment);
+            await _context.SaveChangesAsync();
+            timeslot.AppointmentId = new_appointment.Id;
+            await _context.SaveChangesAsync();
+        }
         #endregion
 
 

@@ -74,7 +74,7 @@ namespace VirtualClinic.Tests
 
             DataModel.Timeslot[] timeslots =
             {
-               new DataModel.Timeslot {Id = 1, AppointmentId = null, DoctorId = 1, Start = new DateTime(2020, 12, 20, 8, 0, 0), End = new DateTime(2020, 12, 20, 17, 0, 0)},
+               new DataModel.Timeslot {Id = 1, AppointmentId = null, DoctorId = 1, Start = new DateTime(2020, 12, 20, 8, 0, 0), End = new DateTime(2020, 12, 20, 8, 30, 0)},
                new DataModel.Timeslot {Id = 2, AppointmentId = null, DoctorId = 2, Start = new DateTime(2020, 12, 20, 8, 0, 0), End = new DateTime(2020, 12, 20, 17, 0, 0)},
                new DataModel.Timeslot {Id = 3, AppointmentId = null, DoctorId = 3, Start = new DateTime(2020, 12, 20, 8, 0, 0), End = new DateTime(2020, 12, 20, 17, 0, 0)},
                new DataModel.Timeslot {Id = 4, AppointmentId = null, DoctorId = 4, Start = new DateTime(2020, 12, 20, 8, 0, 0), End = new DateTime(2020, 12, 20, 17, 0, 0)},
