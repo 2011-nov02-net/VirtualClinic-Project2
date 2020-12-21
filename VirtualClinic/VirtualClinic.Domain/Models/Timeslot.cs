@@ -7,11 +7,12 @@ namespace VirtualClinic.Domain.Models
 {
     public class Timeslot
     {
-        private int id;
 
+        public int Id { get; set; }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public Appointment Appointment { get; set; }
+        public int DoctorId { get; set; }
 
         /// <summary>
         /// Creates a 30 minute Appointment starting now.
@@ -33,12 +34,17 @@ namespace VirtualClinic.Domain.Models
             Start = start;
             End = end;
         }
-
         public Timeslot(int id, DateTime start, DateTime end)
         {
-            this.id = id;
+            Id = id;
             Start = start;
             End = end;
+        }
+        public Timeslot(DateTime start)
+        {
+            Start = start;
+            End = start;
+            End.AddMinutes(30);
         }
     }
 }

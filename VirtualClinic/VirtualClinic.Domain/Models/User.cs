@@ -20,6 +20,15 @@ namespace VirtualClinic.Domain.Models
                 timeslots = new List<Timeslot>();
             }
         }
+        protected User(string name, List<Timeslot> timeslots)
+        {
+            Name = name;
+
+            if (timeslots is null)
+            {
+                timeslots = new List<Timeslot>();
+            }
+        }
 
         protected User()
         {

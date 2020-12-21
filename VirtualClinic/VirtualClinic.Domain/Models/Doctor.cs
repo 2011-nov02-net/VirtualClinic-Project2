@@ -52,5 +52,14 @@ namespace VirtualClinic.Domain.Models
             this.Title = title;
             _patients = new HashSet<Patient>();
         }
+        public Doctor(string name, string title = null)
+        {
+            base.Name = name;
+            this.Title = title;
+            _patients = new HashSet<Patient>();
+        }
+        public Doctor()
+        {
+        }
     }
 }
