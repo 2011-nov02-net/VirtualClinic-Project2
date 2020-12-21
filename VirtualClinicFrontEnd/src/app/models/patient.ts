@@ -2,7 +2,7 @@ import { Doctor } from "./doctor";
 import { PatientReports } from "./patientreport";
 import { prescription } from "./prescription";
 
-export class Patient{
+export interface Patient{
     insuranceProvider: string;
     reports: PatientReports[];
     prescriptions: prescription[];

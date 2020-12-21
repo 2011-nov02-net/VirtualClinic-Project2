@@ -1,8 +1,8 @@
-import { appointment } from "./appointment";
+import { Appointment } from "./appointment";
 
-export class timeslot {
+export interface timeslot {
     id: number;
     start: Date;
     end: Date;
-    appointment: appointment;
+    appointment: Appointment;
 }

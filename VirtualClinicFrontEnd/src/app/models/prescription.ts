@@ -1,9 +1,9 @@
 import { Doctor } from "./doctor";
-import { patient } from "./patient";
+import { Patient } from "./patient";
 
-export class prescription {
+export interface prescription {
     id: number;
-    patient: patient | null;
+    patient: Patient | null;
     doctor: Doctor | null;
     info: string;
     drugName: string;
