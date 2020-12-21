@@ -351,3 +351,5 @@ MigrationBackup/
 
 .DS_Store
 SQL/.DS_Store
+
+VirtualClinic/VirtualClinic.Api/appsettings.json

@@ -30,7 +30,7 @@ export class DoctorsComponent implements OnInit {
   getDoctor(): void {
     const id = +this.route.snapshot.paramMap.get('id');
     this.sharedService.getDoctor(id)
-      .subscribe(hero => this.doctor = hero);
+      .subscribe(doctor => this.doctor = doctor);
   }
 
   onSelect(patient: Patient): void {

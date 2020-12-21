@@ -7,6 +7,7 @@ using VirtualClinic.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using VirtualClinic.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -35,6 +36,7 @@ namespace VirtualClinic.Api.Controllers
         /// </param>
         /// <returns>Information on the patient, or error 403 not authorized.</returns>
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Get([FromQuery] string search = null)
         {
             //check if logged in as dr, if not, then return not authorized
