@@ -28,6 +28,7 @@ env:
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   
 jobs:
+  #static analysis
   sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest
@@ -43,9 +44,7 @@ jobs:
                 -Dsonar.projectKey=2011-nov02-net_VirtualClinic-Project2
                 -Dsonar.sources=${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/src
                 -Dsonar.verbose=true
-      
-    
-    
+  #build and deploy to azure
   build-and-deploy:
     name: Build and Deploy
     runs-on: ubuntu-latest
@@ -64,6 +63,17 @@ jobs:
         npm install
         npm run build --if-present
         npm run test --if-present
+        
+    - name: Azure Login
+      uses: Azure/login@v1.1
+      with:
+        # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        # Set this value to true to enable Azure PowerShell Login in addition to Az CLI login
+        enable-AzPSSession: false# optional
+        # Set this value to true to enable support for accessing tenants without subscriptions
+        allow-no-subscriptions: false # optional
+    
     - name: 'Deploy to Azure WebApp'
       uses: azure/webapps-deploy@v2
       with:
