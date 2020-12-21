@@ -39,10 +39,7 @@ steps:
     version: '5.0.x'
   
 
-  
-
-
-- script: dotnet build /VirtualClinic/VirtualClinic.Api --configuration $(buildConfiguration)
+- script: dotnet build ./VirtualClinic/VirtualClinic.Api --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
