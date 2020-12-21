@@ -21,7 +21,7 @@ on:
 
 
 env:
-  AZURE_WEBAPP_NAME: virtual-clinic-front-end    # set this to your application's name
+  AZURE_WEBAPP_NAME: virtual-clinic   # set this to your application's name
   AZURE_WEBAPP_PACKAGE_PATH: './VirtualClinicFrontEnd'      # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '10.0.x'                # set this to the node version to use
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
