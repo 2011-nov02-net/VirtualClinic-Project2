@@ -88,7 +88,11 @@ namespace VirtualClinic.Domain.Mapper
         /// <param name="script"></param>
         /// <returns></returns>
         internal static Models.Prescription MapPrescription(DataModel.Prescription script){
-            return new Models.Prescription(script.Id, script.Information, script.Drug);
+            return new Models.Prescription(script.Id, script.Information, script.Drug)
+            {
+                PatientId = script.PatientId,
+                DoctorId = script.DoctorId
+            };
         }
 
         internal static Models.Patient MapPatient(DataModel.Patient dBPatient)

@@ -64,7 +64,7 @@ namespace VirtualClinic.Domain.Interfaces
         #region Perscriptions
         public Prescription GetPrescription(int PerscriptionId);
 
-        public Task<bool> GetPrescriptionAsync(int PerscriptionId);
+        public Task<Prescription> GetPrescriptionAsync(int PerscriptionId);
 
         public IEnumerable<Prescription> GetPatientPrescriptions(int id);
         public Task<IEnumerable<Prescription>> GetPatientPrescriptionsAsync(int id);

@@ -661,9 +661,9 @@ namespace VirtualClinic.Domain.Repositories
         /// </exception>
         /// <param name="PerscriptionId">The ID of the desired prescription</param>
         /// <returns>The prescription with the given ID.</returns>
-        public Models.Prescription GetPrescription(int PerscriptionId)
+        public Models.Prescription GetPrescription(int PrescriptionId)
         {
-            var script = _context.Prescriptions.Find(PerscriptionId);
+            var script = _context.Prescriptions.Find(PrescriptionId);
 
             if (script is not null)
             {
@@ -671,13 +671,22 @@ namespace VirtualClinic.Domain.Repositories
             }
             else
             {
-                throw new ArgumentException("Prescription, {id}, not found.");
+                throw new ArgumentException($"Prescription, {PrescriptionId}, not found.");
             }
         }
 
-        public Task<bool> GetPrescriptionAsync(int PerscriptionId)
+        public async Task<Models.Prescription> GetPrescriptionAsync(int PrescriptionId)
         {
-            throw new NotImplementedException();
+            var script = await _context.Prescriptions.FindAsync(PrescriptionId);
+
+            if (script is not null)
+            {
+                return DB_DomainMapper.MapPrescription(script);
+            }
+            else
+            {
+                throw new ArgumentException($"Prescription, {PrescriptionId}, not found.");
+            }
         }
 
 
@@ -703,9 +712,20 @@ namespace VirtualClinic.Domain.Repositories
             return modelPresciptions;
         }
 
-        public Task<IEnumerable<Models.Prescription>> GetPatientPrescriptionsAsync(int id)
+        public async Task<IEnumerable<Models.Prescription>> GetPatientPrescriptionsAsync(int patientID)
         {
-            throw new NotImplementedException();
+            var DbPerscriptions = await _context.Prescriptions
+                .Where(p => p.PatientId == patientID)
+                .ToListAsync();
+
+            List<Models.Prescription> modelPresciptions = new List<Models.Prescription>();
+
+            foreach (var script in DbPerscriptions)
+            {
+                modelPresciptions.Add(DB_DomainMapper.MapPrescription(script));
+            }
+
+            return modelPresciptions;
         }
 
 
@@ -719,8 +739,8 @@ namespace VirtualClinic.Domain.Repositories
             {
                 Information = prescription.Info,
                 Drug = prescription.DrugName,
-                PatientId = prescription.Patient.Id,
-                DoctorId = prescription.Doctor.Id,
+                PatientId = prescription.PatientId,
+                DoctorId = prescription.DoctorId
             };
 
             _context.Add(newPrescription);
@@ -739,8 +759,8 @@ namespace VirtualClinic.Domain.Repositories
             {
                 Information = prescription.Info,
                 Drug = prescription.DrugName,
-                PatientId = prescription.Patient.Id,
-                DoctorId = prescription.Doctor.Id,
+                PatientId = prescription.PatientId,
+                DoctorId = prescription.DoctorId,
             };
 
             await _context.AddAsync(newPrescription);
