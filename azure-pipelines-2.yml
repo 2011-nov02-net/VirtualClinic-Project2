@@ -1,0 +1,73 @@
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
+trigger:
+ branches:
+   include:
+     - master
+
+stages:
+- stage: build
+  jobs:
+   - job: build
+  pool:
+    vmImage: 'windows-latest'
+
+    variables:
+      solution: '**/*.sln'
+      buildPlatform: 'Any CPU'
+      buildConfiguration: 'Release'
+
+    steps:
+    - task: UseDotNet@2
+      displayName: 'Use 2.0 SDK for sonar'
+      inputs:
+        packageType: 'sdk'
+        version: '2.0.x'
+    
+           #sonar settings
+    - task: SonarCloudPrepare@1
+      displayName: 'Sonar Cloud Setup'
+      inputs:
+        SonarCloud: 'Sonar Cloud Proj 1'
+        organization: '2011-nov02-net'
+        scannerMode: 'MSBuild'
+        projectKey: '2011-nov02-net_danielp-project1'
+        projectName: 'Proj 1'
+        extraProperties: 'sonar.exclusions=**/lib/**'
+
+    - task: UseDotNet@2
+      displayName: 'Use current SDK to build'
+      inputs:
+        packageType: 'sdk'
+        version: '3.1.x'
+
+    - task: NuGetToolInstaller@1
+
+    - task: NuGetCommand@2
+      inputs:
+        restoreSolution: '$(solution)'
+
+    - task: VSBuild@1
+      inputs:
+        solution: '$(solution)'
+        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+
+    - task: VSTest@2
+      inputs:
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+
+      #danil's subscription test
+    - task: AzureRmWebAppDeployment@4
+      displayName: azure app service deploy backend
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'Azure subscription 1(e92a324b-9577-4df8-b544-5189c2ff2bbb)'
+        appType: 'webApp'
+        WebAppName: 'virtual-clinic-backend'
+        packageForLinux: '$(appDir)/dist/$(appDir)'
