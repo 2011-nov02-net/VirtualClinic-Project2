@@ -1,4 +1,4 @@
-export interface vitals{
+export interface Vitals{
     id: number;
     heartrate: number | null;
     bloodPressure: string | null;

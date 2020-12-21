@@ -1,13 +1,13 @@
 import { Doctor } from "./doctor";
 import { PatientReports } from "./patientreport";
-import { prescription } from "./prescription";
+import { Prescription } from "./prescription";
 
 export interface Patient{
+    id : number;
     insuranceProvider: string;
     reports: PatientReports[];
-    prescriptions: prescription[];
+    prescriptions: Prescription[];
     doctor: Doctor;
-    doctorid: number | null;
     birthday: Date;
     ssn: string;
 }
