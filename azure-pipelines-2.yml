@@ -28,11 +28,10 @@ stages:
         version: '2.0.x'
     
     #sonar settings
-    #f3cba434f3ce10430a7036e1a6d99bf899c345b9
     - task: SonarCloudPrepare@1
       displayName: 'Sonar Prepare'
       inputs:
-        SonarCloud: 'Sonar Cloud Proj 1'
+        SonarCloud: 'azure backend'
         organization: '2011-nov02-net'
         scannerMode: 'MSBuild'
         projectKey: '2011-nov02-net_VirtualClinic-Project2'
