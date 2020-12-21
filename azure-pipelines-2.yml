@@ -12,6 +12,7 @@ trigger:
 variables:
   solution: '**/*.sln'
   buildConfiguration: 'Release'
+  apiFolder: './VirtualClinic/VirtualClinic.Api'
 
 steps:
 - task: UseDotNet@2
@@ -39,17 +40,16 @@ steps:
     version: '5.0.x'
   
 
-- script: dotnet build ./VirtualClinic/VirtualClinic.Api --configuration $(buildConfiguration)
+- script: dotnet publish  $(apiFolder) --configuration $(buildConfiguration) --output $(System.DefaultWorkingDirectory)/publish
   displayName: 'dotnet build $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
-  displayName: 'dotnet Test Build - $(buildConfiguration)'
+  displayName: 'dotnet Test Build- $(buildConfiguration)'
   inputs:
     command: 'test'
     projects: '$(System.DefaultWorkingDirectory)/VirtualClinic/VirtualClinic.Tests.csproj'
     arguments: '--configuration $(buildConfiguration)'
     testRunTitle: 'Unit Tests'
-
 
 - task: SonarCloudAnalyze@1
   displayName: 'Sonar Cloud - Run'
@@ -59,17 +59,10 @@ steps:
   inputs:
     pollingTimeoutSec: '300'
 
-
-    # can also include a working directory
-
-- script: dotnet publish --configuration $(buildConfiguration) --output $(System.DefaultWorkingDirectory)/publish
-  displayName: 'dotnet build $(buildConfiguration)'
-  #workingDirectory: 
-
+#publish artifact
 - publish:  $(System.DefaultWorkingDirectory)/publish
   displayName: 'publish artifact'
   artifact: BuildAppArtifact
-
 
 - task: AzureRmWebAppDeployment@4
   displayName: "azure app service deploy backend"
