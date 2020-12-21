@@ -1,10 +1,10 @@
 import { Doctor } from "./doctor";
 import { Patient } from "./patient";
 
-export interface prescription {
+export interface Prescription {
     id: number;
-    patient: Patient | null;
-    doctor: Doctor | null;
+    patient: Patient;
+    doctor: Doctor;
     info: string;
     drugName: string;
 }

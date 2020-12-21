@@ -7,12 +7,12 @@ import { Doctor } from '../models/doctor';
 })
 export class DoctorsService {
 
-  private baseUrl = 'http://localhost:44317/api'
+  private baseUrl = 'https://localhost:44317/api'
 
   constructor(private http: HttpClient) { }
 
   getDoctorByID(id: number): Promise<Doctor> {
-    return this.http.get<Doctor>(`/doctors/${id}`)
+    return this.http.get<Doctor>(`${this.baseUrl}/Doctors/${id}`)
       .toPromise();
   }
 }

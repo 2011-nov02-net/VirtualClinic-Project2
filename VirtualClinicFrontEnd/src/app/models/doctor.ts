@@ -1,8 +1,11 @@
+import { TimeslotsComponent } from "../timeslots/timeslots.component";
 import { Patient } from "./patient";
-import { PatientReports } from "./patientreport";
+import { Timeslot } from "./timeslot";
 
 export interface Doctor {
-    doctorid: number;
+    id: number;
+    name: string;
     patients: Patient[];
     title: string;
+    timeslots: Timeslot[];
 }

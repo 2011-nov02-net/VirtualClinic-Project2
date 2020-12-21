@@ -12,7 +12,7 @@ import { DoctorsService } from '../services/doctors.service';
   styleUrls: ['./doctors.component.scss']
 })
 export class DoctorsComponent implements OnInit {
-  doctor: Doctor | undefined;
+  doctor : Doctor | undefined;
   selectedPatient : Patient | undefined;
 
   constructor(
@@ -22,7 +22,7 @@ export class DoctorsComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    //this.getDoctorByID(1);
+    this.getDoctorByID(1);
 
   }
 

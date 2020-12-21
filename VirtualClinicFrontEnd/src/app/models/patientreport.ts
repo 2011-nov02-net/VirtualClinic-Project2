@@ -1,10 +1,10 @@
 import { Patient } from "./patient";
-import { vitals } from "./vitals";
+import { Vitals } from "./vitals";
 
 export interface PatientReports {
     id: number;
-    Patient: Patient | null;
+    patient: Patient | null;
     time: Date;
     info: string;
-    vitals: vitals;
+    vitals: Vitals | null;
 }
