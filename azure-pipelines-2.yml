@@ -75,7 +75,7 @@ stages:
       displayName: 'dotnet Test Build - $(buildConfiguration)'
       inputs:
         command: 'test'
-        projects: '$(System.DefaultWorkingDirectory)/MyStore.Store.Tests/MyStore.Store.Tests.csproj'
+        projects: '$(System.DefaultWorkingDirectory)/VirtualClinic/VirtualClinic.Tests.csproj'
         arguments: '--configuration $(buildConfiguration)'
         testRunTitle: 'Unit Tests'
 
