@@ -3,6 +3,11 @@ name: backendDotNet
 on:
   push:
     branches: [ master ]
+env:
+  AZURE_WEBAPP_NAME: virtual-clinic-backend    # set this to your application's name
+  AZURE_WEBAPP_PACKAGE_PATH: './VirtualClinicFrontEnd'      # set this to the path to your web app project, defaults to the repository root
+  SOLUTION_PATH: './VirtualClinic'  # Needed to get PR information, if any
+
 
 jobs:
   build:
@@ -14,11 +19,11 @@ jobs:
       with:
         dotnet-version: 3.1.301
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore ${{ env.SOLUTION_PATH}}
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build ${{ env.SOLUTION_PATH}} --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test ${{ env.SOLUTION_PATH}} --no-build --verbosity normal
       
     - name: Azure WebApp
       uses: Azure/webapps-deploy@v2
