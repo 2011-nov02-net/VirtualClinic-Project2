@@ -22,24 +22,25 @@ stages:
 
     steps:
     - task: UseDotNet@2
-      displayName: 'Use 2.0 SDK for sonar'
+      displayName: 'get 2.0 SDK for sonar'
       inputs:
         packageType: 'sdk'
         version: '2.0.x'
     
-           #sonar settings
+    #sonar settings
+    #f3cba434f3ce10430a7036e1a6d99bf899c345b9
     - task: SonarCloudPrepare@1
-      displayName: 'Sonar Cloud Setup'
+      displayName: 'Sonar Prepare'
       inputs:
         SonarCloud: 'Sonar Cloud Proj 1'
         organization: '2011-nov02-net'
         scannerMode: 'MSBuild'
-        projectKey: '2011-nov02-net_danielp-project1'
-        projectName: 'Proj 1'
+        projectKey: '2011-nov02-net_VirtualClinic-Project2'
+        projectName: '2011-nov02-net_VirtualClinic-Project2'
         extraProperties: 'sonar.exclusions=**/lib/**'
 
     - task: UseDotNet@2
-      displayName: 'Use current SDK to build'
+      displayName: 'Use actual SDK to build'
       inputs:
         packageType: 'sdk'
         version: '3.1.x'
@@ -62,12 +63,55 @@ stages:
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
 
-      #danil's subscription test
-    - task: AzureRmWebAppDeployment@4
-      displayName: azure app service deploy backend
+    - task: SonarCloudAnalyze@1
+      displayName: 'Sonar Cloud - Run'
+
+    - task: SonarCloudPublish@1
+      displayName: 'Sonar Cloud - Timeout'
       inputs:
-        ConnectionType: 'AzureRM'
-        azureSubscription: 'Azure subscription 1(e92a324b-9577-4df8-b544-5189c2ff2bbb)'
-        appType: 'webApp'
-        WebAppName: 'virtual-clinic-backend'
-        packageForLinux: '$(appDir)/dist/$(appDir)'
+        pollingTimeoutSec: '300'
+
+
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet Test Build - $(buildConfiguration)'
+      inputs:
+        command: 'test'
+        projects: '$(System.DefaultWorkingDirectory)/MyStore.Store.Tests/MyStore.Store.Tests.csproj'
+        arguments: '--configuration $(buildConfiguration)'
+        testRunTitle: 'Unit Tests'
+
+        # can also include a working directory
+
+    - script: dotnet publish --configuration $(buildConfiguration) --output $(System.DefaultWorkingDirectory)/publish
+      displayName: 'dotnet build $(buildConfiguration)'
+      #workingDirectory: 
+
+    - publish:  $(System.DefaultWorkingDirectory)/publish
+      displayName: 'publish artifact'
+      artifact: BuildAppArtifact
+
+
+- stage: release
+  jobs:
+    #default behavior is to download artifact. the job job defaults to download source code
+    - deployment: app_service_deployment
+      displayName: app deployment
+      environment: prod
+      strategy: 
+       runOnce:
+         deploy:
+           steps:
+            - download: current
+              artifact: BuildAppArtifact
+              displayName: downloaded artifact
+            - task: AzureRmWebAppDeployment@4
+              displayName: "azure app service deploy backend"
+              condition: and( succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+              inputs:
+                ConnectionType: 'AzureRM'
+                azureSubscription: 'Azure subscription 1(e92a324b-9577-4df8-b544-5189c2ff2bbb)'
+                appType: 'webApp'
+                WebAppName: 'virtual-clinic-backend'
+                packageForLinux: '$(appDir)/dist/$(appDir)'
+
+
