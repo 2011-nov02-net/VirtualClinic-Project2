@@ -26,7 +26,7 @@ jobs:
         # Name of the Azure Web App
         app-name: clinic-backend
         # Applies to Web Apps(Windows and Linux) and Web App Containers(linux). Multi container scenario not supported. Publish profile (*.publishsettings) file contents with Web Deploy secrets
-        publish-profile: ${{ AZURE_WEBAPP_PUBLISH_PROFILE_BACKEND }} # optional
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_BACKEND }} # optional
         # Applies to Web App only: Path to package or folder. *.zip, *.war, *.jar or a folder to deploy
         package: ./VirtualClinic # optional, default is .
         # Enter the start up command. For ex. dotnet run or dotnet run
