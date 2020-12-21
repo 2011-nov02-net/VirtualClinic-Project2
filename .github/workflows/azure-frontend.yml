@@ -25,7 +25,7 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: './VirtualClinicFrontEnd'      # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '10.0.x'                # set this to the node version to use
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   
 jobs:
   build-and-deploy:
