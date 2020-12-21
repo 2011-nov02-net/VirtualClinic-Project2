@@ -7,7 +7,7 @@ import { Doctor } from '../models/doctor';
 })
 export class DoctorsService {
 
-  private baseUrl = 'http://localhost:4200/api'
+  private baseUrl = 'http://localhost:44317/api'
 
   constructor(private http: HttpClient) { }
 
