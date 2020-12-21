@@ -4,16 +4,16 @@
 //affects body background
 $body-bg: hsl(71, 100%, 88%);
 //affects body text
-$body-color: #1f093b;
+$body-color: #180038;
 //overrides theme colors
-$primary: rgb(77, 235, 120);
+$primary: rgb(68, 111, 253);
 $secondary: rgb(41, 240, 236);
-$success: #238222;
-$info: #87c7c7;
-$warning: #c7c12c;
-$danger: #c2bc19;
-$light: #32a852;
-$dark: #8f7f7f;
+$success: #09ff05;
+$info: #79dfdf;
+$warning: #fff708;
+$danger: #ff371d;
+$light: #b9ffcc;
+$dark: #03044d;
 //includes all of bootstrap
 @import "~bootstrap/scss/bootstrap";
 a.navbar-brand {
