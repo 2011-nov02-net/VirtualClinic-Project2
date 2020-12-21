@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { OktaAuthService } from '@okta/okta-angular';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -19,8 +20,7 @@ export class AppComponent implements OnInit {
      * page: the page to route to}
      */
     { title: 'One', fragment: 'one', page:"." },
-    { title: 'Two', fragment: 'two', page:"." },
-    { title: 'Log In', fragment: '', page:"login" }
+    { title: 'Two', fragment: 'two', page:"." }
   ];
 
   //https://ng-bootstrap.github.io/#/components/nav/overview#routing
