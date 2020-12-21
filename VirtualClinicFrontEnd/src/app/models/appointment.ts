@@ -1,7 +1,7 @@
 import { Doctor } from "./doctor";
 import { Patient } from "./patient";
 
-export class appointment{
+export interface Appointment{
     id: number;
     doctor: Doctor;
     patient: Patient;

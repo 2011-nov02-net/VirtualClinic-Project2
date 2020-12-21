@@ -1,4 +1,4 @@
-export class vitals{
+export interface vitals{
     id: number;
     heartrate: number | null;
     bloodPressure: string | null;

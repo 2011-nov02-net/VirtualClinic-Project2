@@ -12,6 +12,7 @@ import { TimeslotsComponent } from './timeslots/timeslots/timeslots.component';
 import { PrescriptionsComponent } from './prescriptions/prescriptions.component';
 import { PatientsComponent } from './patients/patients.component';
 import { VitalsComponent } from './vitals/vitals.component';
+import { DoctorsComponent } from './doctors/doctors.component';
 
 
 
@@ -37,7 +38,8 @@ const config = {
     TimeslotsComponent,
     PrescriptionsComponent,
     PatientsComponent,
-    VitalsComponent
+    VitalsComponent,
+    DoctorsComponent
   ],
   imports: [
     NgbModule,

@@ -1,8 +1,8 @@
-import { patient } from "./patient";
+import { Patient } from "./patient";
 import { PatientReports } from "./patientreport";
 
-export class Doctor {
+export interface Doctor {
     doctorid: number;
-    patients: patient[];
+    patients: Patient[];
     title: string;
 }

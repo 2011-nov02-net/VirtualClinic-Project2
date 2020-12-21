@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Patient } from '../models/patient';
 
 @Component({
   selector: 'app-patients',

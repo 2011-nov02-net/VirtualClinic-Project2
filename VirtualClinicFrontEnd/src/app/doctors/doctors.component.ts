@@ -3,6 +3,8 @@ import { Doctor } from '../models/doctor';
 import { Patient }  from '../models/patient';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { DoctorsService } from '../services/doctors.service';
+
 
 @Component({
   selector: 'app-doctors',
@@ -11,24 +13,24 @@ import { Location } from '@angular/common';
 })
 export class DoctorsComponent implements OnInit {
   doctor: Doctor | undefined;
-   
   selectedPatient : Patient | undefined;
 
   constructor(
     private route: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    private doctorService: DoctorsService
     ) { }
 
   ngOnInit(): void {
-    this.getDoctor();
+    this.getDoctorByID(1);
 
   }
 
-
-  getDoctor(): void {
-    const id = +this.route.snapshot.paramMap.get('id');
-    this.sharedService.getDoctor(id)
-      .subscribe(doctor => this.doctor = doctor);
+  getDoctorByID(id: number): void {
+    this.doctorService.getDoctorByID(id)
+      .then(doctor => {
+        this.doctor = doctor;
+      })
   }
 
   onSelect(patient: Patient): void {
