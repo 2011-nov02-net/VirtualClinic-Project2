@@ -41,7 +41,7 @@ jobs:
            args: >
                 -Dsonar.organization=2011-nov02-net
                 -Dsonar.projectKey=2011-nov02-net_VirtualClinic-Project2
-                -Dsonar.sources=src
+                -Dsonar.sources=${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/src
                 -Dsonar.verbose=true
       
     
