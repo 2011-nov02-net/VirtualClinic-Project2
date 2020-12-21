@@ -12,82 +12,82 @@ stages:
 - stage: build
   jobs:
    - job: build
-  pool:
-    vmImage: 'windows-latest'
+     pool:
+      vmImage: 'windows-latest'
 
-    variables:
-      solution: '**/*.sln'
-      buildPlatform: 'Any CPU'
-      buildConfiguration: 'Release'
+      variables:
+        solution: '**/*.sln'
+        buildPlatform: 'Any CPU'
+        buildConfiguration: 'Release'
 
-    steps:
-    - task: UseDotNet@2
-      displayName: 'get 2.0 SDK for sonar'
-      inputs:
-        packageType: 'sdk'
-        version: '2.0.x'
-    
-    #sonar settings
-    - task: SonarCloudPrepare@1
-      displayName: 'Sonar Prepare'
-      inputs:
-        SonarCloud: 'azure backend'
-        organization: '2011-nov02-net'
-        scannerMode: 'MSBuild'
-        projectKey: '2011-nov02-net_VirtualClinic-Project2'
-        projectName: '2011-nov02-net_VirtualClinic-Project2'
-        extraProperties: 'sonar.exclusions=**/lib/**'
+      steps:
+      - task: UseDotNet@2
+        displayName: 'get 2.0 SDK for sonar'
+        inputs:
+          packageType: 'sdk'
+          version: '2.0.x'
+      
+      #sonar settings
+      - task: SonarCloudPrepare@1
+        displayName: 'Sonar Prepare'
+        inputs:
+          SonarCloud: 'azure backend'
+          organization: '2011-nov02-net'
+          scannerMode: 'MSBuild'
+          projectKey: '2011-nov02-net_VirtualClinic-Project2'
+          projectName: '2011-nov02-net_VirtualClinic-Project2'
+          extraProperties: 'sonar.exclusions=**/lib/**'
 
-    - task: UseDotNet@2
-      displayName: 'Use actual SDK to build'
-      inputs:
-        packageType: 'sdk'
-        version: '3.1.x'
+      - task: UseDotNet@2
+        displayName: 'Use actual SDK to build'
+        inputs:
+          packageType: 'sdk'
+          version: '3.1.x'
 
-    - task: NuGetToolInstaller@1
+      - task: NuGetToolInstaller@1
 
-    - task: NuGetCommand@2
-      inputs:
-        restoreSolution: '$(solution)'
+      - task: NuGetCommand@2
+        inputs:
+          restoreSolution: '$(solution)'
 
-    - task: VSBuild@1
-      inputs:
-        solution: '$(solution)'
-        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-        platform: '$(buildPlatform)'
-        configuration: '$(buildConfiguration)'
+      - task: VSBuild@1
+        inputs:
+          solution: '$(solution)'
+          msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+          platform: '$(buildPlatform)'
+          configuration: '$(buildConfiguration)'
 
-    - task: VSTest@2
-      inputs:
-        platform: '$(buildPlatform)'
-        configuration: '$(buildConfiguration)'
+      - task: VSTest@2
+        inputs:
+          platform: '$(buildPlatform)'
+          configuration: '$(buildConfiguration)'
 
-    - task: SonarCloudAnalyze@1
-      displayName: 'Sonar Cloud - Run'
+      - task: SonarCloudAnalyze@1
+        displayName: 'Sonar Cloud - Run'
 
-    - task: SonarCloudPublish@1
-      displayName: 'Sonar Cloud - Timeout'
-      inputs:
-        pollingTimeoutSec: '300'
+      - task: SonarCloudPublish@1
+        displayName: 'Sonar Cloud - Timeout'
+        inputs:
+          pollingTimeoutSec: '300'
 
 
-    - task: DotNetCoreCLI@2
-      displayName: 'dotnet Test Build - $(buildConfiguration)'
-      inputs:
-        command: 'test'
-        projects: '$(System.DefaultWorkingDirectory)/VirtualClinic/VirtualClinic.Tests.csproj'
-        arguments: '--configuration $(buildConfiguration)'
-        testRunTitle: 'Unit Tests'
+      - task: DotNetCoreCLI@2
+        displayName: 'dotnet Test Build - $(buildConfiguration)'
+        inputs:
+          command: 'test'
+          projects: '$(System.DefaultWorkingDirectory)/VirtualClinic/VirtualClinic.Tests.csproj'
+          arguments: '--configuration $(buildConfiguration)'
+          testRunTitle: 'Unit Tests'
 
-        # can also include a working directory
+          # can also include a working directory
 
-    - script: dotnet publish --configuration $(buildConfiguration) --output $(System.DefaultWorkingDirectory)/publish
-      displayName: 'dotnet build $(buildConfiguration)'
-      #workingDirectory: 
+      - script: dotnet publish --configuration $(buildConfiguration) --output $(System.DefaultWorkingDirectory)/publish
+        displayName: 'dotnet build $(buildConfiguration)'
+        #workingDirectory: 
 
-    - publish:  $(System.DefaultWorkingDirectory)/publish
-      displayName: 'publish artifact'
-      artifact: BuildAppArtifact
+      - publish:  $(System.DefaultWorkingDirectory)/publish
+        displayName: 'publish artifact'
+        artifact: BuildAppArtifact
 
 
 - stage: release
