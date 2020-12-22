@@ -120,10 +120,10 @@ namespace VirtualClinic.Api.Controllers
         /// </summary>
         /// <returns>403 unauthorized, some other error for id collision, or CreatedAt</returns>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Timeslot value)
+        public async Task<IActionResult> Post([FromBody] Domain.Models.Timeslot value)
         {
             //check authorization
-            Task<Timeslot> apointmentTask = _ApointmentRepo.AddTimeslotAsync(value);
+            Task<Domain.Models.Timeslot> apointmentTask = _ApointmentRepo.AddTimeslotAsync(value);
 
             //try catch for errors
             Timeslot createdApointment = await apointmentTask;

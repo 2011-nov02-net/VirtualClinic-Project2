@@ -492,7 +492,7 @@ namespace VirtualClinic.Domain.Repositories
             _context.SaveChanges();
         }
 
-        public async Task AddTimeslotAsync(Models.Timeslot timeslot)
+        public async Task<Models.Timeslot> AddTimeslotAsync(Models.Timeslot timeslot)
         {
             DataModel.Timeslot DBTimeslot = new DataModel.Timeslot();
 
@@ -524,6 +524,8 @@ namespace VirtualClinic.Domain.Repositories
 
             await _context.Timeslots.AddAsync(DBTimeslot);
             _context.SaveChanges();
+
+            return timeslot;
         }
 
 
@@ -554,7 +556,7 @@ namespace VirtualClinic.Domain.Repositories
             timeslot.AppointmentId = new_appointment.Id;
             _context.SaveChanges();
         }
-        public async Task AddAppointmentToTimeslotAsync(Models.Appointment appointment, int TimeslotId)
+        public async Task<Models.Timeslot> AddAppointmentToTimeslotAsync(Models.Appointment appointment, int TimeslotId)
         {
             var timeslot = await _context.Timeslots.FindAsync(TimeslotId);
 
@@ -579,6 +581,9 @@ namespace VirtualClinic.Domain.Repositories
             await _context.SaveChangesAsync();
             timeslot.AppointmentId = new_appointment.Id;
             await _context.SaveChangesAsync();
+
+
+            return DB_DomainMapper.MapTimeslot(timeslot);
         }
         #endregion
 
