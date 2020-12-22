@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace VirtualClinic.Domain.Models
 {
     public class Patient : User
     {
+        [JsonIgnore]
         public Doctor PrimaryDoctor { get; set; }
+        [JsonIgnore]
         public List<PatientReport> PatientReports { get; set; }
+        [JsonIgnore]
         public List<Prescription> Prescriptions { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string SSN { get; set; }

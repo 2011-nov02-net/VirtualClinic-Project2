@@ -92,9 +92,9 @@ namespace VirtualClinic.Domain.Repositories
             }
         }
 
-        public async Task<Models.Patient> GetPatientByIDAsync(int id)
+        public async Task<Models.Patient> GetPatientByIDAsync(int patientId)
         {
-            var DBPatient = await _context.Patients.FindAsync(id);
+            var DBPatient = await _context.Patients.FindAsync(patientId);
 
             if (DBPatient is not null)
             {
@@ -145,23 +145,66 @@ namespace VirtualClinic.Domain.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
-        #endregion
-
-
-
-        /*     _____             _                 
-         *    |  __ \           | |                
-         *    | |  | | ___   ___| |_ ___  _ __ ___ 
-         *    | |  | |/ _ \ / __| __/ _ \| '__/ __|
-         *    | |__| | (_) | (__| || (_) | |  \__ \
-         *    |_____/ \___/ \___|\__\___/|_|  |___/                                
-         */
-        #region Doctors
 
         /// <summary>
-        /// Get's all the doctors.
+        /// Update a patient in the database
         /// </summary>
-        /// <returns>A list of all the doctors.</returns>
+        /// <param name="id">The id of teh patient to be updated</param>
+        /// <param name="patient">The update </param>
+        /// <returns>True if the patient is in the datase and has been updated </returns>
+        public async Task<bool> UpdatePatientAsync(int id, Models.Patient patient)
+        {
+            var updatedPatient = await _context.Patients.Where(p => p.Id == id).FirstAsync();
+            if (updatedPatient == null)
+            {
+                return false;
+            }else
+            {
+
+            updatedPatient.Id = patient.Id;
+            updatedPatient.Name = patient.Name;
+            updatedPatient.DoctorId = patient.PrimaryDoctor.Id;
+            updatedPatient.Ssn = patient.SSN;
+            updatedPatient.Dob = patient.DateOfBirth;
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+
+        }
+
+        public async Task<bool> DeletePatientAsync(int id)
+        {
+            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Id == id);
+
+            if (patient != null)
+            {
+                _context.Patients.Remove(patient);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            else
+            {
+                throw new Exception(" This patient doesn't exist");
+            }
+        }
+            #endregion
+
+
+
+            /*     _____             _                 
+             *    |  __ \           | |                
+             *    | |  | | ___   ___| |_ ___  _ __ ___ 
+             *    | |  | |/ _ \ / __| __/ _ \| '__/ __|
+             *    | |__| | (_) | (__| || (_) | |  \__ \
+             *    |_____/ \___/ \___|\__\___/|_|  |___/                                
+             */
+            #region Doctors
+
+            /// <summary>
+            /// Get's all the doctors.
+            /// </summary>
+            /// <returns>A list of all the doctors.</returns>
         public IEnumerable<Models.Doctor> GetDoctors()
         {
             var DBDoctors = _context.Doctors
@@ -303,7 +346,7 @@ namespace VirtualClinic.Domain.Repositories
         /// Adds a doctor to the database
         /// </summary>
         /// <param name="doctor">The doctor to be added to the database</param>
-        public async Task AddDoctorAsync(Models.Doctor doctor)
+        public async Task<bool> AddDoctorAsync(Models.Doctor doctor)
         {
             var newDoctor = new DataModel.Doctor
             {
@@ -312,6 +355,7 @@ namespace VirtualClinic.Domain.Repositories
             };
             await _context.Doctors.AddAsync(newDoctor);
             await _context.SaveChangesAsync();
+            return true;
         }
 
         #endregion
@@ -425,8 +469,9 @@ namespace VirtualClinic.Domain.Repositories
             DBTimeslot.End = timeslot.End;
             DBTimeslot.AppointmentId = timeslot.Appointment?.Id;
 
-            //DBTimeslot.DoctorId = timeslot.dr.id;
+            //DBTimeslot.DoctorId = timeslot.dr.id;      
 
+            _context.Timeslots.Attach(DBTimeslot);
             if (timeslot.Appointment is not null)
             {
                 // TODO: construct appointment record and insert into table
@@ -480,6 +525,9 @@ namespace VirtualClinic.Domain.Repositories
             await _context.Timeslots.AddAsync(DBTimeslot);
             _context.SaveChanges();
         }
+
+
+
         public void AddAppointmentToTimeslot(Models.Appointment appointment, int TimeslotId)
         {
             var timeslot = _context.Timeslots.Find(TimeslotId);
@@ -633,15 +681,14 @@ namespace VirtualClinic.Domain.Repositories
 
         public async Task<IEnumerable<Models.PatientReport>> GetPatientReportsAsync(int PatientId)
         {
-            List<DataModel.PatientReport> reports = await _context.PatientReports
-                .Where(report => report.PatientId == PatientId)
-                .ToListAsync();
+            List<DataModel.PatientReport> reports = await  _context.PatientReports
+               .Where(report => report.PatientId == PatientId)
+               .ToListAsync();
 
             List<Models.PatientReport> modelreports = new List<Models.PatientReport>();
 
             foreach (var r in reports)
             {
-                r.PatientId = PatientId;
                 modelreports.Add(DB_DomainMapper.MapReport(r));
             }
 
@@ -673,7 +720,7 @@ namespace VirtualClinic.Domain.Repositories
         /// Add a patient report to the database
         /// </summary>
         /// <param name="report">The report to be added tp the database</param>
-        public async Task AddPatientReportAsync(Models.PatientReport report)
+        public async Task<bool> AddPatientReportAsync(Models.PatientReport report)
         {
             var newPatientReport = new DataModel.PatientReport
             {
@@ -686,6 +733,7 @@ namespace VirtualClinic.Domain.Repositories
 
             await _context.AddAsync(newPatientReport);
             await _context.SaveChangesAsync();
+            return true;
         }
         #endregion
 

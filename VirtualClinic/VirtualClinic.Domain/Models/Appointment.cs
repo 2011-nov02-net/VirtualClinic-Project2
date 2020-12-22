@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace VirtualClinic.Domain.Models
 {
@@ -9,7 +10,10 @@ namespace VirtualClinic.Domain.Models
         public int Id { get; set; }
         public int DoctorId { get; set; }
         public int PatientId { get; set; }
+
+        [JsonIgnore]
         public Doctor Doctor { get; set; }
+        [JsonIgnore]
         public Patient Patient { get; set; }
         public string Notes { get; set; }
 
