@@ -873,7 +873,25 @@ namespace VirtualClinic.Domain.Repositories
         }
         #endregion
 
+        public string GetAuthType(string userEmail)
+        {
+            var type = _context.Users.Find(userEmail);
+            if (type is null)
+            {
+                throw new ArgumentException($"Email {userEmail} does not exist");
+            }
+            return type.UserType;
+        }
 
+        public async Task<string> GetAuthTypeAsync(string userEmail)
+        {
+            var type = await _context.Users.FindAsync(userEmail);
+            if (type is null)
+            {
+                throw new ArgumentException($"Email {userEmail} does not exist");
+            }
+            return type.UserType;
+        }
 
         /*    _    _      _                     
          *   | |  | |    | |                    
