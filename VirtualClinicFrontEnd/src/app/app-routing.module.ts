@@ -8,8 +8,8 @@ import { PatientsComponent } from '../app/patients/patients.component';
 const routes: Routes = [
   { path: 'login', component: LogInComponent },
   { path: 'login/callback', component: OktaCallbackComponent },
-  { path: 'Doctors/1', component: DoctorsComponent },
-  { path:  'Patients/:id', component: PatientsComponent}
+  { path: 'Doctors/:id', component: DoctorsComponent },
+  { path: 'Patients/:id', component: PatientsComponent}
 ];
 
 @NgModule({
