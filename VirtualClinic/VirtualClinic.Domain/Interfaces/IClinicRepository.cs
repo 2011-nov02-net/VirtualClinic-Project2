@@ -77,8 +77,8 @@ namespace VirtualClinic.Domain.Interfaces
         public Task<bool> AddPrescriptionAsync(Prescription prescription);
         #endregion
 
-        public string GetAuthType(string user);
+        public string GetAuthType(string userEmail);
 
-        public Task<string> GetAuthTypeAsync(string user);
+        public Task<string> GetAuthTypeAsync(string userEmail);
     }
 }
