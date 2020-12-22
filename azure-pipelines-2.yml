@@ -48,7 +48,7 @@ steps:
   inputs:
     command: 'test'
     projects: '$(System.DefaultWorkingDirectory)/VirtualClinic'
-    arguments: '--configuration $(buildConfiguration)'
+    arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
     testRunTitle: 'Unit Tests'
 
 - task: SonarCloudAnalyze@1
