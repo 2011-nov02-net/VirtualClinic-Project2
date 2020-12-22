@@ -2,11 +2,11 @@
 -- Clinic.Appointments as A LEFT JOIN Clinic.Timeslots as T on A.Id = T.AppointmentId
 -- Where T.DoctorId = 1;
 
-INSERT INTO Clinic.Doctors (Id,Name, Title) VALUES 
-     (1,'Gregory House', 'Diagnostician' ),
-     (2,'Critina Yang', 'Cardiologist'),
-     (3,'Perry Cox', 'Oncologist'),
-     (4,'Dana Scully', 'Radiologist');
+INSERT INTO Clinic.Doctors (Name, Title) VALUES 
+     ('Gregory House', 'Diagnostician' ),
+     ('Critina Yang', 'Cardiologist'),
+     ('Perry Cox', 'Oncologist'),
+     ('Dana Scully', 'Radiologist');
 
 INSERT INTO Clinic.Patients (Name, DoctorId, DOB, SSN, Insurance) VALUES 
       ('Walter White',1,'2015-12-17','626-70-4664', 'Aetna'),

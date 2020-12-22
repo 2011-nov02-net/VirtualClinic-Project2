@@ -38,12 +38,14 @@ namespace VirtualClinic.Api.Controllers
         {
             if (await _clinicRepository.GetDoctorsAsync() is IEnumerable<Doctor> doctors)
             {
-            //if search isn't null, filter list of all doctors by name
-                //    if(search is not null)
-                //    {
-                //     //todo: return getdoctorsbyname
-                //    }
-                //else
+                //if search isn't null, filter list of all doctors by name
+                if (search is not null)
+                {
+                    var searchDoctor = doctors.FirstOrDefault(d => d.Name.ToLower() == search.ToLower());
+
+                    return Ok(searchDoctor);
+                }
+                else
                 {
 
                     return Ok(doctors);
@@ -87,5 +89,62 @@ namespace VirtualClinic.Api.Controllers
             }
         }
 
+
+        //PUT: api/Doctors/{id}
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int doctorId, [FromBody] Doctor doctor)
+        {
+            if (await _clinicRepository.GetDoctorByIDAsync(doctorId) is Doctor)
+            {
+                // _clinicRepository.UpdateDoctorAsync(doctor);
+
+                return NoContent();
+            }
+
+
+            return NotFound();
+        }
+
+        //GET: api/Doctors/{id}/Patients
+        /// <summary>
+        /// Requires DR Level Authentication. Gets a list of all the DR's Patients.
+        /// </summary>
+        /// <param name="search">
+        /// search term to filter names to only names containing this string.
+        /// </param>
+        /// <returns>Information on the patient, or error 403 not authorized.</returns>
+        [HttpGet("{id}/Patients")]
+        public async Task<IActionResult> Get([FromQuery] int id, [FromQuery] string search = null)
+        {
+            //check if logged in as dr, if not, then return not authorized
+            //get all the patients of the currently logged in doctor.
+
+
+            if (await _clinicRepository.GetDoctorPatientsAsync(id) is IEnumerable<Patient> patients)
+            {
+
+                if (search is not null)
+                {
+                    //filter by name based on search string
+                    var searchPatient = patients.FirstOrDefault(p => p.Name.ToLower() == search.ToLower());
+
+                    return Ok(searchPatient);
+
+                }
+                else
+                {
+
+                    return Ok(patients);
+                }
+
+            }
+            else
+            {
+
+                return NotFound();
+            }
+
+
+        }
     }
 }

@@ -1,1 +1,36 @@
 <p>patients works!</p>
+
+<div *ngIf="patient">
+    <h2>{{patient.name | uppercase}} Details</h2>
+    <div><span>id: </span>{{patient.id}}</div>
+    <div>
+        <label>name:
+        <input type="text" [(ngModel)]="patient.name" placeholder="name"/>
+      </label>
+        <span>Name: </span>{{patient.name}}
+        <span>Doctor: </span>{{patient.Doctor.name}}
+        <span>Birthdate: </span>{{patient.birthday}}
+        <span>SSN: </span>{{patient.ssn}}
+    </div>
+    <button (click)="goBack()">go back</button>
+    <div>
+        <h2>My Prescriptions</h2>
+        <ul class="prescription">
+            <li *ngFor="let prescription of patient.prescriptions">
+                <a routerLink="/Prescriptions/{{prescription.id}}">
+                    <span class="badge">{{prescription.id}}:</span> {{patient.drugName}}
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div>
+        <h2>My Reports</h2>
+        <ul class="reports">
+            <li *ngFor="let report of patient.reports">
+                <a routerLink="/Reports/{report.id}}">
+                    <span class="badge">{{report.id}}</span> {{report.info}}
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

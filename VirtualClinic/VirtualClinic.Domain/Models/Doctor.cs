@@ -2,11 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace VirtualClinic.Domain.Models
 {
     public class Doctor : User
     {
+
+       
         private HashSet<Patient> _patients = new HashSet<Patient>();
 
         public List<Patient> Patients { 
@@ -51,6 +54,15 @@ namespace VirtualClinic.Domain.Models
             base.Name = name;
             this.Title = title;
             _patients = new HashSet<Patient>();
+        }
+        public Doctor(string name, string title = null)
+        {
+            base.Name = name;
+            this.Title = title;
+            _patients = new HashSet<Patient>();
+        }
+        public Doctor()
+        {
         }
     }
 }

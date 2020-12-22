@@ -1,9 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { OktaAuthModule, OKTA_CONFIG } from '@okta/okta-angular/';
 
 import { AppComponent } from './app.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { DoctorsComponent } from './doctors/doctors.component';
 import { LogInComponent } from './log-in/log-in.component';
 import { AppRoutingModule } from './app-routing.module';
 import { StyletestsComponent } from './styletests/styletests.component';
@@ -11,7 +12,6 @@ import { TimeslotsComponent } from './timeslots/timeslots.component';
 import { PrescriptionsComponent } from './prescriptions/prescriptions.component';
 import { PatientsComponent } from './patients/patients.component';
 import { VitalsComponent } from './vitals/vitals.component';
-import { DoctorsComponent } from './doctors/doctors.component';
 import { HttpClientModule } from '@angular/common/http';
 
 
@@ -37,8 +37,8 @@ const config = {
     TimeslotsComponent,
     PrescriptionsComponent,
     PatientsComponent,
-    VitalsComponent,
-    DoctorsComponent
+    DoctorsComponent,
+    VitalsComponent
   ],
   imports: [
     NgbModule,

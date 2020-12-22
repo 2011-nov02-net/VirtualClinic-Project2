@@ -1,13 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace VirtualClinic.Domain.Models
 {
     public class Appointment
     {
         public int Id { get; set; }
+        public int DoctorId { get; set; }
+        public int PatientId { get; set; }
+
+        [JsonIgnore]
         public Doctor Doctor { get; set; }
+        [JsonIgnore]
         public Patient Patient { get; set; }
         public string Notes { get; set; }
 
@@ -24,6 +30,12 @@ namespace VirtualClinic.Domain.Models
             Notes = notes;
             Doctor = doctor;
             Patient = patient;        
+        }
+        public Appointment(string notes, Doctor doctor = null, Patient patient = null)
+        {
+            Notes = notes;
+            Doctor = doctor;
+            Patient = patient;
         }
     }
 }
