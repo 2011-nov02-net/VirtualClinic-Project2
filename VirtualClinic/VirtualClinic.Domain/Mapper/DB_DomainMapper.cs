@@ -28,6 +28,7 @@ namespace VirtualClinic.Domain.Mapper
             Models.PatientReport modelreport = new Models.PatientReport(report.Id, report.Information);
 
             modelreport.Time = report.ReportTime;
+            modelreport.PatientId = report.PatientId;
 
             return modelreport;
         }
@@ -40,22 +41,13 @@ namespace VirtualClinic.Domain.Mapper
         public static Models.Vitals MapVitals(DataModel.Vital vital)
         {
             Models.Vitals modelvitals = new Models.Vitals(vital.Id);
+
             modelvitals.Id = vital.Id;
-
-            if(vital.Temperature is not null)
-            {
-                decimal d = (decimal) vital.Temperature;
-                modelvitals.Temperature = decimal.ToDouble(d);
-            } else
-            {
-                modelvitals.Temperature = null;
-            }
-
-            //todo: make sure this is correct.
-            modelvitals.HeartRate = vital.Diastolic;
-
-            //todo: get blood pressure or remove from model
-            modelvitals.BloodPressure = null;
+            modelvitals.HeartRate = vital.HeartRate;
+            modelvitals.Systolic = vital.Systolic;
+            modelvitals.Diastolic = vital.Diastolic;
+            modelvitals.PainLevel = vital.Pain;
+            modelvitals.Temperature = (double?)vital.Temperature;
 
             return modelvitals;
         }
@@ -67,8 +59,16 @@ namespace VirtualClinic.Domain.Mapper
         /// <returns>The domain model version of a DB timeslot</returns>
         internal static Models.Timeslot MapTimeslot(DataModel.Timeslot DbTimeSlot)
         {
-            Models.Timeslot timeslot = new Models.Timeslot(DbTimeSlot.Id, DbTimeSlot.Start, DbTimeSlot.End);
-            timeslot.Appointment = null;
+            Models.Timeslot timeslot = new Models.Timeslot();
+
+            //TODO: get timeslot from db when added to db
+
+
+            timeslot.Id = DbTimeSlot.Id;
+            timeslot.Start = DbTimeSlot.Start;
+            timeslot.End = DbTimeSlot.End;
+
+
             return timeslot;
         }
 
@@ -89,12 +89,16 @@ namespace VirtualClinic.Domain.Mapper
         /// <param name="script"></param>
         /// <returns></returns>
         internal static Models.Prescription MapPrescription(DataModel.Prescription script){
-            return new Models.Prescription(script.Id, script.Information, script.Drug);
+            return new Models.Prescription(script.Id, script.Information, script.Drug)
+            {
+                PatientId = script.PatientId,
+                DoctorId = script.DoctorId
+            };
         }
 
         internal static Models.Patient MapPatient(DataModel.Patient dBPatient)
         {
-            var patient = new Models.Patient(dBPatient.Id, dBPatient.Name, dBPatient.Dob);
+            var patient = new Models.Patient(dBPatient.Id, dBPatient.Name, dBPatient.Dob, dBPatient.Ssn, dBPatient.Insurance);
             patient.InsuranceProvider = dBPatient.Insurance;
             patient.SSN = dBPatient.Ssn;
 

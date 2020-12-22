@@ -1,2 +1,15 @@
-<p>doctors works!</p>
-<p>{{ doctor?.name }}</p>
+<h2>Name: {{doctor.name | uppercase}}</h2>
+<h2>Title: {{doctor.title}}</h2>
+<div>
+    <h2>My patients</h2>
+    <ul class="doctor">
+        <li *ngFor="let patient of doctor.patients" >
+        <a routerLink="/Patients/{{patient.id}}">
+            <span class="badge" >{{patient.id}}</span> {{patient.name}}
+        </a>
+      </li>
+    </ul>
+</div>
+
+
+<!-- <app-patient-detail [patient]="selectedPatient"></app-patient-detail> -->

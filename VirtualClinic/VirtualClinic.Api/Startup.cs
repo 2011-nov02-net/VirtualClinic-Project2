@@ -2,19 +2,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using VirtualClinic.DataModel;
 using VirtualClinic.Domain.Interfaces;
 using VirtualClinic.Domain.Repositories;
+using VirtualClinic.DataModel;
 
 namespace VirtualClinic.Api
 {
@@ -37,9 +39,22 @@ namespace VirtualClinic.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped <IClinicRepository, ClinicRepository>();
+
+            services.AddControllers(options =>
+            {
+                // make asp.net core forget about text/plain so swagger ui uses json as the default
+                options.OutputFormatters.RemoveType<StringOutputFormatter>();
+                // teach asp.net core to be able to serialize & deserialize XML
+                options.InputFormatters.Add(new XmlSerializerInputFormatter(options));
+                options.OutputFormatters.Add(new XmlSerializerOutputFormatter());
+
+                options.ReturnHttpNotAcceptable = true;
+            });
+
             services.AddDbContext<ClinicDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("default")));
-            services.AddControllers();
+           options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "VirtualClinic.Api", Version = "v1" });
@@ -55,12 +70,33 @@ namespace VirtualClinic.Api
                                        * ******
                                        * ******
                                        * DO NOT LET THIS MAKE IT TO LIVE BUILD */
-                                      .AllowAnyOrigin(); 
+                                      .AllowAnyOrigin();
                                       /**********
                                        * ********
                                        * *****/
+
+                                      /*addresses on main
+                                        "http://dev-7862904.okta.com",
+                                        "http://theFrontend.com",
+                                        "http://localhost:5000",
+                                        "http://localhost:5001",
+                                        "http://localhost:4200",
+                                        "http://localhost:4200/",
+                                        "http://localhost:44317")
+                                       */
                                   });
             });
+
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = "https://dev-723797.okta.com/oauth2/default";
+                    options.Audience = "api://default";
+                    options.RequireHttpsMetadata = false;
+                }
+            );
+
             services.AddScoped<IClinicRepository, ClinicRepository>();
         }
 
@@ -79,6 +115,8 @@ namespace VirtualClinic.Api
             app.UseRouting();
 
             app.UseCors(MyAllowSpecificOrigins);
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

@@ -7,6 +7,8 @@ namespace VirtualClinic.Domain.Models
     public class Prescription
     {
         public int Id { get; set; }
+        public int PatientId { get; set; }
+        public int DoctorId { get; set; }
         public Patient Patient { get; set; }
         public Doctor Doctor { get; set; }
         public string Info { get; set; }
@@ -24,6 +26,13 @@ namespace VirtualClinic.Domain.Models
         public Prescription(int id, string info, string drugName, Patient patient = null, Doctor doctor = null)
         {
             Id = id;
+            Info = info;
+            DrugName = drugName;
+            Patient = patient;
+            Doctor = doctor;
+        }
+        public Prescription(string info, string drugName, Patient patient = null, Doctor doctor = null)
+        {
             Info = info;
             DrugName = drugName;
             Patient = patient;
