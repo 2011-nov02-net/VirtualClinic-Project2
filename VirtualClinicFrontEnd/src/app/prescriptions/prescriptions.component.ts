@@ -20,11 +20,11 @@ export class PrescriptionsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getPrescription();
+    this.getPatientsPrescriptions(1);
   }
 
-  getPrescription(): void {
-    this.prescriptionService.getPrescriptions()
+  getPatientsPrescriptions(id: number): void {
+    this.prescriptionService.getPatientPrescriptions(id)
     .then(prescriptions => {
       this.prescriptions = prescriptions
     })

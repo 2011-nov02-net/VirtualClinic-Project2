@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Patient } from '../models/patient';
 import { ActivatedRoute } from '@angular/router';
@@ -11,7 +11,7 @@ import { PatientDetailsService } from '../services/patient-details.service';
   styleUrls: ['./patient-details.component.scss']
 })
 export class PatientDetailsComponent implements OnInit {
-  patient: Patient | undefined;
+  @Input()patient: Patient | undefined;
 
 
   constructor(
