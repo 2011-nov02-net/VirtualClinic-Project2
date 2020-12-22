@@ -25,29 +25,29 @@ INSERT INTO Clinic.Vitals (Systolic, Diastolic, HeartRate,Temperature, Pain) VAL
        (123, 65, 83,98.1, 4);
 
 INSERT INTO Clinic.PatientReports (PatientId, Information, ReportTime, VitalsId) VALUES
-       (1, 'Lorem Ipsum1', GetDate(), 5),
-       (2, 'Lorem Ipsum2', GetDate(), 6),
-       (3, 'Lorem Ipsum3', GetDate(), 7),
-       (4, 'Lorem Ipsum4', GetDate(), 8),
-       (5, 'Lorem Ipsum5', GetDate(), 9),
-       (6, 'Lorem Ipsum1', GetDate(), 10),
-       (1, 'Lorem Ipsum1', GetDate(), NULL),
-       (2, 'Lorem Ipsum6', GetDate(), NULL);
+       (13, 'Lorem Ipsum1', GetDate(), 1),
+       (14, 'Lorem Ipsum2', GetDate(), 2),
+       (15, 'Lorem Ipsum3', GetDate(), 3),
+       (16, 'Lorem Ipsum4', GetDate(), 4),
+       (17, 'Lorem Ipsum5', GetDate(), 5),
+       (18, 'Lorem Ipsum1', GetDate(), 6),
+       (13, 'Lorem Ipsum1', GetDate(), NULL),
+       (14, 'Lorem Ipsum6', GetDate(), NULL);
 
 INSERT INTO Clinic.Prescriptions (PatientId, DoctorId, Drug, Information, [Date]) VALUES
-       (1, 1,'Levothyroxine','Lorem Ipsum1' , GETDATE()),
-       (2, 2,'Lisinopril','Lorem Ipsum2' , GETDATE()),
-       (3, 3,'Omeprazole','Lorem Ipsum3' , GETDATE()),
-       (1, 1,'Albuterol','Lorem Ipsum4' , GETDATE()),
-       (2, 2,'Simvastatin','Lorem Ipsum5' , GETDATE());
+       (13, 1,'Levothyroxine','Lorem Ipsum1' , GETDATE()),
+       (14, 2,'Lisinopril','Lorem Ipsum2' , GETDATE()),
+       (15, 3,'Omeprazole','Lorem Ipsum3' , GETDATE()),
+       (13, 1,'Albuterol','Lorem Ipsum4' , GETDATE()),
+       (14, 2,'Simvastatin','Lorem Ipsum5' , GETDATE());
 
 INSERT INTO Clinic.Appointments (Notes, DoctorId, PatientId, VitalsId, [Start], [End])   VALUES
-       ('Lorem Ipsum1',1, 1, 5, '2020-12-20 12:30:00', '2020-12-20 13:00:00'),
-       ('Lorem Ipsum2',2, 2, 6, '2020-12-20 9:30:00', '2020-12-20 11:00:00'), 
-       ('Lorem Ipsum3',3, 3, 7, '2020-12-20 12:30:00', '2020-12-20 13:00:00'), 
-       ('Lorem Ipsum4',4, 4, 8, '2020-12-20 12:00:00', '2020-12-20 13:00:00'), 
-       ('Lorem Ipsum5',1, 1, 9, '2020-12-26 12:30:00', '2020-12-26 13:00:00'), 
-       ('Lorem Ipsum6',2, 2, 10, '2020-12-30 12:30:00', '2020-12-30 13:00:00');
+       ('Lorem Ipsum1',1, 13, 1, '2020-12-20 12:30:00', '2020-12-20 13:00:00'),
+       ('Lorem Ipsum2',2, 14, 2, '2020-12-20 9:30:00', '2020-12-20 11:00:00'), 
+       ('Lorem Ipsum3',3, 15, 3, '2020-12-20 12:30:00', '2020-12-20 13:00:00'), 
+       ('Lorem Ipsum4',4, 16, 4, '2020-12-20 12:00:00', '2020-12-20 13:00:00'), 
+       ('Lorem Ipsum5',1, 17, 5, '2020-12-26 12:30:00', '2020-12-26 13:00:00'), 
+       ('Lorem Ipsum6',2, 18, 6, '2020-12-30 12:30:00', '2020-12-30 13:00:00');
 
 INSERT INTO Clinic.Timeslots (DoctorId, AppointmentId, [Start], [End])  VALUES
        (1,8, '2020-12-20 12:30:00', '2020-12-20 13:00:00'),
@@ -66,5 +66,8 @@ select * from Clinic.Patients
 select * from Clinic.Timeslots
 select * from Clinic.Vitals
 select * from Clinic.Prescriptions
+select * from Clinic.Users
 
 delete from Clinic.Appointments
+delete from Clinic.Patients
+delete from Clinic.Prescriptions
