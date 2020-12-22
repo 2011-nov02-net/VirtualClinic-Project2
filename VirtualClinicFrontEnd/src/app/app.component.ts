@@ -14,6 +14,8 @@ export class AppComponent implements OnInit {
   title = 'VirtualClinicFrontEnd';
   isAuthenticated = false;
 
+  username = "Not Logged In"
+
   links = [
     /*{titel: link display text, }
      * fragment: url fragment. shows up as "#fragment" appended at the end,
@@ -47,7 +49,12 @@ export class AppComponent implements OnInit {
       this.isAuthenticated = isAuthenticated;
       if (isAuthenticated) {
         this.oktaAuth.getUser().then(console.log);
+        this.username = this.oktaAuth.getUser().then();
       }
+    }
+
+    setUsername(user){
+      this.username = user.email;
     }
   
     login() {
