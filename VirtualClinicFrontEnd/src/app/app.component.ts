@@ -19,8 +19,8 @@ export class AppComponent implements OnInit {
      * fragment: url fragment. shows up as "#fragment" appended at the end,
      * page: the page to route to}
      */
-    { title: 'Doctors', fragment: ' ', page:"Doctors" },
-    { title: 'Patients', fragment: ' ', page:"Patients" }
+    { title: 'Doctors', fragment: '', page:"Doctors" },
+    { title: 'Patients', fragment: '', page:"Patients" }
   ];
 
   //https://ng-bootstrap.github.io/#/components/nav/overview#routing

@@ -9,6 +9,8 @@ import { PatientsComponent } from '../app/patients/patients.component';
 const routes: Routes = [
   { path: 'Doctors/:id', component: DoctorsComponent },
   { path: 'Patients/:id', component: PatientsComponent},
+  { path: 'Doctors', component: DoctorsComponent },
+  { path: 'Patients', component: PatientsComponent},
   { path: 'login/callback', component: OktaCallbackComponent }
 ];
 
