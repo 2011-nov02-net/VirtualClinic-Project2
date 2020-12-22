@@ -13,6 +13,7 @@ export class PatientDetailComponent implements OnInit {
   constructor() { 
     this.patient = {
       id : -1,
+      name: "name",
       insuranceProvider: "na",
       reports: [],
       prescriptions: [],

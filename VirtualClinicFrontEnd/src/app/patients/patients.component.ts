@@ -13,7 +13,7 @@ import { PatientsService } from '../services/patients.service';
 })
 
 export class PatientsComponent implements OnInit {
-   @Input() patient: Patient | undefined;
+   patient: Patient | undefined;
    selectedPrescrition: Prescription | undefined;
    selectedReport: PatientReports | undefined;
   constructor(
