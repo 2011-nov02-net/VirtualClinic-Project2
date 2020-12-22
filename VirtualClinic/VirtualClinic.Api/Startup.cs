@@ -6,11 +6,15 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using VirtualClinic.DataModel;
+using VirtualClinic.Domain.Interfaces;
+using VirtualClinic.Domain.Repositories;
 
 namespace VirtualClinic.Api
 {
@@ -33,7 +37,8 @@ namespace VirtualClinic.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddDbContext<ClinicDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("default")));
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -49,6 +54,7 @@ namespace VirtualClinic.Api
                                                           "http://www.contoso.com");
                                   });
             });
+            services.AddScoped<IClinicRepository, ClinicRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
