@@ -4,6 +4,7 @@ import { Prescription } from "./prescription";
 
 export interface Patient{
     id : number;
+    name: string;
     insuranceProvider: string;
     reports: PatientReports[];
     prescriptions: Prescription[];
