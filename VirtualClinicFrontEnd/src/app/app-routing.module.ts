@@ -5,7 +5,6 @@ import { DoctorsComponent } from '../app/doctors/doctors.component';
 import { PatientDetailComponent} from '../app/patient-detail/patient-detail.component';
 import { LogInComponent } from './log-in/log-in.component';
 import { OktaCallbackComponent } from '@okta/okta-angular';
-import { DoctorsComponent} from '../app/doctors/doctors.component';
 import { PatientsComponent } from '../app/patients/patients.component';
 
 
@@ -23,7 +22,6 @@ const routes: Routes = [
   imports: [
     RouterModule.forRoot(routes)
   ],
-  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

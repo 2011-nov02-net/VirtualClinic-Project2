@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { OktaAuthModule, OKTA_CONFIG } from '@okta/okta-angular/';
 
 import { AppComponent } from './app.component';
@@ -13,7 +12,6 @@ import { TimeslotsComponent } from './timeslots/timeslots.component';
 import { PrescriptionsComponent } from './prescriptions/prescriptions.component';
 import { PatientsComponent } from './patients/patients.component';
 import { VitalsComponent } from './vitals/vitals.component';
-import { DoctorsComponent } from './doctors/doctors.component';
 import { HttpClientModule } from '@angular/common/http';
 
 

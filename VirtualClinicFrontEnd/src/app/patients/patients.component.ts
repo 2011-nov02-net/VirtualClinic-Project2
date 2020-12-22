@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Patient } from '../models/patient';
 import { Prescription } from '../models/prescription';
 import { PatientReports } from '../models/patientreport';
@@ -11,8 +11,9 @@ import { PatientsService } from '../services/patients.service';
   templateUrl: './patients.component.html',
   styleUrls: ['./patients.component.scss']
 })
+
 export class PatientsComponent implements OnInit {
-   patient: Patient | undefined;
+   @Input() patient: Patient | undefined;
    selectedPrescrition: Prescription | undefined;
    selectedReport: PatientReports | undefined;
   constructor(
