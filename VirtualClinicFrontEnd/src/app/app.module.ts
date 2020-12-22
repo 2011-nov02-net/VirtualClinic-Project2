@@ -29,7 +29,7 @@ const config = {
   redirectUri: 'http://localhost:4200/login/callback',
   scopes: ['openid', 'profile', 'email'],
   pkce: true
-};
+}; 
 
 
 @NgModule({
