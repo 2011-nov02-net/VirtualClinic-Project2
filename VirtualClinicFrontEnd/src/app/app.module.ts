@@ -49,4 +49,6 @@ const config = {
   providers: [ { provide: OKTA_CONFIG, useValue: config }],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule { 
+  static globalBaseURL: string = 'https://localhost:44317/api/';
+}
