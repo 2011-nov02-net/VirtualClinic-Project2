@@ -5,7 +5,6 @@ import { OktaAuthModule, OKTA_CONFIG } from '@okta/okta-angular/';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DoctorsComponent } from './doctors/doctors.component';
-import { LogInComponent } from './log-in/log-in.component';
 import { AppRoutingModule } from './app-routing.module';
 import { StyletestsComponent } from './styletests/styletests.component';
 import { TimeslotsComponent } from './timeslots/timeslots.component';
@@ -35,7 +34,6 @@ const config = {
 @NgModule({
   declarations: [
     AppComponent,
-    LogInComponent,
     StyletestsComponent,
     TimeslotsComponent,
     PrescriptionsComponent,
