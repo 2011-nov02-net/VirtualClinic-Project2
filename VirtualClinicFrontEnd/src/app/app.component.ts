@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { OktaAuthService} from '@okta/okta-angular';
 import { environment } from 'src/environments/environment';
 import { User } from './models/user'
+import { UsertypeService } from './usertype.service';
 
 
 @Component({
@@ -14,30 +15,21 @@ import { User } from './models/user'
 export class AppComponent implements OnInit {
   title = 'VirtualClinicFrontEnd';
   isAuthenticated = false;
-
   username:string = "Unknown"
 
-  links = [
-    /*{titel: link display text, }
-     * fragment: url fragment. shows up as "#fragment" appended at the end,
-     * page: the page to route to}
-     */
-    { title: 'Doctors', fragment: '', page:"Doctors" },
-    { title: 'Patients', fragment: '', page:"Patients" }
-  ];
 
   //https://ng-bootstrap.github.io/#/components/nav/overview#routing
   //gives the component a ref to the active route for the nav
   constructor(
     public route: ActivatedRoute,
-    private oktaAuth: OktaAuthService
+    private oktaAuth: OktaAuthService,
+    private userType: UsertypeService
     /*, private api service*/) 
     {    
       this.oktaAuth.$authenticationState.subscribe((isAuthenticated) =>
         this.updateAuthState(isAuthenticated)
       );
     }
-
 
     ngOnInit(): void {
       this.oktaAuth
@@ -71,5 +63,20 @@ export class AppComponent implements OnInit {
   
     logout() {
       this.oktaAuth.signOut();
+    }
+
+
+
+      /*{title: link display text, }
+     * fragment: url fragment. shows up as "#fragment" appended at the end,
+     * page: the page to route to}
+     */
+    getLinks(){
+      if(this.userType.IsDoctor()){
+        return [{ title: 'Patients', fragment: '', page:"Patients" },
+                { title: 'Doctors', fragment: '', page:"Doctors" }] ;
+      } else {
+        return [{ title: 'Doctors', fragment: '', page:"Doctors" }];
+      }
     }
 }
