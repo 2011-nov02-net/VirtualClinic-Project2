@@ -47,7 +47,7 @@ steps:
   displayName: 'dotnet Test Build- $(buildConfiguration)'
   inputs:
     command: 'test'
-    projects: '$(System.DefaultWorkingDirectory)/VirtualClinic/VirtualClinic.Tests.csproj'
+    projects: '$(System.DefaultWorkingDirectory)/VirtualClinic'
     arguments: '--configuration $(buildConfiguration)'
     testRunTitle: 'Unit Tests'
 
