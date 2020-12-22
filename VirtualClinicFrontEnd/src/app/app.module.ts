@@ -14,6 +14,8 @@ import { PatientsComponent } from './patients/patients.component';
 import { VitalsComponent } from './vitals/vitals.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { UpperCasePipe } from '@angular/common';
+
 
 
 
@@ -42,6 +44,7 @@ const config = {
     VitalsComponent
   ],
   imports: [
+    UpperCasePipe,
     NgbModule,
     FormsModule,
     BrowserModule,

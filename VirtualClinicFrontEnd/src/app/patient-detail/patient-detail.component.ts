@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { UpperCasePipe } from '@angular/common';
 import { DoctorsComponent } from '../doctors/doctors.component';
 import { Patient } from '../models/patient';
 import { Doctor } from '../models/doctor';

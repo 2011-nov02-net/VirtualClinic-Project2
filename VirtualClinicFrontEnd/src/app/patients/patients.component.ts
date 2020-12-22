@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { PatientsService } from '../services/patients.service';
 
+
 @Component({
   selector: 'app-patients',
   templateUrl: './patients.component.html',
