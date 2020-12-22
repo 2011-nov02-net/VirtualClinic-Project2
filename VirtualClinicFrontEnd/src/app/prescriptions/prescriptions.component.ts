@@ -10,7 +10,7 @@ import { PrescriptionsService} from '../services/prescriptions.service'
   styleUrls: ['./prescriptions.component.scss']
 })
 export class PrescriptionsComponent implements OnInit {
-  prescription: Prescription | undefined;
+  prescriptions: Prescription[] | undefined;
 
    
   constructor(
@@ -20,13 +20,13 @@ export class PrescriptionsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getPrescriptionById(1);
+    this.getPrescription();
   }
 
-  getPrescriptionById(id: number): void {
-    this.prescriptionService.getPrescriptionById(id)
-    .then(prescription => {
-      this.prescription = prescription
+  getPrescription(): void {
+    this.prescriptionService.getPrescriptions()
+    .then(prescriptions => {
+      this.prescriptions = prescriptions
     })
   }
 

@@ -1,28 +1,12 @@
 <p>patients works!</p>
 
-<div *ngIf="patient">
-    <h2>{{patient.name | uppercase}} Details</h2>
-    <h3><span>id: </span>{{patient.id}}</h3>
-    <h3><span>Name: </span>{{patient.name}}</h3>
-    <h3><span>Doctor: </span>{{patient.doctor.name}}</h3>
-    <h3><span>Birthdate: </span>{{patient.birthday}}</h3>
-    <h3><span>SSN: </span>{{patient.ssn}}</h3>
+<div *ngIf="patients">
     <div>
-        <h2>My Prescriptions</h2>
-        <ul class="prescription">
-            <li *ngFor="let prescription of patient.prescriptions">
-                <a routerLink="/Prescriptions/{{prescription.id}}">
-                    <span class="badge">{{prescription.id}}:</span> {{prescription.drugName}}
-                </a>
-            </li>
-        </ul>
-    </div>
-    <div>
-        <h2>My Reports</h2>
-        <ul class="reports">
-            <li *ngFor="let report of patient.reports">
-                <a routerLink="/Reports/{report.id}}">
-                    <span class="badge">{{report.id}}</span> {{report.info}}
+    <h1>List of Patients</h1>
+        <ul class="patients">
+            <li *ngFor="let patient of patients">
+                <a routerLink="/Patient/{{patient.id}}">
+                    <span class="badge">{{patient.id}}:</span> {{patient.name}}
                 </a>
             </li>
         </ul>

@@ -1,18 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Patient } from '../models/patient';
-import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PatientsService {
-  private baseUrl = 'https://localhost:44317/api/'
+export class PatientDetailsService {
+  private baseUrl = 'https://localhost:44317/api/';
   constructor(private http: HttpClient) { }
 
- /** GET patients from the server */
- getPatients(): Promise<Patient[]>{
-  return this.http.get<Patient[]>(`${this.baseUrl}/Patients/`).toPromise();
+   /** GET patient from the server */
+ getPatientByID(id: number): Promise<Patient>{
+  return this.http.get<Patient>(`${this.baseUrl}/Patients/${id}`).toPromise();
 }
 
 /** POST Patient to the server */

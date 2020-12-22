@@ -15,6 +15,7 @@ import { VitalsComponent } from './vitals/vitals.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { UpperCasePipe } from '@angular/common';
+import { PatientDetailsComponent } from './patient-details/patient-details.component';
 
 
 
@@ -41,7 +42,8 @@ const config = {
     PrescriptionsComponent,
     PatientsComponent,
     DoctorsComponent,
-    VitalsComponent
+    VitalsComponent,
+    PatientDetailsComponent
   ],
   imports: [
     NgbModule,

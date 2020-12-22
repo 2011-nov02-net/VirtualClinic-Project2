@@ -10,13 +10,14 @@ export class PrescriptionsService {
   private baseUrl = 'https://localhost:44317/api/'
   constructor(private http: HttpClient) { }
 
- /** GET Prescription  from the server */
- getPrescriptionById(id: number): Promise<Prescription>{
-  return this.http.get<Prescription>(`${this.baseUrl}/Prescriptions/${id}`).toPromise();
+ /** GET Prescriptions  from the server */
+ getPrescriptions(): Promise<Prescription[]>{
+  return this.http.get<Prescription[]>(`${this.baseUrl}/Prescriptions/`).toPromise();
 }
 
 /** POST Prescription to the server */
-postPatient(prescription: Prescription): Promise<Prescription> {
+postPrescription(prescription: Prescription): Promise<Prescription> {
   return this.http.post<Prescription>(`${this.baseUrl}/Prescriptions/`, prescription).toPromise();
 }
+
 }
