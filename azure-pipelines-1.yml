@@ -1,6 +1,11 @@
 trigger:
-- master
-
+ branches:
+   include:
+     - master
+ paths:
+  include:
+    - VirtualClinicFrontEnd 
+    
 pr:
 - master
 
@@ -24,25 +29,6 @@ steps:
   displayName: ng build
   workingDirectory: $(appDir)
 
-- task: SonarCloudPrepare@1
-  inputs:
-    SonarCloud: 'SonarCloud Project 2'
-    organization: '2011-nov02-net'
-    scannerMode: 'CLI'
-    configMode: 'manual'
-    cliProjectKey: '2011-nov02-net_VirtualClinic-Project2'
-    cliProjectName: 'VirtualClinic-Project2'
-    cliProjectVersion: '1.0.0'
-    cliSources: '$(appDir)/src,$(appDir)/e2e'
-    extraProperties: 'sonar.coverage.exclusions=**/*.spec.ts,$(appDir)/e2e/**/*'
-
-- task: SonarCloudAnalyze@1
-  displayName: sonarcloud run
-
-- task: SonarCloudPublish@1
-  displayName: sonarcloud publish
-  inputs:
-    pollingTimeoutSec: '300'
 - task: AzureRmWebAppDeployment@4
   displayName: azure app service deploy
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
