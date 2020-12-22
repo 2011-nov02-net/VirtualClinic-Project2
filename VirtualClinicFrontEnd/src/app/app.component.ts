@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { OktaAuthService } from '@okta/okta-angular';
+import { OktaAuthService} from '@okta/okta-angular';
 import { environment } from 'src/environments/environment';
+import { User } from './models/user'
 
 
 @Component({
@@ -14,7 +15,7 @@ export class AppComponent implements OnInit {
   title = 'VirtualClinicFrontEnd';
   isAuthenticated = false;
 
-  username = "Not Logged In"
+  username:string = "Unknown"
 
   links = [
     /*{titel: link display text, }
@@ -47,13 +48,20 @@ export class AppComponent implements OnInit {
 
     updateAuthState(isAuthenticated: boolean) {
       this.isAuthenticated = isAuthenticated;
-      if (isAuthenticated) {
+      this.updateuserinfo();
+    }
+
+    async updateuserinfo(){
+      if (this.isAuthenticated) {
         this.oktaAuth.getUser().then(console.log);
-        this.username = this.oktaAuth.getUser().then();
+        const userClaims = this.oktaAuth.getUser();
+        const realClaims  = (await userClaims);
+
+        this.setUsername(realClaims)
       }
     }
 
-    setUsername(user){
+    setUsername(user : UserClaims){
       this.username = user.email;
     }
   

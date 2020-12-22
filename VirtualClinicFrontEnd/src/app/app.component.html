@@ -12,6 +12,9 @@
                     <a ngbNavLink routerLink="{{link.page}}" [fragment]="link.fragment" class="nav-link text-dark">{{ link.title }}</a>
                 </li>
 
+                <li>
+                    <p *ngIf="isAuthenticated" class="nav-link text-dark"> | {{username}}</p>
+                </li>
                 <li class="nav-item">
                     <button *ngIf="!isAuthenticated" (click)="login()" class="btn btn-primary float-right">Login</button>
                     <button *ngIf="isAuthenticated" (click)="logout()" class="btn btn-primary float-right">Logout</button>
