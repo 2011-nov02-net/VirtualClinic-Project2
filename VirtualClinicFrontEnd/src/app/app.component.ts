@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { OktaAuthService} from '@okta/okta-angular';
-import { environment } from 'src/environments/environment';
 import { User } from './models/user'
 import { UsertypeService } from './usertype.service';
 
@@ -53,7 +52,7 @@ export class AppComponent implements OnInit {
       }
     }
 
-    setUsername(user : UserClaims){
+    setUsername(user:any){
       this.username = user.email;
     }
   
@@ -71,12 +70,26 @@ export class AppComponent implements OnInit {
      * fragment: url fragment. shows up as "#fragment" appended at the end,
      * page: the page to route to}
      */
-    getLinks(){
-      if(this.userType.IsDoctor()){
+    getLinks() :  NavBarLink[]{
+      var usernum : Number = this.userType.GetUserEnum();
+      if(usernum === 2){
+        //doctor, 2
         return [{ title: 'Patients', fragment: '', page:"Patients" },
-                { title: 'Doctors', fragment: '', page:"Doctors" }] ;
-      } else {
+        { title: 'Doctors', fragment: '', page:"Doctors" }] ;
+      } else if(usernum === 1){
+        //patient, 1
         return [{ title: 'Doctors', fragment: '', page:"Doctors" }];
+      } else {
+        //not logged in, 0
+        return[{title: "Please log in!", fragment:'', page:''}]
       }
     }
 }
+
+
+interface NavBarLink{
+  title: string,
+  fragment: string | undefined
+  page: string | undefined
+}
+
