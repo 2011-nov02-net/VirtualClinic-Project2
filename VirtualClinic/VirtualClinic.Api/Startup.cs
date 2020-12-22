@@ -64,7 +64,7 @@ namespace VirtualClinic.Api
                                   builder =>
                                   {
                                       builder.WithOrigins("http://localhost:4200/",
-                                                          "http://www.contoso.com")
+                                                          "http://localhost:4312")
                                       .AllowAnyMethod()
                                       .AllowCredentials()
                                       .AllowAnyHeader();
