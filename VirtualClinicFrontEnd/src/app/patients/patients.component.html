@@ -2,23 +2,17 @@
 
 <div *ngIf="patient">
     <h2>{{patient.name | uppercase}} Details</h2>
-    <div><span>id: </span>{{patient.id}}</div>
-    <div>
-      <label>name:
-        <!-- <input [(ngModel)]="patient.name" placeholder="name"/> -->
-      </label>
-      <span>Name: </span>{{patient.name}}
-      <span>Doctor: </span>{{patient.doctor.name}}
-      <span>Birthdate: </span>{{patient.birthday}}
-      <span>SSN: </span>{{patient.ssn}}
-    </div>
+    <h3><span>id: </span>{{patient.id}}</h3>
+    <h3><span>Name: </span>{{patient.name}}</h3>
+    <h3><span>Doctor: </span>{{patient.doctor.name}}</h3>
+    <h3><span>Birthdate: </span>{{patient.birthday}}</h3>
+    <h3><span>SSN: </span>{{patient.ssn}}</h3>
     <div>
         <h2>My Prescriptions</h2>
         <ul class="prescription">
             <li *ngFor="let prescription of patient.prescriptions" >
                 <a routerLink="/Prescriptions/{{prescription.id}}">
-                    <span class="badge" >{{prescription.id}}:</span> 
-                    <!-- {{patient.prescriptions.drugName}} -->
+                    <span class="badge" >{{prescription.id}}:</span> {{prescription.drugName}}
                 </a>
             </li>
         </ul>
