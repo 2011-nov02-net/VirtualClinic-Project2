@@ -50,8 +50,15 @@ namespace VirtualClinic.Api
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                                   builder =>
                                   {
-                                      builder.WithOrigins("http://example.com",
-                                                          "http://www.contoso.com");
+                                      builder.WithOrigins("https://localhost")
+                                      /*******
+                                       * ******
+                                       * ******
+                                       * DO NOT LET THIS MAKE IT TO LIVE BUILD */
+                                      .AllowAnyOrigin(); 
+                                      /**********
+                                       * ********
+                                       * *****/
                                   });
             });
             services.AddScoped<IClinicRepository, ClinicRepository>();
