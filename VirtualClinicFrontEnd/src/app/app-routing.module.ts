@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { DoctorsComponent } from '../app/doctors/doctors.component';
-import { LogInComponent } from './log-in/log-in.component';
 import { OktaCallbackComponent } from '@okta/okta-angular';
 import { PatientsComponent } from '../app/patients/patients.component';
 
