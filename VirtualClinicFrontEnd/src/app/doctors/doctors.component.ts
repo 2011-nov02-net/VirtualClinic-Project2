@@ -5,7 +5,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { DoctorsService } from '../services/doctors.service';
 
-
 @Component({
   selector: 'app-doctors',
   templateUrl: './doctors.component.html',
