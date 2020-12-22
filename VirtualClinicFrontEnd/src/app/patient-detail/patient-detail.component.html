@@ -1,12 +1,12 @@
 <div *ngIf="patient">
 
-    <h2>{{patient.name | uppercase}} Details</h2>
-    <div><span>id: </span>{{patient.id}}</div>
-    <div>
-      <!-- <label>name:
+  <h2>{{patient.name | uppercase}} Details</h2>
+  <div><span>id: </span>{{patient.id}}</div>
+  <div>
+    <!-- <label>name:
         <input [(ngModel)]="patient.name" placeholder="name"/>
       </label> -->
-      <span>Name: </span>{{patient.name}}
-    </div>
-    <button (click)="goBack()">go back</button>
+    <span>Name: </span>{{patient.name}}
   </div>
+  <button (click)="goBack()">go back</button>
+</div>

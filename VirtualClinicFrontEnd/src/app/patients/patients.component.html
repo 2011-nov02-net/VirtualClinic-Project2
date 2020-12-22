@@ -10,9 +10,9 @@
     <div>
         <h2>My Prescriptions</h2>
         <ul class="prescription">
-            <li *ngFor="let prescription of patient.prescriptions" >
+            <li *ngFor="let prescription of patient.prescriptions">
                 <a routerLink="/Prescriptions/{{prescription.id}}">
-                    <span class="badge" >{{prescription.id}}:</span> {{prescription.drugName}}
+                    <span class="badge">{{prescription.id}}:</span> {{prescription.drugName}}
                 </a>
             </li>
         </ul>
@@ -20,12 +20,12 @@
     <div>
         <h2>My Reports</h2>
         <ul class="reports">
-            <li *ngFor="let report of patient.reports" >
+            <li *ngFor="let report of patient.reports">
                 <a routerLink="/Reports/{report.id}}">
-                    <span class="badge" >{{report.id}}</span> {{report.info}}
+                    <span class="badge">{{report.id}}</span> {{report.info}}
                 </a>
             </li>
         </ul>
     </div>
     <button (click)="goBack()">go back</button>
-  </div>
+</div>

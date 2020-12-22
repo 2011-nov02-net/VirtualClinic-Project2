@@ -1,1 +1,12 @@
 <p>prescriptions works!</p>
+<div *ngIf="prescription">
+    <div>
+        <h2>{{prescription.patient.name | uppercase}} Details</h2>
+        <h3><span>Doctor: </span>{{prescription.doctor.name}}</h3>
+        <h3><span>Prescripton Id:</span> {{prescription.id}}</h3>
+        <h3><span>Prescription Name: </span>{{prescription.drugName}}</h3>
+    </div>
+    <div>
+        Instructions: {{prescription.info}}
+    </div>
+</div>

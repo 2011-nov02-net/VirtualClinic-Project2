@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { DoctorsComponent } from '../doctors/doctors.component';
+import { Location } from '@angular/common';
 import { Patient } from '../models/patient';
 import { Doctor } from '../models/doctor';
 
@@ -10,7 +11,9 @@ import { Doctor } from '../models/doctor';
 })
 export class PatientDetailComponent implements OnInit {
   @Input() patient: Patient;
-  constructor() { 
+  constructor(
+    private location: Location,
+  ) { 
     this.patient = {
       id : -1,
       name: "name",
@@ -32,4 +35,8 @@ export class PatientDetailComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  
+  goBack(): void {
+    this.location.back();
+  }
 }
