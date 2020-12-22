@@ -29,8 +29,9 @@ namespace VirtualClinic.Api.Controllers
                 var type = await _repo.GetAuthTypeAsync(search_email);
                 return Ok(type);
             }
-            catch
+            catch (ArgumentException e)
             {
+                _logger.LogError(e.Message);
                 return NotFound();
             }
         }
