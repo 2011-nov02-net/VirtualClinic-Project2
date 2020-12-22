@@ -25,7 +25,11 @@ export class PatientsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.getPatientByID(1);
   }
+
+
+
   getPatientByID(id: number): void {
     this.patientService.getPatientByID(id)
       .then(patient => {
