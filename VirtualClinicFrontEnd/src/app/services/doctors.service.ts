@@ -4,6 +4,7 @@ import { Doctor } from '../models/doctor';
 import { Observable } from 'rxjs';
 import { AppModule } from '../app.module';
 import { environment } from 'src/environments/environment';
+import { Appointment } from '../models/appointment';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +18,8 @@ export class DoctorsService {
   getDoctorByID(id: number): Promise<Doctor> {
     return this.http.get<Doctor>(`${this.baseUrl}/Doctors/${id}`).toPromise();
   }
-  
-  getDocotrs(): Promise<Doctor[]> {
+
+  getDoctors(): Promise<Doctor[]> {
     return this.http.get<Doctor[]>(`${this.baseUrl}/Doctors`).toPromise();
   }
 }
