@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Patient } from '../models/patient';
 import { Prescription } from '../models/prescription';
 import { PatientReports } from '../models/patientreport';
@@ -13,7 +14,7 @@ import { PatientsService } from '../services/patients.service';
 })
 
 export class PatientsComponent implements OnInit {
-   patient: Patient | undefined;
+   @Input() patient: Patient | undefined;
    selectedPrescrition: Prescription | undefined;
    selectedReport: PatientReports | undefined;
   constructor(
