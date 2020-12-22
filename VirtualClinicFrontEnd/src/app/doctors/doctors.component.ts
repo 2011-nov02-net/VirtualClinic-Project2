@@ -1,36 +1,35 @@
 import { Component, OnInit } from '@angular/core';
-import { Doctor } from '../doctor';
-import { Patient}  from '../patient';
-import { SharedService} from '../shared.service';
+import { Doctor } from '../models/doctor';
+import { Patient }  from '../models/patient';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { DoctorsService } from '../services/doctors.service';
 
 @Component({
   selector: 'app-doctors',
   templateUrl: './doctors.component.html',
-  styleUrls: ['./doctors.component.css']
+  styleUrls: ['./doctors.component.scss']
 })
 export class DoctorsComponent implements OnInit {
-  doctor: Doctor | undefined;
-   
+  doctor : Doctor | undefined;
   selectedPatient : Patient | undefined;
 
   constructor(
-    private sharedService : SharedService,
     private route: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    private doctorService: DoctorsService
     ) { }
 
   ngOnInit(): void {
-    this.getDoctor();
+    this.getDoctorByID(1);
 
   }
 
-
-  getDoctor(): void {
-    const id = +this.route.snapshot.paramMap.get('id');
-    this.sharedService.getDoctor(id)
-      .subscribe(doctor => this.doctor = doctor);
+  getDoctorByID(id: number): void {
+    this.doctorService.getDoctorByID(id)
+      .then(doctor => {
+        this.doctor = doctor;
+      })
   }
 
   onSelect(patient: Patient): void {

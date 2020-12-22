@@ -36,7 +36,7 @@ namespace VirtualClinic.Api.Controllers
         /// <param name="after">
         /// Filter apointments to only be the ones after this date using Linq.
         /// </param>
-        /// <returns>A list of all apointments.</returns>
+        /// <returns>A list of all appointments.</returns>
         [HttpGet]
         public async Task<IActionResult> GetAsync([FromQuery] DateTime? after = null)
         {
@@ -89,12 +89,12 @@ namespace VirtualClinic.Api.Controllers
             return Ok(apointments.ToList());
         }
 
-        // GET api/<ApointmentsController>/5
+        // GET api/<AppointmentsController>/5
         /// <summary>
-        /// Gets the information about an apointment.   
+        /// Gets the information about an Appointment.   
         /// </summary>
-        /// <param name="id"> The apointment's ID</param>
-        /// <returns>The apointments information, 404 not found, or 403 unauthorized</returns>
+        /// <param name="id"> The Appointment's ID</param>
+        /// <returns>The appointments information, 404 not found, or 403 unauthorized</returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
@@ -114,9 +114,9 @@ namespace VirtualClinic.Api.Controllers
             }
         }
 
-        // POST api/<ApointmentsController>
+        // POST api/<AppointmentsController>
         /// <summary>
-        /// If patient, create an apointment, if dr create an open timeslot?
+        /// If patient, create an Appointment, if dr create an open timeslot?
         /// </summary>
         /// <returns>403 unauthorized, some other error for id collision, or CreatedAt</returns>
         [HttpPost]
@@ -132,11 +132,11 @@ namespace VirtualClinic.Api.Controllers
             return CreatedAtAction(nameof(Get), createdApointment);
         }
 
-        // PUT api/<ApointmentsController>/5
+        // PUT api/<AppointmentsController>/5
         /// <summary>
-        /// updates an apointments details
+        /// updates an appointments details
         /// </summary>
-        /// <param name="id">The ID of the apointment</param>
+        /// <param name="id">The ID of the Appointment</param>
         /// <param name="value">The changes to be made</param>
         /// <returns>
         /// 404 not found, 403 unauthorized or something to do with succsess
@@ -156,11 +156,11 @@ namespace VirtualClinic.Api.Controllers
             throw new NotImplementedException("Not Yet Implemented");
         }
 
-        // DELETE api/<ApointmentsController>/5
+        // DELETE api/<AppointmentsController>/5
         /// <summary>
-        /// Cancels an apointment freeing the timeslot.
+        /// Cancels an Appointment freeing the timeslot.
         /// </summary>
-        /// <param name="id">The id of the apointment</param>
+        /// <param name="id">The id of the Appointment</param>
         /// <returns>
         /// OK, 404 not found, or 403 not authroized
         /// </returns>
