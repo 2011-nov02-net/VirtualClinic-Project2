@@ -13,6 +13,7 @@ import { PrescriptionsComponent } from './prescriptions/prescriptions.component'
 import { PatientsComponent } from './patients/patients.component';
 import { VitalsComponent } from './vitals/vitals.component';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -42,6 +43,7 @@ const config = {
   ],
   imports: [
     NgbModule,
+    FormsModule,
     BrowserModule,
     AppRoutingModule,
     OktaAuthModule,
