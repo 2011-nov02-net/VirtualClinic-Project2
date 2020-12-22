@@ -44,7 +44,6 @@ const config = {
     VitalsComponent
   ],
   imports: [
-    UpperCasePipe,
     NgbModule,
     FormsModule,
     BrowserModule,
