@@ -84,6 +84,8 @@ namespace VirtualClinic.Api
                     options.RequireHttpsMetadata = false;
                 }
             );
+
+            services.AddScoped<IClinicRepository, ClinicRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
