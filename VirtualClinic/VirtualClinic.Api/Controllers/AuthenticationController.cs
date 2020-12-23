@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VirtualClinic.Domain.Interfaces;
+using System.Security;
+using System.Security.Claims;
 
 namespace VirtualClinic.Api.Controllers
 {
@@ -33,6 +36,33 @@ namespace VirtualClinic.Api.Controllers
             {
                 _logger.LogError(e.Message);
                 return NotFound();
+            }
+        }
+
+
+        private static readonly string EmailKey = "email";
+        [HttpPut]
+        [Authorize]
+        public async Task<IActionResult> PutNewPatient()
+        {
+            IEnumerable<Claim> userClaims = HttpContext.User.Claims;
+            Claim claim = userClaims.FirstOrDefault();
+
+            if(claim is not null)
+            {
+                if (claim.Properties.ContainsKey(EmailKey))
+                {
+                    var newuser = await _repo.AddAuthorizedPatientAsync(claim.Properties[EmailKey]);
+
+                    return CreatedAtAction(nameof(GetAuth), new { id = newuser.Id }, newuser);
+                } else
+                {
+                    return this.UnprocessableEntity(claim);
+                }
+                
+            } else
+            {
+                return Unauthorized();
             }
         }
     }

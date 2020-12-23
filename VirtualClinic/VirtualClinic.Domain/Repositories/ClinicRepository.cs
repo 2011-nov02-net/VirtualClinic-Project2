@@ -893,6 +893,37 @@ namespace VirtualClinic.Domain.Repositories
             return type.UserType;
         }
 
+
+        /// <summary>
+        /// Currently, this creates a new patient with placeholder values, inserts it into the db, and then creates a new 
+        /// patient type user and inserts that into the db, and returns information on the new user.
+        /// </summary>
+        /// <param name="email">The user's email.</param>
+        /// <returns>the created user object from the db</returns>
+        public async Task<UserModel> AddAuthorizedPatientAsync(string email)
+        {
+            DataModel.User newuser = new DataModel.User();
+
+            newuser.Email = email;
+            newuser.UserType = "patient";
+
+            Models.Patient pat = new Models.Patient(-1, "Dr.", DateTime.Now, "1234-56-678","Unknown Insurance.");
+
+            //should be removed after AddPatientAsynch returns the patient created 
+            //with real id, then update id bellow in commented out code
+            pat.Id = _context.Patients.Max(patient => patient.Id) + 1;
+
+            var newDbPat = AddPatientAsync(pat);
+
+            //uncomment when add patients asynch is added
+            //pat.Id = newDbPat.id;
+            newuser.Id = pat.Id;
+
+            var user = await _context.Users.AddAsync(newuser);
+
+            return new UserModel(newuser.Id, email);
+        }
+
         /*    _    _      _                     
          *   | |  | |    | |                    
          *   | |__| | ___| |_ __   ___ _ __ ___ 

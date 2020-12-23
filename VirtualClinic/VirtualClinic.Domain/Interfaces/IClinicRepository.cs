@@ -80,5 +80,8 @@ namespace VirtualClinic.Domain.Interfaces
         public string GetAuthType(string userEmail);
 
         public Task<string> GetAuthTypeAsync(string userEmail);
+
+        public Task<UserModel> AddAuthorizedPatientAsync(string Email);
+
     }
 }
