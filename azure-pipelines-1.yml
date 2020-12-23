@@ -1,5 +1,3 @@
-variables:
-  appDir: VirtualClinicFrontEnd/
 
 trigger:
      - master
@@ -7,9 +5,11 @@ trigger:
 pr:
 - master
 
+variables:
+  appDir: VirtualClinicFrontEnd
+
 pool:
   vmImage: 'ubuntu-latest'
-
 
 steps:
 - task: NodeTool@0
