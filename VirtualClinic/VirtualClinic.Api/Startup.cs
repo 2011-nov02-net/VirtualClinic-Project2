@@ -62,28 +62,18 @@ namespace VirtualClinic.Api
 
             services.AddCors(options =>
             {
+                
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                                   builder =>
-                                  {
-                                      builder.WithOrigins("https://localhost")
-                                      /*******
-                                       * ******
-                                       * ******
-                                       * DO NOT LET THIS MAKE IT TO LIVE BUILD */
-                                      .AllowAnyOrigin();
-                                      /**********
-                                       * ********
-                                       * *****/
-
-                                      /*addresses on main
-                                        "http://dev-7862904.okta.com",
-                                        "http://theFrontend.com",
-                                        "http://localhost:5000",
-                                        "http://localhost:5001",
-                                        "http://localhost:4200",
-                                        "http://localhost:4200/",
-                                        "http://localhost:44317")
-                                       */
+                                  {                               
+                                      builder.WithOrigins("https://localhost",
+                                            "http://dev-7862904.okta.com",
+                                            "http://theFrontend.com",
+                                            "http://localhost:5000",
+                                            "http://localhost:5001",
+                                            "http://localhost:4200",
+                                            "http://localhost:4200/",
+                                            "http://localhost:44317");
                                   });
             });
 
