@@ -62,17 +62,18 @@ namespace VirtualClinic.Api
 
             services.AddCors(options =>
             {
+                
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                                   builder =>
-                                  {
-                                      builder.WithOrigins("http://dev-7862904.okta.com",
-                                        "http://theFrontend.com",
-                                        "http://localhost:5000",
-                                        "http://localhost:5001",
-                                        "http://localhost:4200",
-                                        "http://localhost:4200/",
-                                        "http://localhost:44317",
-                                        "https://localhost");
+                                  {                               
+                                      builder.WithOrigins("https://localhost",
+                                            "http://dev-7862904.okta.com",
+                                            "http://theFrontend.com",
+                                            "http://localhost:5000",
+                                            "http://localhost:5001",
+                                            "http://localhost:4200",
+                                            "http://localhost:4200/",
+                                            "http://localhost:44317");
                                   });
             });
 

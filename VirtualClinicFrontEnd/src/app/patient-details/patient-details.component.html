@@ -1,0 +1,11 @@
+<p>patient-details works!</p>
+
+<div *ngIf="patient">
+    <h2>{{patient.name | uppercase}} Details</h2>
+    <h3><span>id: </span>{{patient.id}}</h3>
+    <h3><span>Name: </span>{{patient.name}}</h3>
+    <h3><span>Doctor: </span>{{patient.doctor.name}}</h3>
+    <h3><span>Birthdate: </span>{{patient.birthday}}</h3>
+    <h3><span>SSN: </span>{{patient.ssn}}</h3>
+    <div>
+</div>

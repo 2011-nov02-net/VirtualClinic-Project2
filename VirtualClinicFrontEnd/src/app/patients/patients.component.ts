@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { PatientsService } from '../services/patients.service';
 
+
 @Component({
   selector: 'app-patients',
   templateUrl: './patients.component.html',
@@ -14,7 +15,7 @@ import { PatientsService } from '../services/patients.service';
 })
 
 export class PatientsComponent implements OnInit {
-   @Input() patient: Patient | undefined;
+   @Input() patients: Patient[] | undefined;
    selectedPrescrition: Prescription | undefined;
    selectedReport: PatientReports | undefined;
   constructor(
@@ -24,11 +25,15 @@ export class PatientsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.getPatients();
   }
-  getPatientByID(id: number): void {
-    this.patientService.getPatientByID(id)
-      .then(patient => {
-        this.patient = patient;
+
+
+
+  getPatients(): void {
+    this.patientService.getPatients()
+      .then(patients => {
+        this.patients = patients;
       })
   }
 
@@ -36,10 +41,7 @@ export class PatientsComponent implements OnInit {
     this.selectedPrescrition = prescription;
   };
 
-  // onSelect(report: PatientReports): void {
-  //   this.selectedReport = report;
-  // };
-
+  
   goBack(): void {
     this.location.back();
   }
