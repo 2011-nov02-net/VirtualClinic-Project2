@@ -111,7 +111,7 @@ namespace VirtualClinic.Domain.Repositories
         /// Add a patient to the database 
         /// </summary>
         /// <param name="patient">A patient to be added to the database</param>
-        public void AddPatient(Models.Patient patient)
+        public Models.Patient AddPatient(Models.Patient patient)
         {
             //todo: replace with mapper
             var newPatient = new DataModel.Patient
@@ -124,14 +124,15 @@ namespace VirtualClinic.Domain.Repositories
             };
             _context.Patients.Add(newPatient);
             _context.SaveChanges();
-
+            patient.Id = newPatient.Id;
+            return patient;
         }
 
         /// <summary>
         /// Add a patient to the database 
         /// </summary>
         /// <param name="patient">A patient to be added to the database</param>
-        public async Task<bool> AddPatientAsync(Models.Patient patient)
+        public async Task<Models.Patient> AddPatientAsync(Models.Patient patient)
         {
             var newPatient = new DataModel.Patient
             {
@@ -143,7 +144,8 @@ namespace VirtualClinic.Domain.Repositories
             };
             await _context.Patients.AddAsync(newPatient);
             await _context.SaveChangesAsync();
-            return true;
+            patient.Id = newPatient.Id;
+            return patient;
         }
 
         /// <summary>
@@ -331,7 +333,7 @@ namespace VirtualClinic.Domain.Repositories
         /// Adds a doctor to the database
         /// </summary>
         /// <param name="doctor">The doctor to be added to the database</param>
-        public void AddDoctor(Models.Doctor doctor)
+        public Models.Doctor AddDoctor(Models.Doctor doctor)
         {
             var newDoctor = new DataModel.Doctor
             {
@@ -340,13 +342,15 @@ namespace VirtualClinic.Domain.Repositories
             };
             _context.Doctors.Add(newDoctor);
             _context.SaveChanges();
+            doctor.Id = newDoctor.Id;
+            return doctor;
         }
 
         /// <summary>
         /// Adds a doctor to the database
         /// </summary>
         /// <param name="doctor">The doctor to be added to the database</param>
-        public async Task<bool> AddDoctorAsync(Models.Doctor doctor)
+        public async Task<Models.Doctor> AddDoctorAsync(Models.Doctor doctor)
         {
             var newDoctor = new DataModel.Doctor
             {
@@ -355,7 +359,8 @@ namespace VirtualClinic.Domain.Repositories
             };
             await _context.Doctors.AddAsync(newDoctor);
             await _context.SaveChangesAsync();
-            return true;
+            doctor.Id = newDoctor.Id;
+            return doctor;
         }
 
         #endregion
@@ -457,7 +462,7 @@ namespace VirtualClinic.Domain.Repositories
         /// of the given timeslot is already in use on the DB
         /// </exception>
         /// <param name="timeslot">A Model Timeslot </param>
-        public void AddTimeslot(Models.Timeslot timeslot)
+        public Models.Timeslot AddTimeslot(Models.Timeslot timeslot)
         {
             DataModel.Timeslot DBTimeslot = new DataModel.Timeslot();
 
@@ -490,6 +495,8 @@ namespace VirtualClinic.Domain.Repositories
 
             _context.Timeslots.Add(DBTimeslot);
             _context.SaveChanges();
+            timeslot.Id = DBTimeslot.Id;
+            return timeslot;
         }
 
         public async Task<Models.Timeslot> AddTimeslotAsync(Models.Timeslot timeslot)
@@ -524,13 +531,13 @@ namespace VirtualClinic.Domain.Repositories
 
             await _context.Timeslots.AddAsync(DBTimeslot);
             _context.SaveChanges();
-
+            timeslot.Id = DBTimeslot.Id;
             return timeslot;
         }
 
 
 
-        public void AddAppointmentToTimeslot(Models.Appointment appointment, int TimeslotId)
+        public Models.Appointment AddAppointmentToTimeslot(Models.Appointment appointment, int TimeslotId)
         {
             var timeslot = _context.Timeslots.Find(TimeslotId);
 
@@ -554,9 +561,11 @@ namespace VirtualClinic.Domain.Repositories
             _context.Appointments.Add(new_appointment);
             _context.SaveChanges();
             timeslot.AppointmentId = new_appointment.Id;
+            appointment.Id = new_appointment.Id;
             _context.SaveChanges();
+            return appointment;
         }
-        public async Task<Models.Timeslot> AddAppointmentToTimeslotAsync(Models.Appointment appointment, int TimeslotId)
+        public async Task<Models.Appointment> AddAppointmentToTimeslotAsync(Models.Appointment appointment, int TimeslotId)
         {
             var timeslot = await _context.Timeslots.FindAsync(TimeslotId);
 
@@ -580,10 +589,10 @@ namespace VirtualClinic.Domain.Repositories
             await _context.Appointments.AddAsync(new_appointment);
             await _context.SaveChangesAsync();
             timeslot.AppointmentId = new_appointment.Id;
+            appointment.Id = new_appointment.Id;
             await _context.SaveChangesAsync();
 
-
-            return DB_DomainMapper.MapTimeslot(timeslot);
+            return appointment;
         }
         #endregion
 
@@ -704,7 +713,7 @@ namespace VirtualClinic.Domain.Repositories
         /// Add a patient report to the database
         /// </summary>
         /// <param name="report">The report to be added tp the database</param>
-        public void AddPatientReport(Models.PatientReport report)
+        public Models.PatientReport AddPatientReport(Models.PatientReport report)
         {
             var newPatientReport = new DataModel.PatientReport
             {
@@ -718,14 +727,15 @@ namespace VirtualClinic.Domain.Repositories
 
             _context.Add(newPatientReport);
             _context.SaveChanges();
-
+            report.Id = newPatientReport.Id;
+            return report;
         }
 
         /// <summary>
         /// Add a patient report to the database
         /// </summary>
         /// <param name="report">The report to be added tp the database</param>
-        public async Task<bool> AddPatientReportAsync(Models.PatientReport report)
+        public async Task<Models.PatientReport> AddPatientReportAsync(Models.PatientReport report)
         {
             var newPatientReport = new DataModel.PatientReport
             {
@@ -738,7 +748,8 @@ namespace VirtualClinic.Domain.Repositories
 
             await _context.AddAsync(newPatientReport);
             await _context.SaveChangesAsync();
-            return true;
+            report.Id = newPatientReport.Id;
+            return report;
         }
         #endregion
 
@@ -832,12 +843,11 @@ namespace VirtualClinic.Domain.Repositories
             return modelPresciptions;
         }
 
-
         /// <summary>
         /// Add a prescription to the database
         /// </summary>
         /// <param name="prescription">The prescition to be added to the databse</param>
-        public void AddPrescription(Models.Prescription prescription)
+        public Models.Prescription AddPrescription(Models.Prescription prescription)
         {
             var newPrescription = new DataModel.Prescription
             {
@@ -849,15 +859,15 @@ namespace VirtualClinic.Domain.Repositories
 
             _context.Add(newPrescription);
             _context.SaveChanges();
-
+            prescription.Id = newPrescription.Id;
+            return prescription;
         }
-
 
         /// <summary>
         /// Add a prescription to the database
         /// </summary>
         /// <param name="prescription">The prescition to be added to the databse</param>
-        public async Task<bool> AddPrescriptionAsync(Models.Prescription prescription)
+        public async Task<Models.Prescription> AddPrescriptionAsync(Models.Prescription prescription)
         {
             var newPrescription = new DataModel.Prescription
             {
@@ -869,7 +879,8 @@ namespace VirtualClinic.Domain.Repositories
 
             await _context.AddAsync(newPrescription);
             await _context.SaveChangesAsync();
-            return true;
+            prescription.Id = newPrescription.Id;
+            return prescription;
         }
         #endregion
 

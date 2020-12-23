@@ -161,13 +161,12 @@ namespace VirtualClinic.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Patient patient)
         {
-            if (await _clinicRepository.AddPatientAsync(patient))
+            if (await _clinicRepository.AddPatientAsync(patient) is Domain.Models.Patient)
             {
                 return Ok();
             }
             else
             {
-
                 return BadRequest("Request could not be processed.");
             }
         }

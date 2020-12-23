@@ -86,7 +86,7 @@ namespace VirtualClinic.Api.Controllers
 
             //if they do, create the report with the given details.
 
-            if(await _clinicRepository.AddPatientReportAsync(report))
+            if(await _clinicRepository.AddPatientReportAsync(report) is Domain.Models.PatientReport)
             {
                 return Ok();
             }
