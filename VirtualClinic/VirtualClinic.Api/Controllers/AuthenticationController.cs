@@ -35,10 +35,5 @@ namespace VirtualClinic.Api.Controllers
                 return NotFound();
             }
         }
-
-        public IActionResult Index()
-        {
-            return View();
-        }
     }
 }
