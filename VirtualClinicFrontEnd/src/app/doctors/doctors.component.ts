@@ -14,6 +14,7 @@ import { DoctorsService } from '../services/doctors.service';
 export class DoctorsComponent implements OnInit {
   doctor : Doctor | undefined;
   selectedPatient : Patient | undefined;
+  patients: Patient[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -23,7 +24,7 @@ export class DoctorsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getDoctorByID(1);
-
+    this.getDoctorPatients(1);
   }
 
   getDoctorByID(id: number): void {
@@ -35,6 +36,10 @@ export class DoctorsComponent implements OnInit {
 
   onSelect(patient: Patient): void {
     this.selectedPatient = patient;
+  }
+
+  getDoctorPatients(id: number): void {
+    this.doctorService.getDoctorPatients(id).then(patients => { this.patients = patients});
   }
   
   goBack(): void {

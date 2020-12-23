@@ -12,7 +12,7 @@ const routes: Routes = [
   { path: 'Doctors', component: DoctorsComponent },
   { path: 'Patients', component: PatientsComponent},
   { path: 'Patients/:id', component: PatientDetailsComponent},
-  { path: 'Prescritions', component: PrescriptionsComponent},
+  { path: 'Prescriptions', component: PrescriptionsComponent},
   { path: 'login/callback', component: OktaCallbackComponent }
 
 ];
