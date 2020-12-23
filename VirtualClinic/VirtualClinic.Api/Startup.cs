@@ -65,25 +65,14 @@ namespace VirtualClinic.Api
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                                   builder =>
                                   {
-                                      builder.WithOrigins("https://localhost")
-                                      /*******
-                                       * ******
-                                       * ******
-                                       * DO NOT LET THIS MAKE IT TO LIVE BUILD */
-                                      .AllowAnyOrigin();
-                                      /**********
-                                       * ********
-                                       * *****/
-
-                                      /*addresses on main
-                                        "http://dev-7862904.okta.com",
+                                      builder.WithOrigins("http://dev-7862904.okta.com",
                                         "http://theFrontend.com",
                                         "http://localhost:5000",
                                         "http://localhost:5001",
                                         "http://localhost:4200",
                                         "http://localhost:4200/",
-                                        "http://localhost:44317")
-                                       */
+                                        "http://localhost:44317",
+                                        "https://localhost");
                                   });
             });
 
