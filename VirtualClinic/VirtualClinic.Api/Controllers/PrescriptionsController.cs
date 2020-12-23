@@ -84,9 +84,10 @@ namespace VirtualClinic.Api.Controllers
             //If user is a DR, create a new prescription for a patient
 
             //If user is a patient, return 403 forbidden
-            if (await _clinicRepository.AddPrescriptionAsync(prescription))
+            var new_prescription = await _clinicRepository.AddPrescriptionAsync(prescription);
+            if (new_prescription is Domain.Models.Prescription)
             {
-                return Ok();
+                return CreatedAtAction(nameof(Get), new { id = new_prescription.Id }, new_prescription);
             }
             else
             {
