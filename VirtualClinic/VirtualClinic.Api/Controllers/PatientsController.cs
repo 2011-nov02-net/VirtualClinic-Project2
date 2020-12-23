@@ -161,9 +161,10 @@ namespace VirtualClinic.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Patient patient)
         {
-            if (await _clinicRepository.AddPatientAsync(patient) is Domain.Models.Patient)
+            var new_patient = await _clinicRepository.AddPatientAsync(patient);
+            if (new_patient is Domain.Models.Patient)
             {
-                return Ok();
+                return CreatedAtAction(nameof(Get), new { id = patient.Id }, new_patient);
             }
             else
             {

@@ -94,11 +94,12 @@ namespace VirtualClinic.Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int doctorId, [FromBody] Doctor doctor)
         {
-            if (await _clinicRepository.GetDoctorByIDAsync(doctorId) is Doctor)
+            var new_doctor = await _clinicRepository.GetDoctorByIDAsync(doctorId);
+            if (new_doctor is Doctor)
             {
                 // _clinicRepository.UpdateDoctorAsync(doctor);
 
-                return NoContent();
+                return CreatedAtAction(nameof(Get), new { id = new_doctor.Id }, new_doctor);
             }
 
 
