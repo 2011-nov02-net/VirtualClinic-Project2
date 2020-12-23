@@ -33,7 +33,7 @@ steps:
     extraProperties: |
        sonar.exclusions=**/lib/**'
        sonar.cs.xunit.reportsPaths=${Agent.TempDirectory}/**/XUnit.TestResults.xml
-       sonar.cs.opencover.reportsPaths=${Agent.TempDirectory}/**/opencoverCoverage.xml
+       sonar.cs.opencover.reportsPaths=${Agent.TempDirectory}/coverage/opencoverCoverage.xml
 
 
 - task: UseDotNet@2
@@ -48,7 +48,7 @@ steps:
   inputs:
     command: 'test'
     projects: '$(System.DefaultWorkingDirectory)/VirtualClinic'
-    arguments: '--configuration $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=$(Agent.TempDirectory)/coverage/ /p:MergeWith=$(Agent.TempDirectory)/coverage/ --collect "Code coverage"'
+    arguments: '--configuration $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=$(Agent.TempDirectory)/coverage/ --collect "Code coverage"'
     testRunTitle: 'Unit Tests'
     
 - task: PublishTestResults@2
