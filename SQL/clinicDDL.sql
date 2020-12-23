@@ -41,11 +41,11 @@ CREATE TABLE Clinic.Patients
 CREATE TABLE Clinic.Vitals
 (
     Id          INT NOT NULL IDENTITY PRIMARY KEY,
-    Systolic    INT NOT NULL CHECK ( Systolic > 80 AND Systolic < 250 ),
-    Diastolic   INT NOT NULL CHECK  ( Diastolic > 40 AND Diastolic < 150),
-    HeartRate   INT NOT NULL CHECK  ( HeartRate > 60 AND HeartRate < 220),
-    Temperature DECIMAL  CHECK ( Temperature > 95.0 AND Temperature < 105.0),
-    Pain        INT CHECK   ( Pain > 0 And  Pain <= 10),
+    Systolic    INT NULL CHECK ( Systolic > 80 AND Systolic < 250 ),
+    Diastolic   INT NULL CHECK  ( Diastolic > 40 AND Diastolic < 150),
+    HeartRate   INT NULL CHECK  ( HeartRate > 60 AND HeartRate < 220),
+    Temperature DECIMAL NULL CHECK ( Temperature > 95.0 AND Temperature < 105.0),
+    Pain        INT NULL CHECK   ( Pain > 0 And  Pain <= 10),
 );
 
 
@@ -78,7 +78,7 @@ CREATE TABLE Clinic.Prescriptions
 CREATE TABLE Clinic.Appointments
 (
     Id         INT NOT NULL IDENTITY PRIMARY KEY,
-    Notes      NVARCHAR(2000),
+    Notes      NVARCHAR(2000) NULL,
     VitalsId   INT NULL,
     PatientId  INT NOT NULL,
 	DoctorId   INT NOT NULL,
@@ -102,4 +102,11 @@ CREATE TABLE Clinic.Timeslots
 	CONSTRAINT TimeslotDateTIme CHECK (Timeslots.[End] > Timeslots.[Start]),
     CONSTRAINT Doctor_FK FOREIGN KEY (DoctorId) REFERENCES Clinic.Doctors (Id),
     CONSTRAINT TimeslotAppointment_FK FOREIGN KEY (AppointmentId) REFERENCES Clinic.Appointments (Id)
+);
+
+CREATE TABLE Clinic.Users
+(
+	Id INT NOT NULL,
+	Email NVARCHAR(300) NOT NULL PRIMARY KEY,
+	UserType NVARCHAR(300) NOT NULL
 );

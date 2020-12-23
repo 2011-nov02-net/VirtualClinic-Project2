@@ -23,6 +23,7 @@ namespace VirtualClinic.DataModel
         public virtual DbSet<PatientReport> PatientReports { get; set; }
         public virtual DbSet<Prescription> Prescriptions { get; set; }
         public virtual DbSet<Timeslot> Timeslots { get; set; }
+        public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Vital> Vitals { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -154,6 +155,20 @@ namespace VirtualClinic.DataModel
                     .HasForeignKey(d => d.DoctorId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Doctor_FK");
+            });
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasKey(e => e.Email)
+                    .HasName("PK__Users__A9D105353D801094");
+
+                entity.ToTable("Users", "Clinic");
+
+                entity.Property(e => e.Email).HasMaxLength(300);
+
+                entity.Property(e => e.UserType)
+                    .IsRequired()
+                    .HasMaxLength(300);
             });
 
             modelBuilder.Entity<Vital>(entity =>
