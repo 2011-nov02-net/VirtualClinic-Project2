@@ -33,7 +33,7 @@ steps:
     extraProperties: |
        sonar.exclusions=**/lib/**'
        sonar.cs.xunit.reportsPaths=${Agent.TempDirectory}/**/XUnit.TestResults.xml
-       sonar.cs.opencover.reportsPaths=${Agent.TempDirectory}/coverage/coverage.opencover.xml
+       sonar.cs.opencover.reportsPaths=/home/vsts/work/_temp/coverage/coverage.opencover.xml
 
 
 - task: UseDotNet@2
