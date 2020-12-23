@@ -911,11 +911,11 @@ namespace VirtualClinic.Domain.Repositories
         /// </summary>
         /// <param name="email">The user's email.</param>
         /// <returns>the created user object from the db</returns>
-        public async Task<UserModel> AddAuthorizedPatientAsync(string email)
+        public async Task<UserModel> AddAuthorizedPatientAsync(string Email)
         {
             DataModel.User newuser = new DataModel.User();
 
-            newuser.Email = email;
+            newuser.Email = Email;
             newuser.UserType = "patient";
 
             Models.Patient pat = new Models.Patient(-1, "Dr.", DateTime.Now, "1234-56-678","Unknown Insurance.");
@@ -932,7 +932,7 @@ namespace VirtualClinic.Domain.Repositories
 
             var user = await _context.Users.AddAsync(newuser);
 
-            return new UserModel(newuser.Id, email);
+            return new UserModel(newuser.Id, Email);
         }
 
         /*    _    _      _                     
