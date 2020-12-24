@@ -1,8 +1,10 @@
+import { HttpClient } from '@angular/common/http';
+import { stringify } from '@angular/compiler/src/util';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { OktaAuthService} from '@okta/okta-angular';
 import { User } from './models/user'
-import { UsertypeService } from './usertype.service';
+
 
 
 @Component({
@@ -15,6 +17,12 @@ export class AppComponent implements OnInit {
   title = 'VirtualClinicFrontEnd';
   isAuthenticated = false;
   username:string = "Unknown"
+  //0 == not logged in
+  //1 == patient
+  //2 == doctor
+  usetype: number = 0;
+
+  links:NavBarLink[] = [];
 
 
   //https://ng-bootstrap.github.io/#/components/nav/overview#routing
@@ -22,7 +30,7 @@ export class AppComponent implements OnInit {
   constructor(
     public route: ActivatedRoute,
     private oktaAuth: OktaAuthService,
-    private userType: UsertypeService
+    private http: HttpClient
     /*, private api service*/) 
     {    
       this.oktaAuth.$authenticationState.subscribe((isAuthenticated) =>
@@ -34,6 +42,24 @@ export class AppComponent implements OnInit {
       this.oktaAuth
         .isAuthenticated()
         .then((isAuthenticated) => this.updateAuthState(isAuthenticated));
+
+
+      if(this.isAuthenticated){
+
+        var response = this.http.get('https://localhost:44317/api/Authentication', {
+          headers: {
+            Authorization: 'Bearer ' + this.oktaAuth.getAccessToken(),
+          }
+        }).toPromise();
+    
+        response.then(console.log)
+
+        response.then( responseval =>
+            this.translateUserTypeAndUpdate( responseval.toString())            
+            );
+
+
+      }
     }
 
 
@@ -49,6 +75,17 @@ export class AppComponent implements OnInit {
         const realClaims  = (await userClaims);
 
         this.setUsername(realClaims)
+
+        var response = this.http.get('https://localhost:44317/api/Authentication', {
+          headers: {
+            Authorization: 'Bearer ' + this.oktaAuth.getAccessToken(),
+          }
+        }).toPromise();
+    
+        response.then( responseval =>
+            this.translateUserTypeAndUpdate( responseval.toString())            
+            );
+
       }
     }
 
@@ -65,24 +102,40 @@ export class AppComponent implements OnInit {
     }
 
 
+    translateUserTypeAndUpdate(typeResponse:string){
+      if(typeResponse && typeResponse == 'doctor'){
+        this.usetype = 2;
+      } else if(typeResponse && typeResponse == 'patient') {
+        this.usetype = 1;
+      } else {
+        this.usetype = 0;
+      }
+
+      this.updateLinks();
+    }
+
 
       /*{title: link display text, }
      * fragment: url fragment. shows up as "#fragment" appended at the end,
      * page: the page to route to}
      */
-    getLinks() :  NavBarLink[]{
-      var usernum : Number = this.userType.GetUserEnum();
-      if(usernum === 2){
-        //doctor, 2
-        return [{ title: 'Patients', fragment: '', page:"Patients" },
-        { title: 'Doctors', fragment: '', page:"Doctors" }] ;
-      } else if(usernum === 1){
-        //patient, 1
-        return [{ title: 'Doctors', fragment: '', page:"Doctors" }];
-      } else {
-        //not logged in, 0
-        return[{title: "Please log in!", fragment:'', page:''}]
+    updateLinks(){
+      if(this.isAuthenticated){
+        if(this.usetype === 2){
+          //doctor, 2
+          this.links = [{ title: 'Patients', fragment: '', page:"Patients" },
+          { title: 'Doctors', fragment: '', page:"Doctors" }] ;
+        } else if(this.usetype === 1){
+          //patient, 1
+          this.links = [{ title: 'Doctors', fragment: '', page:"Doctors" }];
+        } else {
+          this.links = [] ;
+        } 
       }
+
+      //not logged in, or not authenticated
+      //else
+      return[{title: "Please log in!", fragment:'', page:''}]
     }
 }
 
