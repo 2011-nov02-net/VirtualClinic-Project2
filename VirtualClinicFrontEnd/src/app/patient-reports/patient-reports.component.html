@@ -1,0 +1,10 @@
+<div>
+    <ul class="reports">
+        <li *ngFor="let report of this.reports">
+            <h2><span>{{report.time | date: 'MM/dd/yyyy'}}</span></h2>
+            <a routerLink="/Reports/{{report.id}}">
+                <h3><span class="badge">Details</span></h3>
+            </a>
+        </li>
+    </ul>
+</div>

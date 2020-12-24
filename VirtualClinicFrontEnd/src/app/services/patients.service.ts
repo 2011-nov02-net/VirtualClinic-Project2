@@ -16,6 +16,10 @@ export class PatientsService {
   return this.http.get<Patient[]>(`${this.baseUrl}/Patients/`).toPromise();
 }
 
+  getPatientByID(id: number): Promise<Patient> {
+    return this.http.get<Patient>(`${this.baseUrl}/Patients/${id}`).toPromise();
+  }
+
 /** GET Doctors's patients from the server */
 getDoctorsPatients(doctorId: number): Promise<Patient[]>{
   return this.http.get<Patient[]>(`${this.baseUrl}/Doctors/${doctorId}/Patients/`).toPromise();

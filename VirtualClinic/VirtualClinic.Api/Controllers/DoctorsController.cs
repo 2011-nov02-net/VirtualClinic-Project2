@@ -115,7 +115,7 @@ namespace VirtualClinic.Api.Controllers
         /// </param>
         /// <returns>Information on the patient, or error 403 not authorized.</returns>
         [HttpGet("{id}/Patients")]
-        public async Task<IActionResult> Get([FromQuery] int id, [FromQuery] string search = null)
+        public async Task<IActionResult> Get([FromRoute] int id, [FromQuery] string search = null)
         {
             //check if logged in as dr, if not, then return not authorized
             //get all the patients of the currently logged in doctor.

@@ -21,6 +21,7 @@ export class PrescriptionsService {
   getPatientPrescriptions(patientID: number): Promise<Prescription[]> {
     return this.http.get<Prescription[]>(`${this.baseUrl}/Patients/${patientID}/Prescriptions`).toPromise();
   }
+  
   addPrescription(patientID: number, prescription: Prescription): Promise<Prescription> {
     return this.http.post<Prescription>(`${this.baseUrl}/Patients/${patientID}`, prescription).toPromise();
   }

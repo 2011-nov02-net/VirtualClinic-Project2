@@ -9,7 +9,7 @@ export class Patient{
         this.name = name;
         this.insuranceProvider = insurance;
         this.ssn = ssn;
-        this.birthday = new Date();
+        this.dateOfBirth = new Date();
 
         this.reports = [];
         this.prescriptions = [];
@@ -20,7 +20,7 @@ export class Patient{
     name: string;
     ssn: string;
     insuranceProvider: string;
-    birthday: Date;
+    dateOfBirth: Date;
 
     reports: PatientReports[];
     prescriptions: Prescription[];
