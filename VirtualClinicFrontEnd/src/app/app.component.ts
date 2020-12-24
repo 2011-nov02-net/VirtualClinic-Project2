@@ -25,7 +25,8 @@ export class AppComponent implements OnInit {
   //2 == doctor
   usetype: number = 0;
 
-  links:NavBarLink[] = [];
+  links:NavBarLink[] = [{ title: 'Home', fragment: '', page:"/" },
+  {title: "Please log in!", fragment:'', page:''}];
 
 
   //https://ng-bootstrap.github.io/#/components/nav/overview#routing
@@ -186,19 +187,24 @@ export class AppComponent implements OnInit {
       if(this.isAuthenticated){
         if(this.usetype === 2){
           //doctor, 2
-          this.links = [{ title: 'Patients', fragment: '', page:"Patients" },
-          { title: 'Doctors', fragment: '', page:"Doctors" }] ;
+          this.links = [{ title: 'Home', fragment: '', page:"/" },
+            { title: 'Profile', fragment: '', page:"Doctors" },
+          //{ title: 'Patients', fragment: '', page:"Patients" }
+          ] ;
         } else if(this.usetype === 1){
           //patient, 1
-          this.links = [{ title: 'Doctors', fragment: '', page:"Doctors" }];
+          this.links = [{ title: 'Home', fragment: '', page:"/" },
+            { title: 'Doctor', fragment: '', page:"Doctors" },
+
+          { title: 'Prescriptions', fragment: '', page:"Prescriptions" }];
         } else {
-          this.links = [] ;
+          this.links = [{ title: 'Home', fragment: '', page:"/" }] ;
         } 
       }
-
       //not logged in, or not authenticated
       //else
-      return[{title: "Please log in!", fragment:'', page:''}]
+      return[{ title: 'Home', fragment: '', page:"/" },
+      {title: "Please log in!", fragment:'', page:''}]
     }
 }
 
