@@ -2,7 +2,7 @@
 
 //variable overrides for bootstrap
 //affects body background
-$body-bg: hsl(71, 100%, 88%);
+// $body-bg: hsl(71, 100%, 88%);
 //affects body text
 $body-color: #180038;
 //overrides theme colors
@@ -26,7 +26,7 @@ a.navbar-brand {
 /* Provide sufficient contrast against white background */
 
 .btn-primary {
-    color: #FFFBBD;
+    color: #FFFFFF;
     background-color: #1D1A05;
     border-color: #1D1A05;
 }
@@ -91,3 +91,41 @@ body {
     line-height: 60px;
     /* Vertically center the text there */
 }
+
+body,
+html {
+  height: 100%;
+}
+
+.bg {
+  /* The image used */
+  background-image: url("https://mdbootstrap.com/img/Photos/Horizontal/Nature/full page/img(20).jpg");
+  /* Full height */
+  height: 100%;
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  
+}
+
+.aboutus{
+    font-size: 75px;
+    padding-top: 10%;
+}
+.about{
+    font-size: large;
+    line-height: 2;
+    padding-bottom: 0.2%
+}
+
+.tech{
+    font-size: large;
+    padding-bottom: 10%;
+    line-height: 3;
+    text-align:center;
+}
+
+.tech ul li{
+   display:block;
+ }

@@ -1,5 +1,5 @@
 <div *ngIf="patient">
-<button routerLink="/Patients/{{patient.id}}/UpdatePatient">Update</button>
+<button routerLink="/Patients/{{patient.id}}/UpdatePatient" class="btn btn-primary">Update</button>
 <h2>{{patient.name | uppercase}} Details</h2>
     <h3><span>Birthdate: </span>{{patient.dateOfBirth | date: 'MM/dd/yyyy'}}</h3>
     <h3><span>SSN: </span>{{patient.ssn}}</h3>
