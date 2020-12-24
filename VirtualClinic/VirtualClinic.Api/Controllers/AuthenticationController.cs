@@ -25,8 +25,13 @@ namespace VirtualClinic.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAuth([FromQuery] string search_email)
+        [Authorize]
+        public async Task<IActionResult> GetAuth()
         {
+            ClaimsPrincipal userClaims = HttpContext.User;
+
+            string search_email = userClaims.FindFirstValue(EmailClaimType);
+
             try
             {
                 var type = await _repo.GetAuthTypeAsync(search_email);
@@ -59,7 +64,7 @@ namespace VirtualClinic.Api.Controllers
             {
 
                 _logger.LogError("Could not get user claims.");
-                return Unauthorized();
+                return Ok();
             }
         }
     }
