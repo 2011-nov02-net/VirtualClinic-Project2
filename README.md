@@ -12,9 +12,11 @@ Virtual Clinic is an application that can be used by both doctors and their pati
 
 ## Features
 
-* Awesome feature 1
-* Awesome feature 2
-* Awesome feature 3
+* View patient reports
+* View patient prescriptions
+* View Patient Details 
+* Login authentication with Okta
+* CI/CD with azure dev ops set up
 
 To-do list:
 - [ ] Improve Patient functionality
