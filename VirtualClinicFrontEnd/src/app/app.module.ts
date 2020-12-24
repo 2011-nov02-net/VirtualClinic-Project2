@@ -18,6 +18,7 @@ import { PrescriptionDetailsComponent } from './prescription-details/prescriptio
 import { environment } from './../environments/environment';
 import { ReportsComponent } from './patient-reports/patient-reports.component';
 import { ReportDetailsComponent } from './report-details/report-details.component';
+import { CreateReportComponent } from './create-report/create-report.component';
 
 
 
@@ -45,7 +46,8 @@ const config = {
     VitalsComponent,
     PatientDetailsComponent,
     ReportsComponent,
-    ReportDetailsComponent
+    ReportDetailsComponent,
+    CreateReportComponent
   ],
   imports: [
     NgbModule,

@@ -19,7 +19,6 @@ export class PrescriptionDetailsComponent implements OnInit {
   @Input() prescription: Prescription | undefined;
    prescriptionId : number;
 
-
   constructor(
     private route: ActivatedRoute,
     private location: Location,
@@ -39,6 +38,16 @@ export class PrescriptionDetailsComponent implements OnInit {
     .then(prescription => {
       this.prescription = prescription;
     })
+  }
+
+  getDoctor(): void {
+    this.doctorService.getDoctorByID(this.prescription!.doctorId)
+    .then(doctor => {this.prescription!.doctor = doctor})
+  }
+
+  getPatient(): void {
+    this.patientService.getPatientByID(this.prescription!.patientId)
+    .then(patient => {this.prescription!.patient = patient})
   }
 
   goBack(): void {

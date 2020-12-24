@@ -8,6 +8,7 @@ import { PrescriptionsComponent } from '../app/prescriptions/prescriptions.compo
 import { ReportsComponent } from '../app/patient-reports/patient-reports.component';
 import { ReportDetailsComponent } from './report-details/report-details.component';
 import { PrescriptionDetailsComponent} from '../app/prescription-details/prescription-details.component';
+import { CreateReportComponent } from './create-report/create-report.component';
 
 
 
@@ -19,7 +20,8 @@ const routes: Routes = [
   { path: 'Patients/:id/Reports', component: ReportsComponent},
   { path: 'login/callback', component: OktaCallbackComponent},
   { path: 'Reports/:id', component: ReportDetailsComponent},
-  { path: 'Prescriptions/:id', component: PrescriptionDetailsComponent}
+  { path: 'Prescriptions/:id', component: PrescriptionDetailsComponent},
+  { path: 'Reports/Create', component: CreateReportComponent},
 
 ];
 

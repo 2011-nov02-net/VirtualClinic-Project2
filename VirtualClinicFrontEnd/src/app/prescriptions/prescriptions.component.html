@@ -1,11 +1,10 @@
 
 <div *ngIf="prescriptions">
-    <h1>List of Prescriptions</h1>
     <ul class="prescriptions">
         <li *ngFor="let prescription of this.prescriptions">
             <h2><span>{{prescription.drugName}}</span></h2>
             <a routerLink="/Prescriptions/{{prescription.id}}">
-                <span class="badge">Details</span>
+                <h2><span class="badge">Details</span></h2>
             </a>
         </li>
     </ul>
