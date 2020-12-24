@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Prescription } from '../models/prescription';
 import { Location } from '@angular/common';
@@ -11,10 +11,15 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./prescriptions.component.scss']
 })
 export class PrescriptionsComponent implements OnInit {
+<<<<<<< HEAD
   prescriptions: Prescription[] | undefined;
   singlePrescription: Prescription | undefined;
   selectedPrescription: Prescription | undefined;
   patientID: number;
+=======
+  @Input() prescriptions: Prescription[] | undefined;
+  selectedPrescrition: Prescription | undefined;
+>>>>>>> frontend
    
   constructor(
     private route: ActivatedRoute,
@@ -35,6 +40,7 @@ export class PrescriptionsComponent implements OnInit {
     })
   }
 
+<<<<<<< HEAD
   getPrescriptionById(id: number): void {
     this.prescriptionService.getPrescriptionById(id)
     .then(prescription => {this.singlePrescription = prescription});
@@ -43,6 +49,11 @@ export class PrescriptionsComponent implements OnInit {
   onSelect(prescription: Prescription): void {
     this.selectedPrescription = prescription;
   }
+=======
+  onSelect(prescription: Prescription): void {
+    this.selectedPrescrition = prescription;
+  };
+>>>>>>> frontend
 
   goBack(): void {
     this.location.back();

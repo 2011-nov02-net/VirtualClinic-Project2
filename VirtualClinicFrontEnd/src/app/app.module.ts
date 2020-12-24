@@ -14,6 +14,7 @@ import { PrescriptionsComponent } from './prescriptions/prescriptions.component'
 import { PatientsComponent } from './patients/patients.component';
 import { VitalsComponent } from './vitals/vitals.component';
 import { PatientDetailsComponent } from './patient-details/patient-details.component';
+import { PrescriptionDetailsComponent } from './prescription-details/prescription-details.component'
 import { environment } from './../environments/environment';
 import { ReportsComponent } from './patient-reports/patient-reports.component';
 import { ReportDetailsComponent } from './report-details/report-details.component';
@@ -38,6 +39,7 @@ const config = {
     StyletestsComponent,
     TimeslotsComponent,
     PrescriptionsComponent,
+    PrescriptionDetailsComponent,
     PatientsComponent,
     DoctorsComponent,
     VitalsComponent,
