@@ -70,7 +70,7 @@ namespace VirtualClinic.Api
                                   {                               
                                       builder.WithOrigins("https://localhost",
                                             "http://dev-7862904.okta.com",
-                                            "https://virtual-clinic.azurewebsites.net/",
+                                            "https://virtual-clinic.azurewebsites.net",
                                             "http://localhost:5000",
                                             "http://localhost:5001",
                                             "http://localhost:4200",
