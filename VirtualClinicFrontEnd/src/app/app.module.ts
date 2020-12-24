@@ -64,5 +64,5 @@ const config = {
   bootstrap: [AppComponent],
 })
 export class AppModule { 
-  static globalBaseURL: string = 'https://localhost:44317/api/';
+  static globalBaseURL: string = 'https://virtual-clinic-backend.azurewebsites.net/';
 }
