@@ -40,26 +40,21 @@ namespace VirtualClinic.Api.Controllers
         }
 
 
-        private static readonly string EmailKey = "email";
+        private static readonly string EmailClaimType = "sub";
         [HttpPut]
         [Authorize]
         public async Task<IActionResult> PutNewPatient()
         {
-            IEnumerable<Claim> userClaims = HttpContext.User.Claims;
-            Claim claim = userClaims.FirstOrDefault();
+            ClaimsPrincipal userClaims = HttpContext.User;
 
-            if(claim is not null)
+            string email = userClaims.FindFirstValue(EmailClaimType);
+
+            if (! string.IsNullOrEmpty(email))
             {
-                if (claim.Properties.ContainsKey(EmailKey))
-                {
-                    var newuser = await _repo.AddAuthorizedPatientAsync(claim.Properties[EmailKey]);
+                var newuser = await _repo.AddAuthorizedPatientAsync(email);
 
-                    return CreatedAtAction(nameof(GetAuth), new { id = newuser.Id }, newuser);
-                } else
-                {
-                    return this.UnprocessableEntity(claim);
-                }
-                
+                return CreatedAtAction(nameof(GetAuth), new { id = newuser.Id }, newuser);
+
             } else
             {
 
