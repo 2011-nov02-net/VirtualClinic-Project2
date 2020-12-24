@@ -23,8 +23,8 @@ export class DoctorsComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    this.getDoctorByID(environment.userID);
-    this.getDoctorPatients(environment.userID);
+    this.getDoctorByID(1);
+    this.getDoctorPatients(1);
   }
 
   getDoctorByID(id: number): void {
