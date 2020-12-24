@@ -26,12 +26,13 @@ To-do list:
    
 `git clone https://github.com/2011-nov02-net/VirtualClinic-Project2.git`
 
+set the enviorment variable for "DefaultConnection" to an sql server connection string
 
-> Be sure to include BOTH Windows and Unix command  
-> Be sure to mention if the commands only work on a specific platform (eg. AWS, GCP)
+set that server's tables up by running the sql included in the sql folder
 
-- All the `code` required to get started
-- Images of what it should look like
+`dotnet run` the backend
+
+`ng serve --open` the front end
 
 ## Usage
 
