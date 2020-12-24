@@ -5,6 +5,7 @@ import { OktaCallbackComponent } from '@okta/okta-angular';
 import { PatientsComponent } from '../app/patients/patients.component';
 import { PatientDetailsComponent} from '../app/patient-details/patient-details.component';
 import { PrescriptionsComponent } from '../app/prescriptions/prescriptions.component';
+import { ReportsComponent } from '../app/patient-reports/patient-reports.component';
 
 
 
@@ -12,7 +13,8 @@ const routes: Routes = [
   { path: 'Doctors', component: DoctorsComponent },
   { path: 'Patients', component: PatientsComponent},
   { path: 'Patients/:id', component: PatientDetailsComponent},
-  { path: 'Prescriptions', component: PrescriptionsComponent},
+  { path: 'Patients/:id/Prescriptions', component: PrescriptionsComponent},
+  { path: 'Patients/:id/Reports', component: ReportsComponent},
   { path: 'login/callback', component: OktaCallbackComponent}
 
 ];

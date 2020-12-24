@@ -1,17 +1,14 @@
-<p>prescriptions works!</p>
-
 <div>
     <h1>List of Prescriptions</h1>
     <ul class="prescriptions">
-        <li *ngFor="let prescription of prescriptions">
+        <li *ngFor="let prescription of this.prescriptions">
+            <h2><span>{{prescription.drugName}}</span></h2>
             <a routerLink="/Prescriptions/{{prescription.id}}">
-                <span class="badge">{{prescription.id}}:</span> {{prescription.drugName}}
+                <span class="badge">Details</span>
             </a>
         </li>
     </ul>
 </div>
-
-
 
 <!-- saving this for prescription details -->
 <!-- <div *ngIf="prescriptions">

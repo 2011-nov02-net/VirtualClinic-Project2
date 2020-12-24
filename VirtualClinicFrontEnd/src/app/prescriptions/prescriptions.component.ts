@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Prescription } from '../models/prescription';
 import { Location } from '@angular/common';
 import { PrescriptionsService} from '../services/prescriptions.service'
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-prescriptions',
@@ -11,16 +12,20 @@ import { PrescriptionsService} from '../services/prescriptions.service'
 })
 export class PrescriptionsComponent implements OnInit {
   prescriptions: Prescription[] | undefined;
-
+  singlePrescription: Prescription | undefined;
+  selectedPrescription: Prescription | undefined;
+  patientID: number;
    
   constructor(
     private route: ActivatedRoute,
     private location:Location,
     private prescriptionService: PrescriptionsService
-  ) { }
+  ) { 
+    this.patientID = this.route.snapshot.params['id'];
+   }
 
   ngOnInit(): void {
-    this.getPatientsPrescriptions(1);
+    this.getPatientsPrescriptions(this.patientID);
   }
 
   getPatientsPrescriptions(id: number): void {
@@ -28,6 +33,15 @@ export class PrescriptionsComponent implements OnInit {
     .then(prescriptions => {
       this.prescriptions = prescriptions
     })
+  }
+
+  getPrescriptionById(id: number): void {
+    this.prescriptionService.getPrescriptionById(id)
+    .then(prescription => {this.singlePrescription = prescription});
+  }
+
+  onSelect(prescription: Prescription): void {
+    this.selectedPrescription = prescription;
   }
 
   goBack(): void {

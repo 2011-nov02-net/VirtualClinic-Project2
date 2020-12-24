@@ -15,6 +15,7 @@ import { PatientsComponent } from './patients/patients.component';
 import { VitalsComponent } from './vitals/vitals.component';
 import { PatientDetailsComponent } from './patient-details/patient-details.component';
 import { environment } from './../environments/environment';
+import { ReportsComponent } from './patient-reports/patient-reports.component';
 
 
 
@@ -39,7 +40,8 @@ const config = {
     PatientsComponent,
     DoctorsComponent,
     VitalsComponent,
-    PatientDetailsComponent
+    PatientDetailsComponent,
+    ReportsComponent
   ],
   imports: [
     NgbModule,
