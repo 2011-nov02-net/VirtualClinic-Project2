@@ -20,11 +20,10 @@ const routes: Routes = [
   { path: 'Patients/:id/Prescriptions', component: PrescriptionsComponent},
   { path: 'Patients/:id/Reports', component: ReportsComponent},
   { path: 'login/callback', component: OktaCallbackComponent},
-  { path: 'Reports/:id', component: ReportDetailsComponent},
-  { path: 'Prescriptions/:id', component: PrescriptionDetailsComponent},
   { path: 'Reports/Create', component: CreateReportComponent},
-  { path: 'Patients/:id/UpdatePatient', component: EditPatientComponent}
-
+  { path: 'Patients/:id/UpdatePatient', component: EditPatientComponent},
+  { path: 'Reports/:id', component: ReportDetailsComponent},
+  { path: 'Prescriptions/:id', component: PrescriptionDetailsComponent}
 ];
 
 @NgModule({
