@@ -18,13 +18,13 @@ List of features ready and TODOs for future development
 * Awesome feature 3
 
 To-do list:
-* Wow improvement to be done 1
-* Wow improvement to be done 2
+- [ ] Improve Patient functionality
+- [ ] Better new user experince
 
 ## Getting Started
    
-(include git clone command)
-(include all environment setup steps)
+`git clone https://github.com/2011-nov02-net/VirtualClinic-Project2.git`
+
 
 > Be sure to include BOTH Windows and Unix command  
 > Be sure to mention if the commands only work on a specific platform (eg. AWS, GCP)
@@ -42,5 +42,5 @@ To-do list:
 
 ## License
 
-This project uses the following license: [<license_name>](<link>).
+This project uses the following license: [Apache 2.0](https://github.com/2011-nov02-net/danielp-project1/blob/master/LICENSE).
 
