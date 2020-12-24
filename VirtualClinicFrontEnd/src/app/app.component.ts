@@ -1,8 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { stringify } from '@angular/compiler/src/util';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { OktaAuthService} from '@okta/okta-angular';
+import { observable } from 'rxjs';
+import { Doctor } from './models/doctor';
+import { Patient } from './models/patient';
 import { User } from './models/user'
 
 
@@ -30,7 +33,8 @@ export class AppComponent implements OnInit {
   constructor(
     public route: ActivatedRoute,
     private oktaAuth: OktaAuthService,
-    private http: HttpClient
+    private http: HttpClient,
+    private router: Router
     /*, private api service*/) 
     {    
       this.oktaAuth.$authenticationState.subscribe((isAuthenticated) =>
@@ -50,16 +54,38 @@ export class AppComponent implements OnInit {
           headers: {
             Authorization: 'Bearer ' + this.oktaAuth.getAccessToken(),
           }
-        }).toPromise();
+        }).toPromise()
+        .catch( (error: any) => {
+          if(error.status === 404){
+
+          //could be changed into just a redirect and asking what 
+          //send request to make new user
+          var putResponse = this.http.put('https://localhost:44317/api/Authentication', 
+              {},
+              {
+              headers: {
+                Authorization: 'Bearer ' + this.oktaAuth.getAccessToken(),
+              }
+          })
+
+            this.router.navigate(["UpdatePatient"], {skipLocationChange: false, fragment:"UpdatePatient"} );     
+          } else {
+            throw error;
+          }
+        });
     
+        console.log("hi from update user info")
         response.then(console.log)
 
         response.then( responseval =>
-            this.translateUserTypeAndUpdate( responseval.toString())            
-            );
+              {
+                if(responseval){
+                  this.translateUserTypeAndUpdate( responseval.toString())   
+                } 
+              }               
+            );   
 
-
-      }
+        } 
     }
 
 
@@ -80,26 +106,61 @@ export class AppComponent implements OnInit {
           headers: {
             Authorization: 'Bearer ' + this.oktaAuth.getAccessToken(),
           }
-        }).toPromise();
-    
-        response.then( responseval =>
-            this.translateUserTypeAndUpdate( responseval.toString())            
-            );
+        }).toPromise()
+        .catch( (error: any) => {
+          if(error.status === 404){
 
-      }
+          //could be changed into just a redirect and asking what 
+          //send request to make new user
+          var putResponse = this.http.put('https://localhost:44317/api/Authentication', 
+              {},
+              {
+              headers: {
+                Authorization: 'Bearer ' + this.oktaAuth.getAccessToken(),
+              }
+          })
+
+            this.router.navigate(["UpdatePatient"], {skipLocationChange: false, fragment:"UpdatePatient"} );     
+          } else {
+            throw error;
+          }
+        });
+    
+        console.log("hi from update user info")
+        response.then(console.log)
+
+        response.then( responseval =>
+              {
+                if(responseval){
+                  this.translateUserTypeAndUpdate( responseval.toString())   
+                } 
+              }               
+            );   
+
+        }
     }
+
+
+
 
     setUsername(user:any){
       this.username = user.email;
     }
   
+
+
     login() {
       this.oktaAuth.signInWithRedirect();
     }
   
+
+
     logout() {
       this.oktaAuth.signOut();
     }
+
+
+
 
 
     translateUserTypeAndUpdate(typeResponse:string){
@@ -113,6 +174,8 @@ export class AppComponent implements OnInit {
 
       this.updateLinks();
     }
+
+
 
 
       /*{title: link display text, }

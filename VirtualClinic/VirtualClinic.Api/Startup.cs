@@ -76,6 +76,7 @@ namespace VirtualClinic.Api
                                             "http://localhost:4200",
                                             "http://localhost:4200/",
                                             "http://localhost:44317");
+                                      builder.AllowAnyHeader();
                                   });
             });
 

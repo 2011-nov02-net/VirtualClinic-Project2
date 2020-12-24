@@ -134,6 +134,13 @@ namespace VirtualClinic.Domain.Repositories
         /// <param name="patient">A patient to be added to the database</param>
         public async Task<Models.Patient> AddPatientAsync(Models.Patient patient)
         {
+
+            if(patient.PrimaryDoctor is null)
+            {
+                var dr = _context.Doctors.First();
+                var patientdr = new Domain.Models.Doctor(dr.Id, dr.Name);
+                patient.PrimaryDoctor = patientdr;
+            }
             var newPatient = new DataModel.Patient
             {
                 Name = patient.Name,

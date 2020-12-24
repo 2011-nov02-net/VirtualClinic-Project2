@@ -13,8 +13,9 @@ const routes: Routes = [
   { path: 'Patients', component: PatientsComponent},
   { path: 'Patients/:id', component: PatientDetailsComponent},
   { path: 'Prescritions', component: PrescriptionsComponent},
-  { path: 'login/callback', component: OktaCallbackComponent }
-
+  { path: 'login/callback', component: OktaCallbackComponent },
+  //placeholder redirect to update patient information
+  { path: 'UpdatePatient', component: PatientsComponent }
 ];
 
 @NgModule({
