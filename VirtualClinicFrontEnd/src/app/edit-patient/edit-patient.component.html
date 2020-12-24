@@ -1,0 +1,12 @@
+<div  *ngIf="patient">
+<h2>Update Patient Information For: {{patient.name | uppercase}}</h2>
+<div class="form">
+  <form class="register-form" method="PUT" [formGroup]="myForm">
+    <input type="text" placeholder="Full Name" formControlName="name">
+    <input type="text" placeholder="***-**-***"  formControlName="ssn">
+    <input type="text" placeholder="YYYY-MM-DD"  formControlName="dob">
+    <input type="text" placeholder="Insurance"  formControlName="insuranceProvider">
+    <button (click)="updatePatient()">Update</button>
+  </form>
+</div>
+</div>

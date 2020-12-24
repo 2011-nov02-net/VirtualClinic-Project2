@@ -30,4 +30,8 @@ postPatient(patient: Patient): Promise<Patient> {
   return this.http.post<Patient>(`${this.baseUrl}/Patients/`, patient).toPromise();
 }
 
+/** Update Patient from the server */
+
+
+
 }

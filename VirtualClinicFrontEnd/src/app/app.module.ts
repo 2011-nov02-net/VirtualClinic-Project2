@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { OktaAuthModule, OKTA_CONFIG } from '@okta/okta-angular/';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -16,6 +16,7 @@ import { VitalsComponent } from './vitals/vitals.component';
 import { PatientDetailsComponent } from './patient-details/patient-details.component';
 import { PrescriptionDetailsComponent } from './prescription-details/prescription-details.component'
 import { environment } from './../environments/environment';
+import { EditPatientComponent } from './edit-patient/edit-patient.component';
 import { ReportsComponent } from './patient-reports/patient-reports.component';
 import { ReportDetailsComponent } from './report-details/report-details.component';
 import { CreateReportComponent } from './create-report/create-report.component';
@@ -45,6 +46,7 @@ const config = {
     DoctorsComponent,
     VitalsComponent,
     PatientDetailsComponent,
+    EditPatientComponent,
     ReportsComponent,
     ReportDetailsComponent,
     CreateReportComponent
@@ -55,7 +57,8 @@ const config = {
     BrowserModule,
     AppRoutingModule,
     OktaAuthModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [ { provide: OKTA_CONFIG, useValue: config }],
   bootstrap: [AppComponent],
