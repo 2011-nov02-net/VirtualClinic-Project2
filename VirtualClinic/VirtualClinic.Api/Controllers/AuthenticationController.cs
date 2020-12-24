@@ -62,6 +62,8 @@ namespace VirtualClinic.Api.Controllers
                 
             } else
             {
+
+                _logger.LogError("Could not get user claims.");
                 return Unauthorized();
             }
         }

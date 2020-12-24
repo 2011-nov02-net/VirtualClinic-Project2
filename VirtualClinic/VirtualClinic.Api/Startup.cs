@@ -81,8 +81,9 @@ namespace VirtualClinic.Api
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                    options.Authority = "https://dev-723797.okta.com/oauth2/default";
+                    options.Authority = "https://dev-7862904.okta.com/oauth2/default";
                     options.Audience = "api://default";
+                    options.IncludeErrorDetails = true;
                     options.RequireHttpsMetadata = false;
                 }
             );
