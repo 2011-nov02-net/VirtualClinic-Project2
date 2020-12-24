@@ -23,6 +23,7 @@ export class AppComponent implements OnInit {
     public route: ActivatedRoute,
     private oktaAuth: OktaAuthService,
     private userType: UsertypeService
+
     /*, private api service*/) 
     {    
       this.oktaAuth.$authenticationState.subscribe((isAuthenticated) =>
@@ -72,6 +73,7 @@ export class AppComponent implements OnInit {
      */
     getLinks() :  NavBarLink[]{
       var usernum : Number = this.userType.GetUserEnum();
+
       if(usernum === 2){
         //doctor, 2
         return [{ title: 'Patients', fragment: '', page:"Patients" },

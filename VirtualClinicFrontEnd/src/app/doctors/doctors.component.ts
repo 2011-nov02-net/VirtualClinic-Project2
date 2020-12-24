@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { Doctor } from '../models/doctor';
 import { Patient }  from '../models/patient';
 import { ActivatedRoute } from '@angular/router';
 import { Location, UpperCasePipe } from '@angular/common';
 import { DoctorsService } from '../services/doctors.service';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -14,7 +15,6 @@ import { DoctorsService } from '../services/doctors.service';
 export class DoctorsComponent implements OnInit {
   doctor : Doctor | undefined;
   selectedPatient : Patient | undefined;
-  patients: Patient[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -23,8 +23,8 @@ export class DoctorsComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    this.getDoctorByID(1);
-    this.getDoctorPatients(1);
+    this.getDoctorByID(environment.userID);
+    this.getDoctorPatients(environment.userID);
   }
 
   getDoctorByID(id: number): void {
@@ -39,7 +39,7 @@ export class DoctorsComponent implements OnInit {
   }
 
   getDoctorPatients(id: number): void {
-    this.doctorService.getDoctorPatients(id).then(patients => { this.patients = patients});
+    this.doctorService.getDoctorPatients(id).then(patients => { this.doctor!.patients = patients });
   }
   
   goBack(): void {

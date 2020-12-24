@@ -4,7 +4,7 @@
 <div>
     <h2>My patients</h2>
     <ul class="doctor">
-        <li *ngFor="let patient of this.patients" >
+        <li *ngFor="let patient of this.doctor.patients">
         <a routerLink="/Patients/{{patient.id}}">
             <span class="badge" >{{patient.id}}</span> {{patient.name}}
         </a>
