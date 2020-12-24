@@ -17,6 +17,8 @@ using Microsoft.OpenApi.Models;
 using VirtualClinic.Domain.Interfaces;
 using VirtualClinic.Domain.Repositories;
 using VirtualClinic.DataModel;
+using Okta.AspNetCore;
+
 
 namespace VirtualClinic.Api
 {
@@ -74,18 +76,31 @@ namespace VirtualClinic.Api
                                             "http://localhost:4200",
                                             "http://localhost:4200/",
                                             "http://localhost:44317");
+                                      builder.AllowAnyHeader();
                                   });
             });
+
+
+
 
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                    options.Authority = "https://dev-723797.okta.com/oauth2/default";
+                    options.Authority = "https://dev-7862904.okta.com/oauth2/default";
                     options.Audience = "api://default";
+                    options.IncludeErrorDetails = true;
                     options.RequireHttpsMetadata = false;
-                }
-            );
+                }).AddOktaMvc( new OktaMvcOptions
+                    {
+                        OktaDomain = "https://dev-7862904.okta.com/oauth2/default",
+                        ClientId = "0oa2rljvgj0RRay1e5d6",
+                        ClientSecret = "aIZI2AeQqruJ2QfHLzvsZdDwuodPgKawGvveJgwI",
+                    }
+                );
+
+                
+
 
             services.AddScoped<IClinicRepository, ClinicRepository>();
         }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute  } from '@angular/router';
 import { Patient } from '../../app/models/patient';
@@ -27,14 +27,13 @@ export class EditPatientComponent implements OnInit {
     }
     patientId: number;
 
-    myForm!: FormGroup;
+     myForm!: FormGroup;
      name!: FormControl;
      ssn!: FormControl;
      dob!: FormControl;
      insuranceProvider!: FormControl;
 
      patient!: Patient;
-     id!: number;
      nameString!: string;
      emailString!: string;
      ssnString!: string;
@@ -54,7 +53,7 @@ export class EditPatientComponent implements OnInit {
         'name': this.name,
         'ssn': this.ssn,
         'dob': this.dob,
-        'ininsuranceProvider': this.insuranceProvider
+        'insuranceProvider': this.insuranceProvider
 
       }
     )
@@ -64,10 +63,10 @@ export class EditPatientComponent implements OnInit {
     this.patient = await this.patientDetailsService.getPatientByID(this.patientId).then(p => this.patient = p);
     this.patient.name = this.myForm.get('name')?.value;
     this.patient.ssn = this.myForm.get('ssn')?.value;
-    this.patient.birthday = this.myForm.get('dob')?.value;
+    this.patient.dateOfBirth = new Date(this.myForm.get('dob')?.value);
     this.insuranceProvider = this.myForm.get('insuranceProvider')?.value;
     await this.patientDetailsService.updatePatient(this.patient);
-    this.router.navigate(['/Patients/'+ this.patient.id]);
+    this.router.navigate([`Patients/${this.patient.id}`]);
   }
   goBack(): void {
     this.location.back();

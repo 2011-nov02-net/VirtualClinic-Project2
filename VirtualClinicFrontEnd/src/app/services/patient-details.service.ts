@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Patient } from '../models/patient';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PatientDetailsService {
-  private baseUrl = 'https://localhost:44317/api/';
+  private baseUrl = environment.urlBase;
   constructor(private http: HttpClient) { }
 
    /** GET patient from the server */

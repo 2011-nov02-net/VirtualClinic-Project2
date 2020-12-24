@@ -16,6 +16,10 @@ export class PatientReportsService {
     return this.http.get<PatientReports[]>(`${this.baseUrl}/Patients/${id}/Reports`).toPromise();
   }
 
+  getPatientReportByID(id: number): Promise<PatientReports> {
+    return this.http.get<PatientReports>(`${this.baseUrl}/Reports/${id}`).toPromise();
+  }
+
   addPatientReport(id: number, report: PatientReports): Promise<PatientReports> {
     return this.http.post<PatientReports>(`${this.baseUrl}/Patients/${id}`, report).toPromise();
   }

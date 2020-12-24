@@ -8,7 +8,7 @@
             <ul class="navbar-nav flex-grow-1" #nav="ngbNav" ngbNav [activeId]="route.fragment | async">
                 <!-- the *ngfor loops over the links array on the component. the [ngbNavItem] just lets it 
                 know which one to highlight-->
-                <li [ngbNavItem]="link.fragment" *ngFor="let link of this.getLinks()" class="nav-item">
+                <li [ngbNavItem]="link.fragment" *ngFor="let link of this.links" class="nav-item">
                     <a ngbNavLink routerLink="{{link.page}}" [fragment]="link.fragment!" class="nav-link text-dark">{{ link.title }}</a>
                 </li>
 

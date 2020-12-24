@@ -85,10 +85,10 @@ namespace VirtualClinic.Api.Controllers
             // be associated with, and if not return 403 forbidden
 
             //if they do, create the report with the given details.
-
-            if(await _clinicRepository.AddPatientReportAsync(report))
+            var new_report = await _clinicRepository.AddPatientReportAsync(report);
+            if (new_report is Domain.Models.PatientReport)
             {
-                return Ok();
+                return CreatedAtAction(nameof(Get), new { id = new_report.Id }, new_report);
             }
             else
             {
