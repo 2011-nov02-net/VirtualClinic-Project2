@@ -12,7 +12,6 @@ Virtual Clinic is an application that can be used by both doctors and their pati
 
 ## Features
 
-List of features ready and TODOs for future development
 * Awesome feature 1
 * Awesome feature 2
 * Awesome feature 3
