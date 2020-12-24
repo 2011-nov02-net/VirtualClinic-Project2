@@ -1,1 +1,19 @@
-<p>create-report works!</p>
+<div class="this-junk">
+    <form>
+        <div class="form-group">
+            <label for="info">Info</label>
+            <input type="text" class="form-control" id="info" placeholder="Information.">
+        </div>
+        <button type="submit" (click)="CreateNewReport()" required [(ngModel)]="model.info" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+<!--
+        public int Id { get; set; } = -1
+        public Patient Patient { get; set; } = null
+        public int PatientId { get; set; } = get from this
+
+        public DateTime Time { get; set; } = new Date()
+        public string Info { get; set; } = text box
+        public Vitals Vitals { get; set; } = null
+
+-->
