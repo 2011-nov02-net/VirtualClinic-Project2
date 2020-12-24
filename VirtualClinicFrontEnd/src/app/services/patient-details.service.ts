@@ -19,4 +19,9 @@ postPatient(patient: Patient): Promise<Patient> {
   return this.http.post<Patient>(`${this.baseUrl}/Patients/`, patient).toPromise();
 }
 
+/**Update Patient */
+async updatePatient(patient: Patient): Promise<Patient>{
+  return this.http.put<Patient>(`${this.baseUrl}/Patients/${patient.id}`, patient).toPromise()
+}
+
 }
