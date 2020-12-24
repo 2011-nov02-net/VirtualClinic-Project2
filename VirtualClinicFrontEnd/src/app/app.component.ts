@@ -51,7 +51,7 @@ export class AppComponent implements OnInit {
 
       if(this.isAuthenticated){
 
-        var response = this.http.get('https://localhost:44317/api/Authentication', {
+        var response = this.http.get(' https://virtual-clinic-backend.azurewebsites.net/api/Authentication', {
           headers: {
             Authorization: 'Bearer ' + this.oktaAuth.getAccessToken(),
           }
@@ -61,7 +61,7 @@ export class AppComponent implements OnInit {
 
           //could be changed into just a redirect and asking what 
           //send request to make new user
-          var putResponse = this.http.put('https://localhost:44317/api/Authentication', 
+          var putResponse = this.http.put(' https://virtual-clinic-backend.azurewebsites.net/api/Authentication', 
               {},
               {
               headers: {
@@ -103,7 +103,7 @@ export class AppComponent implements OnInit {
 
         this.setUsername(realClaims)
 
-        var response = this.http.get('https://localhost:44317/api/Authentication', {
+        var response = this.http.get(' https://virtual-clinic-backend.azurewebsites.net/api/Authentication', {
           headers: {
             Authorization: 'Bearer ' + this.oktaAuth.getAccessToken(),
           }
@@ -113,7 +113,7 @@ export class AppComponent implements OnInit {
 
           //could be changed into just a redirect and asking what 
           //send request to make new user
-          var putResponse = this.http.put('https://localhost:44317/api/Authentication', 
+          var putResponse = this.http.put(' https://virtual-clinic-backend.azurewebsites.net/api/Authentication', 
               {},
               {
               headers: {
