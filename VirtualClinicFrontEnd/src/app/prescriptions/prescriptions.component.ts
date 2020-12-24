@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Prescription } from '../models/prescription';
 import { Location } from '@angular/common';
@@ -10,8 +10,8 @@ import { PrescriptionsService} from '../services/prescriptions.service'
   styleUrls: ['./prescriptions.component.scss']
 })
 export class PrescriptionsComponent implements OnInit {
-  prescriptions: Prescription[] | undefined;
-
+  @Input() prescriptions: Prescription[] | undefined;
+  selectedPrescrition: Prescription | undefined;
    
   constructor(
     private route: ActivatedRoute,
@@ -29,6 +29,10 @@ export class PrescriptionsComponent implements OnInit {
       this.prescriptions = prescriptions
     })
   }
+
+  onSelect(prescription: Prescription): void {
+    this.selectedPrescrition = prescription;
+  };
 
   goBack(): void {
     this.location.back();
