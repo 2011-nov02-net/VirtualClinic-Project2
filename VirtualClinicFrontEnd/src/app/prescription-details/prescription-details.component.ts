@@ -6,6 +6,8 @@ import { Location } from '@angular/common';
 import { PrescriptionsService } from '../services/prescriptions.service';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
+import { DoctorsService } from '../services/doctors.service';
+import { PatientsService } from '../services/patients.service';
 
 @Component({
   selector: 'app-prescription-details',
@@ -21,7 +23,9 @@ export class PrescriptionDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private location: Location,
-    private prescriptionsService : PrescriptionsService 
+    private prescriptionsService : PrescriptionsService,
+    private doctorService: DoctorsService,
+    private patientService: PatientsService
   ) { 
     this.prescriptionId = this.route.snapshot.params['id'];
   }
